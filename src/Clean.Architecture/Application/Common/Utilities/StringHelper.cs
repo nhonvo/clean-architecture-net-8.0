@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Clean.Architecture.Domain.Utilities
+namespace Clean.Architecture.Application.Common.Utilities
 {
     public static class StringHelper
     {

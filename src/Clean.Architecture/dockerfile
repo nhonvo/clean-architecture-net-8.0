@@ -1,0 +1,25 @@
+# Use the correct tagged version for your application's targeted runtime.
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 5252
+
+ENV ASPNETCORE_URLS=http://+:5252
+
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+COPY ["Clean.Architecture/Clean.Architecture.csproj", "Clean.Architecture/"]
+
+RUN dotnet restore "Clean.Architecture/Clean.Architecture.csproj"
+COPY . .
+WORKDIR "/src/Clean.Architecture"
+RUN dotnet build "Clean.Architecture.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Clean.Architecture.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+ENTRYPOINT ["dotnet", "Clean.Architecture.dll"]

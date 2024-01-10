@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Clean.Architecture.Domain.Enums;
-
 namespace Clean.Architecture.Domain.Entities
 {
     public class User

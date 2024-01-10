@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Clean.Architecture.Domain.Commons
+namespace Clean.Architecture.Application.Common.Models
 {
     public class Pagination<T>
     {
@@ -14,11 +9,7 @@ namespace Clean.Architecture.Domain.Commons
             get
             {
                 var temp = TotalItemsCount / PageSize;
-                if (TotalItemsCount % PageSize == 0)
-                {
-                    return temp;
-                }
-                return temp;
+                return TotalItemsCount % PageSize == 0 ? temp : temp;
             }
         }
         public int PageIndex { get; set; }
