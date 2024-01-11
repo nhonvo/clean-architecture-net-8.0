@@ -1,5 +1,6 @@
 using System.Transactions;
 using Clean.Architecture.Application;
+using Clean.Architecture.Application.Common.Exceptions;
 using Clean.Architecture.Application.Repositories;
 using Clean.Architecture.Infrastructure.Data;
 using Clean.Architecture.Infrastructure.Interface;
@@ -31,7 +32,7 @@ namespace Clean.Architecture.Infrastructure
         // save changes
         public int SaveChanges() => _context.SaveChanges();
 
-        public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
+        public async Task<int> SaveChangesAsync(CancellationToken token) => await _context.SaveChangesAsync(token);
 
         // transaction
         public void BeginTransaction()
@@ -44,7 +45,7 @@ namespace Clean.Architecture.Infrastructure
         {
             if (_transaction == null)
             {
-                throw new TransactionException("No transaction to commit");
+                throw new UserFriendlyException(ErrorCode.Internal, "No transaction to commit");
             }
             try
             {
@@ -58,16 +59,16 @@ namespace Clean.Architecture.Infrastructure
             }
         }
 
-        public async Task CommitAsync()
+        public async Task CommitAsync(CancellationToken token)
         {
             if (_transaction == null)
             {
-                throw new TransactionException("No transaction to commit");
+                throw new UserFriendlyException(ErrorCode.Internal, "No transaction to commit");
             }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(token);
                 _transaction.Commit();
             }
             finally
@@ -82,7 +83,7 @@ namespace Clean.Architecture.Infrastructure
         {
             if (_transaction == null)
             {
-                throw new TransactionException("No transaction to commit");
+                throw new UserFriendlyException(ErrorCode.Internal, "No transaction to commit");
             }
 
             _transaction.Rollback();
@@ -94,7 +95,7 @@ namespace Clean.Architecture.Infrastructure
         {
             if (_transaction == null)
             {
-                throw new TransactionException("No transaction to commit");
+                throw new UserFriendlyException(ErrorCode.Internal, "No transaction to commit");
             }
 
             await _transaction.RollbackAsync();
@@ -124,35 +125,35 @@ namespace Clean.Architecture.Infrastructure
         }
 
         // execute transaction
-        public async Task ExecuteTransactionAsync(Action action)
+        public async Task ExecuteTransactionAsync(Action action, CancellationToken token)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 action();
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
+                await _context.SaveChangesAsync(token);
+                await transaction.CommitAsync(token);
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                throw new TransactionException("Can't execute transaction: " + ex);
+                throw new UserFriendlyException(ErrorCode.Internal, "Can't execute transaction: " + ex);
             }
         }
 
-        public async Task ExecuteTransactionAsync(Func<Task> action)
+        public async Task ExecuteTransactionAsync(Func<Task> action, CancellationToken token)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 await action();
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
+                await _context.SaveChangesAsync(token);
+                await transaction.CommitAsync(token);
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                throw new TransactionException("Can't execute transaction: " + ex);
+                throw new UserFriendlyException(ErrorCode.Internal, "Can't execute transaction: " + ex);
             }
         }
     }

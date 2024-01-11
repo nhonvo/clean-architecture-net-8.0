@@ -13,8 +13,8 @@ namespace Clean.Architecture.Web.Controller
             => Ok(await _userWriteService.Authenticate(request));
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
-            => Ok(await _userWriteService.Register(request));
+        public async Task<IActionResult> Register(RegisterRequest request, CancellationToken token)
+            => Ok(await _userWriteService.Register(request, token));
 
     }
 }

@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Transactions;
 using AutoMapper;
 using Clean.Architecture.Application.Common;
+using Clean.Architecture.Application.Common.Exceptions;
 using Clean.Architecture.Application.Common.Interfaces;
 using Clean.Architecture.Application.Common.Models.User;
 using Clean.Architecture.Application.Common.Utilities;
@@ -27,14 +28,14 @@ namespace Clean.Architecture.Application.Services
             var isUserExist = await _unitOfWork.UserRepository.AnyAsync(x => x.UserName == request.UserName);
             if (!isUserExist)
             {
-                throw new Exception("User does not exist!");
+                throw new UserFriendlyException(ErrorCode.BadRequest, "User does not exist!");
             }
 
             var user = await _unitOfWork.UserRepository.FirstOrDefaultAsync(x => x.UserName == request.UserName);
 
             if (!StringHelper.Verify(request.Password, user.Password))
             {
-                throw new Exception("Password Incorrect!");
+                throw new UserFriendlyException(ErrorCode.BadRequest, "Password Incorrect!");
             }
 
             var token = user.Authenticate(
@@ -50,7 +51,7 @@ namespace Clean.Architecture.Application.Services
             return response;
         }
 
-        public async Task<UserDTO> Register(RegisterRequest request)
+        public async Task<UserDTO> Register(RegisterRequest request, CancellationToken token)
         {
             _logger.LogInformation("Request: " + JsonSerializer.Serialize(request));
 
@@ -65,7 +66,7 @@ namespace Clean.Architecture.Application.Services
 
             var user = _mapper.Map<User>(request);
             user.Password = user.Password.Hash();
-            await _unitOfWork.ExecuteTransactionAsync(async () => await _unitOfWork.UserRepository.AddAsync(user));
+            await _unitOfWork.ExecuteTransactionAsync(async () => await _unitOfWork.UserRepository.AddAsync(user), token);
 
             var response = _mapper.Map<UserDTO>(user);
             _logger.LogInformation("Response: " + JsonSerializer.Serialize(response));

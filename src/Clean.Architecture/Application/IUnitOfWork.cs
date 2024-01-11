@@ -15,7 +15,7 @@ namespace Clean.Architecture.Application
         /// <summary>
         /// Saves changes to the data source. This is a no - op if there are no changes to save
         /// </summary>
-        Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync(CancellationToken token);
         /// <summary>
         /// Starts a transaction. This is a no - op if there is already a transaction in progress. The transaction must be committed or rolled back
         /// </summary>
@@ -27,12 +27,12 @@ namespace Clean.Architecture.Application
         /// <summary>
         /// Commits the changes that have been made to the file. This is called after the file has been opened
         /// </summary>
-        Task CommitAsync();
+        Task CommitAsync(CancellationToken token);
         /// <summary>
         /// Rolls back the transaction. This is called when an error occurs during a transaction that is in progress
         /// </summary>
         void Rollback();
-        Task ExecuteTransactionAsync(Action action);
-        Task ExecuteTransactionAsync(Func<Task> action);
+        Task ExecuteTransactionAsync(Action action, CancellationToken token);
+        Task ExecuteTransactionAsync(Func<Task> action, CancellationToken token);
     }
 }

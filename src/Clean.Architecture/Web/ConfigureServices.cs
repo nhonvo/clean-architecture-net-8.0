@@ -12,12 +12,14 @@ namespace Clean.Architecture.Web
     {
         public static IServiceCollection AddWebAPIService(this IServiceCollection services, AppSettings configuration)
         {
+            services.AddControllers();
             services.AddEndpointsApiExplorer();
-
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();
+            services.AddAuthentication();
+            services.AddAuthorization();
 
             // Middleware
             services.AddSingleton<GlobalExceptionMiddleware>();

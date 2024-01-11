@@ -1,6 +1,5 @@
 using Clean.Architecture.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using static Clean.Architecture.Domain.Constant;
 
 namespace Clean.Architecture.Web.Controller
 {
@@ -9,10 +8,10 @@ namespace Clean.Architecture.Web.Controller
         private readonly ISeedService _seedService = seedService;
 
         [HttpGet]
-        public async Task<IActionResult> Seed()
+        public async Task<IActionResult> Seed(CancellationToken token)
         {
-            await _seedService.Seed();
-            return Ok(SeedingMessage.SeedDataSuccessMessage);
+            await _seedService.Seed(token);
+            return NoContent();
         }
     }
 }

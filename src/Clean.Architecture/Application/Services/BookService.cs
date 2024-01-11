@@ -1,4 +1,3 @@
-using System.Text.Json;
 using AutoMapper;
 using Clean.Architecture.Application.Common.Interfaces;
 using Clean.Architecture.Application.Common.Models;
@@ -14,50 +13,35 @@ namespace Clean.Architecture.Application.Services
 
         public async Task<Pagination<Book>> Get(int pageIndex, int pageSize)
         {
-            _logger.LogInformation("Request: " + JsonSerializer.Serialize(new { PageIndex = pageIndex, PageSize = pageSize }));
             var books = await _unitOfWork.BookRepository.ToPagination(pageIndex, pageSize);
-            _logger.LogInformation("Response: " + JsonSerializer.Serialize(books));
             return books;
         }
 
         public async Task<Book> Get(int id)
         {
-            _logger.LogInformation("Request: " + JsonSerializer.Serialize(id));
             var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == id);
-            _logger.LogInformation("Response: " + JsonSerializer.Serialize(book));
             return book;
         }
 
-        public async Task<int> Add(BookDTO request)
+        public async Task<int> Add(BookDTO request, CancellationToken token)
         {
-            _logger.LogInformation("Request: " + JsonSerializer.Serialize(request));
-
             var book = _mapper.Map<Book>(request);
-            await _unitOfWork.ExecuteTransactionAsync(async () => await _unitOfWork.BookRepository.AddAsync(book));
-            _logger.LogInformation("Response: " + JsonSerializer.Serialize(book.Id));
+            await _unitOfWork.ExecuteTransactionAsync(async () => await _unitOfWork.BookRepository.AddAsync(book), token);
             return book.Id;
         }
-        public async Task<BookDTO> Update(Book request)
+        public async Task<BookDTO> Update(Book request, CancellationToken token)
         {
-            _logger.LogInformation("Request: " + JsonSerializer.Serialize(request));
             var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == request.Id);
             book = _mapper.Map<Book>(request);
-            await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Update(book));
+            await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Update(book), token);
             var result = _mapper.Map<BookDTO>(book);
-
-            _logger.LogInformation("Response: " + JsonSerializer.Serialize(book.Id));
-
             return result;
         }
-        public async Task<int> Delete(int id)
+        public async Task<int> Delete(int id, CancellationToken token)
         {
-            _logger.LogInformation("Request: " + JsonSerializer.Serialize(id));
 
             var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == id);
-            await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Delete(book));
-
-            _logger.LogInformation("Response: " + JsonSerializer.Serialize(book.Id));
-
+            await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Delete(book), token);
             return book.Id;
         }
     }

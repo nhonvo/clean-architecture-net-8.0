@@ -19,17 +19,26 @@ namespace Clean.Architecture.Web.Controller
             => Ok(await _bookService.Get(pageIndex, pageSize));
 
         [HttpPost]
-        public async Task<IActionResult> Add(BookDTO request)
-            => Ok(await _bookService.Add(request));
+        public async Task<IActionResult> Add(BookDTO request, CancellationToken token)
+        {
+            await _bookService.Add(request, token);
+            return NoContent();
+        }
 
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> Update(Book request)
-            => Ok(await _bookService.Update(request));
+        public async Task<IActionResult> Update(Book request, CancellationToken token)
+        {
+            await _bookService.Update(request, token);
+            return NoContent();
+        }
 
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
-            => Ok(await _bookService.Delete(id));
+        public async Task<IActionResult> Delete(int id, CancellationToken token)
+        {
+            await _bookService.Delete(id, token);
+            return NoContent();
+        }
     }
 }

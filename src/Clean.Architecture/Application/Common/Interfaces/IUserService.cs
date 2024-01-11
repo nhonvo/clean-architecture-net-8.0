@@ -5,6 +5,6 @@ namespace Clean.Architecture.Application.Common.Interfaces
     public interface IUserService
     {
         Task<UserDTO> Authenticate(LoginRequest request);
-        Task<UserDTO> Register(RegisterRequest request);
+        Task<UserDTO> Register(RegisterRequest request, CancellationToken token);
     }
 }
