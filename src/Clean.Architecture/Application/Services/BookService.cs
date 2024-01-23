@@ -5,11 +5,10 @@ using Clean.Architecture.Application.Common.Models.Book;
 
 namespace Clean.Architecture.Application.Services
 {
-    public class BookService(IUnitOfWork unitOfWork, IMapper mapper, ILoggerFactory logger) : IBookService
+    public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
-        private readonly ILogger _logger = logger.CreateLogger<BookService>();
 
         public async Task<Pagination<Book>> Get(int pageIndex, int pageSize)
         {
