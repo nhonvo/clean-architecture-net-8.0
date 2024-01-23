@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
 using AutoMapper;
-using Clean.Architecture.Application;
-using Clean.Architecture.Application.Services;
-using Clean.Architecture.Domain.Entities;
-using Clean.Architecture.Infrastructure.Interface;
+using CleanArchitecture.Application;
+using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Infrastructure.Interface;
 using Moq;
 
 namespace CleanArchitecture.Unittest.Application;
