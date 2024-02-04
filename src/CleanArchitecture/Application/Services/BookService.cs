@@ -28,13 +28,11 @@ namespace CleanArchitecture.Application.Services
             await _unitOfWork.ExecuteTransactionAsync(async () => await _unitOfWork.BookRepository.AddAsync(book), token);
             return book.Id;
         }
-        public async Task<BookDTO> Update(Book request, CancellationToken token)
+        public async Task<int> Update(Book request, CancellationToken token)
         {
             var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == request.Id);
-            book = _mapper.Map<Book>(request);
             await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Update(book), token);
-            var result = _mapper.Map<BookDTO>(book);
-            return result;
+            return book.Id;
         }
         public async Task<int> Delete(int id, CancellationToken token)
         {

@@ -8,7 +8,7 @@ namespace CleanArchitecture.Application.Common.Interfaces
         Task<Pagination<Book>> Get(int pageIndex, int pageSize);
         Task<Book> Get(int id);
         Task<int> Add(BookDTO request, CancellationToken token);
-        Task<BookDTO> Update(Book request, CancellationToken token);
+        Task<int> Update(Book request, CancellationToken token);
         Task<int> Delete(int id, CancellationToken token);
     }
 }
