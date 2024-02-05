@@ -50,7 +50,7 @@ namespace CleanArchitecture.Web.Extensions
 
             app.ConfigureHealthCheck();
 
-            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.UseMiddleware<LoggingMiddleware>();
 
             app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions"));
 

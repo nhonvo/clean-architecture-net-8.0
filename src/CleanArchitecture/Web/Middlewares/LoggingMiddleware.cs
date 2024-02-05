@@ -4,18 +4,13 @@ using Newtonsoft.Json;
 
 namespace CleanArchitecture.Web.Middlewares
 {
-    public class RequestResponseLoggingMiddleware
+    public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, AppSettings appSettings)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
-        private readonly AppSettings _appSettings;
-        public RequestResponseLoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, AppSettings appSettings)
-        {
-            _next = next;
-            _logger = loggerFactory
-                      .CreateLogger<RequestResponseLoggingMiddleware>();
-            _appSettings = appSettings;
-        }
+        private readonly RequestDelegate _next = next;
+        private readonly ILogger _logger = loggerFactory
+                      .CreateLogger<LoggingMiddleware>();
+        private readonly AppSettings _appSettings = appSettings;
+
         public async Task InvokeAsync(HttpContext context)
         {
             if (_appSettings.Logging.RequestResponse.IsEnabled)
