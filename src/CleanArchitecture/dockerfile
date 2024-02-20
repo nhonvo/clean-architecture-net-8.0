@@ -1,24 +1,34 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5241
-
-ENV ASPNETCORE_URLS=http://+:5241
-
-USER app
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG configuration=Release
-WORKDIR /src
-COPY ["src/CleanArchitecture/CleanArchitecture.csproj", "src/CleanArchitecture/"]
-RUN dotnet restore "src/CleanArchitecture/CleanArchitecture.csproj"
-COPY . .
-WORKDIR "/src/src/CleanArchitecture"
-RUN dotnet build "CleanArchitecture.csproj" -c $configuration -o /app/build
-
-FROM build AS publish
-ARG configuration=Release
-RUN dotnet publish "CleanArchitecture.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+ 
+#Create an intermediary container to build our project
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /build
+ 
+#Copy project sln file
+COPY *.sln .
+ 
+#Copy all csproj files in our project
+COPY src/*/*.csproj ./
+RUN for file in $(ls *.csproj); do mkdir -p src/${file%.*}/ && mv $file src/${file%.*}/; done
+ 
+#Run dotnet restore to cache nuget packages
+RUN dotnet restore *.sln
+ 
+#Copy remainder of the project files
+COPY ./src ./src
+ 
+#Publish the project with --no-restore flag to take advantage of docker caching
+RUN dotnet publish ./src/CleanArchitecture/CleanArchitecture.csproj -c Release -o /app/out
+ 
+#Switch to the runtime container
+FROM base as final
 WORKDIR /app
-COPY --from=publish /app/publish .
+ 
+#Copy build artifacts to the working directory of the runtime containers
+COPY --from=build-env /app/out .
+ 
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 80
+ 
 ENTRYPOINT ["dotnet", "CleanArchitecture.dll"]

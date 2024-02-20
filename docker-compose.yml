@@ -3,16 +3,27 @@
 version: "3.4"
 
 services:
+  # proxy:
+  #   image: nginx:alpine
+  #   depends_on:
+  #     - api
+  #   volumes:
+  #     - ./SolutionFolder/nginx:/etc/nginx
+  #   ports:
+  #     - 3001:80
+
   api:
+    depends_on:
+      sqlserver: 
+        condition: service_started
+    ports:
+      - "3001:80"
     build:
       context: .
       dockerfile: src/CleanArchitecture/Dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - 5241:5241
-    depends_on:
-      - sqlserver
+      - ASPNETCORE_ENVIRONMENT=docker
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
     ports:

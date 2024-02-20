@@ -1,10 +1,11 @@
 #nullable disable
+using System.ComponentModel.DataAnnotations;
+
 namespace CleanArchitecture.Application.Common
 {
     public class ConnectionStrings
     {
         public string DefaultConnection { get; set; }
-        public string SqlServerConnection { get; set; }
     }
 
     public class Jwt
@@ -19,7 +20,6 @@ namespace CleanArchitecture.Application.Common
         public ConnectionStrings ConnectionStrings { get; set; }
         public Jwt Jwt { get; set; }
         public bool UseInMemoryDatabase { get; set; }
-        public bool UseDocker { get; set; }
         public Logging Logging { get; set; }
     }
 

@@ -16,11 +16,6 @@ public static class ConfigureServices
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("CleanArchitecture"));
         }
-        else if (configuration.UseDocker)
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.ConnectionStrings.SqlServerConnection));
-        }
         else
         {
             services.AddDbContext<ApplicationDbContext>(options =>
