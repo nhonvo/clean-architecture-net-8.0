@@ -1,15 +1,17 @@
+using CleanArchitecture.Application.Common;
+
 namespace CleanArchitecture.Web.Extensions
 {
     public static class CorsExtension
     {
-        public static IServiceCollection AddCorsCustom(this IServiceCollection services)
+        public static IServiceCollection AddCorsCustom(this IServiceCollection services, AppSettings appSettings)
         {
-            services.AddCors(options => options.AddDefaultPolicy(
-                    policy => policy.WithOrigins("", "")
-                              .AllowAnyHeader()
-                              .AllowAnyMethod()));
-
-            return services;
+            return services.AddCors(options => options.AddPolicy("AllowSpecificOrigin",
+                 builder => builder
+                     .WithOrigins(appSettings.Cors)
+                     .AllowCredentials() // Allow credentials
+                     .AllowAnyHeader()
+                     .AllowAnyMethod()));
         }
     }
 }

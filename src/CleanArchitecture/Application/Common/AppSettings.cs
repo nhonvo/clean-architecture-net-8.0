@@ -21,6 +21,7 @@ namespace CleanArchitecture.Application.Common
         public Jwt Jwt { get; set; }
         public bool UseInMemoryDatabase { get; set; }
         public Logging Logging { get; set; }
+        public string[] Cors { get; set; }
     }
 
     public class Logging

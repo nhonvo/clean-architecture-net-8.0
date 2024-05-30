@@ -29,7 +29,7 @@ namespace CleanArchitecture.Web
             // Extension classes
             services.AddHealthChecks();
             services.AddCompressionCustom();
-            services.AddCorsCustom();
+            services.AddCorsCustom(configuration);
             services.AddHttpClient();
             services.AddSwaggerCustom();
             services.AddJWTCustom(configuration);
