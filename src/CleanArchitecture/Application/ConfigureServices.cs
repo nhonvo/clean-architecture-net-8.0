@@ -11,7 +11,6 @@ namespace CleanArchitecture.Application
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBookService, BookService>();
-            services.AddScoped<ISeedService, SeedService>();
 
             services.AddSingleton<ICurrentTime, CurrentTime>();
             services.AddSingleton<ITokenService, TokenService>();

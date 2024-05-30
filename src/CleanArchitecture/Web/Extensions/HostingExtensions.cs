@@ -27,11 +27,7 @@ namespace CleanArchitecture.Web.Extensions
             if (!configuration.UseInMemoryDatabase)
             {
                 var initialize = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
-                // await initialize.InitializeAsync();
-            }
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+                await initialize.InitializeAsync();
             }
 
             app.UseSwagger();
