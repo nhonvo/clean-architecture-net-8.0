@@ -10,8 +10,11 @@ public class MapProfile : Profile
     {
         CreateMap<Book, BookDTO>().ReverseMap();
 
-        CreateMap<User, LoginRequest>().ReverseMap();
-        CreateMap<User, RegisterRequest>().ReverseMap();
+        CreateMap<User, UserSignInRequest>().ReverseMap();
+        CreateMap<User, UserSignInResponse>().ReverseMap();
+        CreateMap<User, UserSignUpRequest>().ReverseMap();
+        CreateMap<User, UserSignUpResponse>().ReverseMap();
         CreateMap<User, UserDTO>().ReverseMap();
+        CreateMap<User, UserProfileResponse>().ReverseMap();
     }
 }

@@ -4,7 +4,10 @@ namespace CleanArchitecture.Application.Common.Interfaces
 {
     public interface IUserService
     {
-        Task<UserDTO> Authenticate(LoginRequest request);
-        Task<UserDTO> Register(RegisterRequest request, CancellationToken token);
+        Task<UserSignInResponse> SignIn(UserSignInRequest request);
+        Task<UserSignUpResponse> SignUp(UserSignUpRequest request, CancellationToken token);
+        void Logout();
+        Task<string> RefreshToken();
+        Task<UserProfileResponse> GetProfile();
     }
 }

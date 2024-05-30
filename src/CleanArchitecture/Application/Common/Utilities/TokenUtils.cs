@@ -7,40 +7,41 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CleanArchitecture.Application.Common.Utilities
 {
-    public static class TokenUtils
+   public class TokenService(AppSettings appSettings, ICurrentTime time) : ITokenService
     {
-        public static string Authenticate(this User user, string issuer, string audience, string key, ICurrentTime time)
+        private readonly AppSettings _appSettings = appSettings;
+        private readonly ICurrentTime _time = time;
+
+        public string GenerateToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Jwt.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim("ID", user.Id.ToString()),
-                new Claim("Email", user.Email!),
-                new Claim(JwtRegisteredClaimNames.Name, user.UserName!),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
             var token = new JwtSecurityToken(
                     claims: claims,
-                    expires: time.GetCurrentTime().AddMinutes(10),
-                    audience: audience,
-                    issuer: issuer,
+                    expires: _time.GetCurrentTime().AddMinutes(10),
+                    audience: _appSettings.Jwt.Audience,
+                    issuer: _appSettings.Jwt.Issuer,
                     signingCredentials: credentials
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        // For MVC
-        public static ClaimsPrincipal Validate(this string token, string issuer, string audience, string key)
+        public ClaimsPrincipal ValidateToken(string token)
         {
             IdentityModelEventSource.ShowPII = true;
             TokenValidationParameters validationParameters = new()
             {
-                ValidIssuer = issuer,
-                ValidAudience = audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                ValidIssuer = _appSettings.Jwt.Issuer,
+                ValidAudience = _appSettings.Jwt.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Jwt.Key)),
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = false,
@@ -50,12 +51,6 @@ namespace CleanArchitecture.Application.Common.Utilities
             var principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out _);
 
             return principal;
-        }
-
-        public static DateTime GetExpireDate(this string token, ICurrentTime currentTime)
-        {
-            JwtSecurityToken jwt = new(token);
-            return string.IsNullOrEmpty(token) is false ? currentTime.GetCurrentTime() : jwt.ValidTo.ToUniversalTime();
         }
     }
 }

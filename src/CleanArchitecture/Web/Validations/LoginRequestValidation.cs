@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace CleanArchitecture.Web.Validations
 {
-    public class LoginRequestValidation : AbstractValidator<LoginRequest>
+    public class LoginRequestValidation : AbstractValidator<UserSignInRequest>
     {
         public LoginRequestValidation()
         {
