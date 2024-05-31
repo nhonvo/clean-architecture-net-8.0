@@ -1,16 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CleanArchitecture.Infrastructure.Data.Configurations
-{
-    public class BookConfiguration : IEntityTypeConfiguration<Book>
-    {
-        public void Configure(EntityTypeBuilder<Book> builder)
-        {
-            builder.ToTable("Book");
+namespace CleanArchitecture.Infrastructure.Data.Configurations;
 
-            //Id
-            builder.HasKey(x => x.Id);
-        }
+public class BookConfiguration : IEntityTypeConfiguration<Book>
+{
+    public void Configure(EntityTypeBuilder<Book> builder)
+    {
+        builder.ToTable("Book");
+
+        //Id
+        builder.HasKey(x => x.Id);
     }
 }

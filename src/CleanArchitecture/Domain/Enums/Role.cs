@@ -1,11 +1,10 @@
 using System.Text.Json.Serialization;
 
-namespace CleanArchitecture.Domain.Enums
+namespace CleanArchitecture.Domain.Enums;
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum Role
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum Role
-    {
-        Admin,
-        User
-    }
+    Admin,
+    User
 }

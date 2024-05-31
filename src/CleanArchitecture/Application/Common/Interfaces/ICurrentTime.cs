@@ -1,7 +1,6 @@
-namespace CleanArchitecture.Application.Common.Interfaces
+namespace CleanArchitecture.Application.Common.Interfaces;
+
+public interface ICurrentTime
 {
-    public interface ICurrentTime
-    {
-        public DateTime GetCurrentTime();
-    }
+    public DateTime GetCurrentTime();
 }

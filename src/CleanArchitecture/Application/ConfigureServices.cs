@@ -3,21 +3,20 @@ using CleanArchitecture.Application.Common.Utilities;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Web.Services;
 
-namespace CleanArchitecture.Application
+namespace CleanArchitecture.Application;
+
+public static class ConfigureServices
 {
-    public static class ConfigureServices
+    public static IServiceCollection AddApplicationService(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplicationService(this IServiceCollection services)
-        {
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IBookService, BookService>();
 
-            services.AddSingleton<ICurrentTime, CurrentTime>();
-            services.AddSingleton<ICurrentUser, CurrentUser>();
-            services.AddSingleton<ITokenService, TokenService>();
-            services.AddSingleton<ICookieService, CookieService>();
+        services.AddSingleton<ICurrentTime, CurrentTime>();
+        services.AddSingleton<ICurrentUser, CurrentUser>();
+        services.AddSingleton<ITokenService, TokenService>();
+        services.AddSingleton<ICookieService, CookieService>();
 
-            return services;
-        }
+        return services;
     }
 }

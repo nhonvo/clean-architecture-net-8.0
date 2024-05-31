@@ -1,13 +1,12 @@
 using CleanArchitecture.Application.Common.Models.User;
 using FluentValidation;
 
-namespace CleanArchitecture.Web.Validations
+namespace CleanArchitecture.Web.Validations;
+
+public class LoginRequestValidation : AbstractValidator<UserSignInRequest>
 {
-    public class LoginRequestValidation : AbstractValidator<UserSignInRequest>
+    public LoginRequestValidation()
     {
-        public LoginRequestValidation()
-        {
-            RuleFor(x => x.UserName).NotEmpty().MaximumLength(100);
-        }
+        RuleFor(x => x.UserName).NotEmpty().MaximumLength(100);
     }
 }

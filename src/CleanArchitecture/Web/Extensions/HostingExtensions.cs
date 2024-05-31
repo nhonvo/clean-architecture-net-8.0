@@ -4,60 +4,59 @@ using CleanArchitecture.Infrastructure;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Web.Middlewares;
 
-namespace CleanArchitecture.Web.Extensions
+namespace CleanArchitecture.Web.Extensions;
+
+public static class HostingExtensions
 {
-    public static class HostingExtensions
+    public static WebApplication ConfigureServices(this WebApplicationBuilder builder, AppSettings configuration)
     {
-        public static WebApplication ConfigureServices(this WebApplicationBuilder builder, AppSettings configuration)
-        {
-            builder.Services.AddInfrastructuresService(configuration);
-            builder.Services.AddApplicationService();
-            builder.Services.AddWebAPIService(configuration);
+        builder.Services.AddInfrastructuresService(configuration);
+        builder.Services.AddApplicationService();
+        builder.Services.AddWebAPIService(configuration);
 
-            return builder.Build();
+        return builder.Build();
+    }
+
+    public static async Task<WebApplication> ConfigurePipelineAsync(this WebApplication app, AppSettings configuration)
+    {
+        using var loggerFactory = LoggerFactory.Create(builder =>
+        {
+
+        });
+        using var scope = app.Services.CreateScope();
+        if (!configuration.UseInMemoryDatabase)
+        {
+            var initialize = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
+            await initialize.InitializeAsync();
         }
 
-        public static async Task<WebApplication> ConfigurePipelineAsync(this WebApplication app, AppSettings configuration)
-        {
-            using var loggerFactory = LoggerFactory.Create(builder =>
-            {
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
-            });
-            using var scope = app.Services.CreateScope();
-            if (!configuration.UseInMemoryDatabase)
-            {
-                var initialize = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
-                await initialize.InitializeAsync();
-            }
+        app.UseCors("AllowSpecificOrigin");
 
-            app.UseSwagger();
-            app.UseSwaggerUI();
+        app.UseMiddleware<GlobalExceptionMiddleware>();
 
-            app.UseCors("AllowSpecificOrigin");
+        app.UseMiddleware<PerformanceMiddleware>();
 
-            app.UseMiddleware<GlobalExceptionMiddleware>();
+        app.UseResponseCompression();
 
-            app.UseMiddleware<PerformanceMiddleware>();
+        app.UseResponseCompression();
 
-            app.UseResponseCompression();
+        app.UseHttpsRedirection();
 
-            app.UseResponseCompression();
+        app.ConfigureHealthCheck();
 
-            app.UseHttpsRedirection();
+        app.UseMiddleware<LoggingMiddleware>();
 
-            app.ConfigureHealthCheck();
+        app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions"));
 
-            app.UseMiddleware<LoggingMiddleware>();
+        app.UseAuthentication();
 
-            app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions"));
+        app.UseAuthorization();
 
-            app.UseAuthentication();
+        app.MapControllers();
 
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            return app;
-        }
+        return app;
     }
 }

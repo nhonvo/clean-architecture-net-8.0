@@ -381,3 +381,8 @@ tab_width = 4
 indent_size = 4
 end_of_line = lf
 dotnet_style_prefer_collection_expression = true:suggestion
+
+# Remove unnecessary using
+dotnet_diagnostic.IDE0005.severity = warning
+# Using file scope namespace
+csharp_style_namespace_declarations = file_scoped:warning
