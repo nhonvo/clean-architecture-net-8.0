@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
 using CleanArchitecture.Application.Common.Models;
+using CleanArchitecture.Domain.Constants;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
-using static CleanArchitecture.Domain.Constant;
 
 namespace CleanArchitecture.Application.Repositories
 {

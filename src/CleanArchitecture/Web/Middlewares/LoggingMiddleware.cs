@@ -7,19 +7,15 @@ namespace CleanArchitecture.Web.Middlewares
     public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, AppSettings appSettings)
     {
         private readonly RequestDelegate _next = next;
-        private readonly ILogger _logger = loggerFactory
-                      .CreateLogger<LoggingMiddleware>();
+        private readonly ILogger _logger = loggerFactory.CreateLogger<LoggingMiddleware>();
         private readonly AppSettings _appSettings = appSettings;
 
         public async Task InvokeAsync(HttpContext context)
         {
             if (_appSettings.Logging.RequestResponse.IsEnabled)
             {
-                bool IsValidFormatRequest = await LogRequest(context);
-                // return false if request json is wrong format
-                // return true if request json is correct format
-                // run next middleware and ignore response log if request json is wrong format
-                if (!IsValidFormatRequest)
+                bool isValidFormatRequest = await LogRequest(context);
+                if (!isValidFormatRequest)
                     await _next(context);
                 else
                     await LogResponse(context);

@@ -1,25 +1,12 @@
 namespace CleanArchitecture.Domain
 {
-    public static class Constant
+    public static partial class Constant
     {
         public static class Application
         {
             public static string Name = "CleanArchitecture";
         }
-        public static class Url
-        {
-            public static string BookData = @"../../Solution Items/data/book.json";
-            public static string UserData = @"../../Solution Items/data/user.json";
-        }
-        public static class ErrorMessage
-        {
-            public static string NotFoundMessage = "Could not find";
-            public static string AppConfigurationMessage = "AppConfiguration cannot be null";
-        }
-        public static class SeedingMessage
-        {
-            public static string SeedDataSuccessMessage = "Seed data successfully";
-        }
+
         public static class ErrorRespondCode
         {
             public const string NOT_FOUND = "not_found";

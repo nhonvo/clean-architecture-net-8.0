@@ -13,8 +13,9 @@ namespace CleanArchitecture.Application
             services.AddScoped<IBookService, BookService>();
 
             services.AddSingleton<ICurrentTime, CurrentTime>();
-            services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<ICurrentUser, CurrentUser>();
+            services.AddSingleton<ITokenService, TokenService>();
+            services.AddSingleton<ICookieService, CookieService>();
 
             return services;
         }

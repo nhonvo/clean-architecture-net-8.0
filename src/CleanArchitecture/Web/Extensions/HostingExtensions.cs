@@ -33,7 +33,7 @@ namespace CleanArchitecture.Web.Extensions
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            app.UseCors("_myAllowSpecificOrigins");
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseMiddleware<GlobalExceptionMiddleware>();
 

@@ -1,5 +1,4 @@
 #nullable disable
-using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitecture.Application.Common
 {

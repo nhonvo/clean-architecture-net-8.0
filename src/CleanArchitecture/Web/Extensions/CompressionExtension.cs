@@ -5,14 +5,14 @@ namespace CleanArchitecture.Web.Extensions
 {
     public static class CompressionExtension
     {
-        private static readonly string[] second = new[]
-              {
-                    "application/json",
-                    "application/xml",
-                    "text/plain",
-                    "image/png",
-                    "image/jpeg"
-              };
+        private static readonly string[] Second =
+        [
+            "application/json",
+            "application/xml",
+            "text/plain",
+            "image/png",
+            "image/jpeg"
+        ];
 
         public static IServiceCollection AddCompressionCustom(this IServiceCollection services)
         {
@@ -20,7 +20,7 @@ namespace CleanArchitecture.Web.Extensions
           {
               options.EnableForHttps = true;
               options.Providers.Add<GzipCompressionProvider>();
-              options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(second);
+              options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(Second);
               options.Providers.Add<BrotliCompressionProvider>();
           });
             services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.SmallestSize);

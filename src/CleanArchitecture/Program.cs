@@ -1,9 +1,10 @@
 using CleanArchitecture.Application.Common;
+using CleanArchitecture.Domain.Constants;
 using CleanArchitecture.Web.Extensions;
-using static CleanArchitecture.Domain.Constant;
 
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration.Get<AppSettings>() ?? throw new ArgumentNullException(ErrorMessage.AppConfigurationMessage);
+var configuration = builder.Configuration.Get<AppSettings>()
+    ?? throw new ArgumentNullException(ErrorMessage.AppConfigurationMessage);
 
 builder.Services.AddSingleton(configuration);
 var app = await builder.ConfigureServices(configuration).ConfigurePipelineAsync(configuration);

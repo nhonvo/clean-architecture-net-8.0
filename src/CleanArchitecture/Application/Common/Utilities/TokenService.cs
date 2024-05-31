@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CleanArchitecture.Application.Common.Utilities
 {
-   public class TokenService(AppSettings appSettings, ICurrentTime time) : ITokenService
+    public class TokenService(AppSettings appSettings, ICurrentTime time) : ITokenService
     {
         private readonly AppSettings _appSettings = appSettings;
         private readonly ICurrentTime _time = time;

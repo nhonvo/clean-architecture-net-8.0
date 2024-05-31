@@ -1,4 +1,3 @@
-using System.Transactions;
 using CleanArchitecture.Application;
 using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Repositories;

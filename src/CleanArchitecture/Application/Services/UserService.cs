@@ -1,10 +1,10 @@
-using System.Security.Claims;
 using AutoMapper;
-using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Models.User;
 using CleanArchitecture.Application.Common.Utilities;
+using CleanArchitecture.Domain.Constants;
 using CleanArchitecture.Infrastructure.Interface;
+using CleanArchitecture.Application.Common.Exceptions;
 
 namespace CleanArchitecture.Application.Services
 {
@@ -13,40 +13,28 @@ namespace CleanArchitecture.Application.Services
                              ITokenService tokenService,
                              ICurrentUser currentUser,
                              IUserRepository userRepository,
-                             IHttpContextAccessor httpContextAccessor
+                             ICookieService cookieService
                              ) : IUserService
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly ICookieService _cookieService = cookieService;
         private readonly ITokenService _tokenService = tokenService;
         private readonly ICurrentUser _currentUser = currentUser;
         private readonly IUserRepository _userRepository = userRepository;
 
         public async Task<UserSignInResponse> SignIn(UserSignInRequest request)
         {
-            var isUserExist = await _unitOfWork.UserRepository.AnyAsync(x => x.UserName == request.UserName);
-            if (!isUserExist)
-            {
-                throw new UserFriendlyException(ErrorCode.BadRequest, "User does not exist!");
-            }
-
-            var user = await _unitOfWork.UserRepository.FirstOrDefaultAsync(x => x.UserName == request.UserName);
+            var user = await _unitOfWork.UserRepository.FirstOrDefaultAsync(x => x.UserName == request.UserName)
+                ?? throw UserException.BadRequestException(UserErrorMessage.UserNotExist);
 
             if (!StringHelper.Verify(request.Password, user.Password))
             {
-                throw new UserFriendlyException(ErrorCode.BadRequest, "Password Incorrect!");
+                throw UserException.BadRequestException(UserErrorMessage.PasswordIncorrect);
             }
 
             var token = _tokenService.GenerateToken(user);
-            // Set cookies
-            _httpContextAccessor.HttpContext.Response.Cookies.Append("acc", token, new CookieOptions
-            {
-                HttpOnly = true,
-                SameSite = SameSiteMode.None, // Or SameSiteMode.Lax if not using HTTPS
-                Secure = true, // Set to true if using HTTPS
-                MaxAge = TimeSpan.FromMinutes(30)
-            });
+            _cookieService.Set(token);
 
             var response = _mapper.Map<UserSignInResponse>(user);
             response.Token = token;
@@ -56,13 +44,13 @@ namespace CleanArchitecture.Application.Services
 
         public async Task<UserSignUpResponse> SignUp(UserSignUpRequest request, CancellationToken token)
         {
-            var isUserExist = await _unitOfWork.UserRepository.AnyAsync(x => x.UserName == request.UserName);
-            if (isUserExist)
-                throw new UserFriendlyException(ErrorCode.BadRequest, "This UserName Already Used");
+            var isUserNameExist = await _unitOfWork.UserRepository.AnyAsync(x => x.UserName == request.UserName);
+            if (isUserNameExist)
+                throw UserException.UserAlreadyExistsException(request.UserName);
 
             var isEmailExist = await _unitOfWork.UserRepository.AnyAsync(x => x.UserName == request.Email);
             if (isEmailExist)
-                throw new UserFriendlyException(ErrorCode.BadRequest, "This Email Already Used!");
+                throw UserException.UserAlreadyExistsException(request.Email);
 
             var user = _mapper.Map<User>(request);
             user.Password = user.Password.Hash();
@@ -75,62 +63,30 @@ namespace CleanArchitecture.Application.Services
 
         public void Logout()
         {
-            var cookies = _httpContextAccessor.HttpContext.Request.Cookies;
-
-            if (cookies.ContainsKey("acc"))
+            try
             {
-                _httpContextAccessor.HttpContext.Response.Cookies.Delete("acc");
+                _ = _cookieService.Get();
+                _cookieService.Delete();
             }
-
-            if (cookies.ContainsKey("ref"))
-            {
-                _httpContextAccessor.HttpContext.Response.Cookies.Delete("ref");
-            }
+            catch { }
         }
 
         public async Task<UserProfileResponse> GetProfile()
         {
-            try
-            {
-                var jwtCookie = _httpContextAccessor.HttpContext.Request.Cookies["acc"];
-                if (string.IsNullOrEmpty(jwtCookie))
-                {
-                    throw new UserFriendlyException(ErrorCode.Unauthorized, "user not logged in");
-                }
-                var token = _tokenService.ValidateToken(jwtCookie);
-                var userId = token.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                var user = await _userRepository.GetByIdAsync(int.Parse(userId));
+            var userId = _currentUser.GetCurrentUserId();
+            var user = await _userRepository.GetByIdAsync(userId);
 
-                var result = _mapper.Map<UserProfileResponse>(user);
-                return result;
-            }
-            catch (Exception exception)
-            {
-                throw new UserFriendlyException(ErrorCode.Internal, "something went wrong", exception);
-            }
+            var result = _mapper.Map<UserProfileResponse>(user);
+            return result;
         }
 
         public async Task<string> RefreshToken()
         {
-            try
-            {
-                var user = await _userRepository.GetByIdAsync(_currentUser.GetCurrentUserId());
+            var user = await _userRepository.GetByIdAsync(_currentUser.GetCurrentUserId());
+            var accessToken = _tokenService.GenerateToken(user);
+            _cookieService.Set(accessToken);
 
-                var accessToken = _tokenService.GenerateToken(user);
-
-                _httpContextAccessor.HttpContext.Response.Cookies.Append("ref", accessToken, new CookieOptions
-                {
-                    HttpOnly = true,
-                    SameSite = SameSiteMode.None,
-                    Secure = true,
-                    MaxAge = TimeSpan.FromMinutes(30)
-                });
-                return accessToken;
-            }
-            catch (Exception exception)
-            {
-                throw new UserFriendlyException(ErrorCode.Internal, "something went wrong", exception);
-            }
+            return accessToken;
         }
     }
 }

@@ -22,24 +22,21 @@ namespace CleanArchitecture.Application.Services
             return book;
         }
 
-        public async Task<int> Add(BookDTO request, CancellationToken token)
+        public async Task Add(BookDTO request, CancellationToken token)
         {
             var book = _mapper.Map<Book>(request);
             await _unitOfWork.ExecuteTransactionAsync(async () => await _unitOfWork.BookRepository.AddAsync(book), token);
-            return book.Id;
         }
-        public async Task<int> Update(Book request, CancellationToken token)
+        public async Task Update(Book request, CancellationToken token)
         {
             var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == request.Id);
             await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Update(book), token);
-            return book.Id;
         }
-        public async Task<int> Delete(int id, CancellationToken token)
+        public async Task Delete(int id, CancellationToken token)
         {
 
             var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == id);
             await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Delete(book), token);
-            return book.Id;
         }
     }
 }
