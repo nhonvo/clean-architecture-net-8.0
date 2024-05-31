@@ -3,15 +3,6 @@
 version: "3.4"
 
 services:
-  # proxy:
-  #   image: nginx:alpine
-  #   depends_on:
-  #     - api
-  #   volumes:
-  #     - ./SolutionFolder/nginx:/etc/nginx
-  #   ports:
-  #     - 3001:80
-
   api:
     depends_on:
       sqlserver: 
