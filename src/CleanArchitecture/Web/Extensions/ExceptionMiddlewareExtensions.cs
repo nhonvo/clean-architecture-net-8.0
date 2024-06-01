@@ -1,7 +1,7 @@
 using System.Net;
 using CleanArchitecture.Application.Common.Exceptions;
+using CleanArchitecture.Domain.Constants;
 using Microsoft.AspNetCore.Diagnostics;
-using static CleanArchitecture.Domain.Constant;
 
 namespace CleanArchitecture.Web.Extensions;
 public static class ExceptionMiddlewareExtensions
@@ -32,56 +32,56 @@ public static class ExceptionMiddlewareExtensions
                             case ErrorCode.NotFound:
                                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.NOT_FOUND}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.NOT_FOUND}";
                                 break;
                             case ErrorCode.VersionConflict:
                                 context.Response.StatusCode = (int)HttpStatusCode.Conflict;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.VERSION_CONFLICT}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.VERSION_CONFLICT}";
                                 break;
                             case ErrorCode.ItemAlreadyExists:
                                 context.Response.StatusCode = (int)HttpStatusCode.Conflict;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
 
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.ITEM_ALREADY_EXISTS}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.ITEM_ALREADY_EXISTS}";
                                 break;
                             case ErrorCode.Conflict:
                                 context.Response.StatusCode = (int)HttpStatusCode.Conflict;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
 
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.CONFLICT}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.CONFLICT}";
                                 break;
                             case ErrorCode.BadRequest:
                                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.BAD_REQUEST}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.BAD_REQUEST}";
                                 break;
                             case ErrorCode.Unauthorized:
                                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.UNAUTHORIZED}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.UNAUTHORIZED}";
                                 break;
                             case ErrorCode.Internal:
                                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.INTERNAL_ERROR}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.INTERNAL_ERROR}";
                                 break;
                             case ErrorCode.UnprocessableEntity:
                                 context.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.UNPROCESSABLE_ENTITY}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.UNPROCESSABLE_ENTITY}";
                                 break;
                             default:
                                 context.Response.StatusCode = 500;
                                 errorMessage = userFriendlyException.UserFriendlyMessage;
-                                errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.GENERAL_ERROR}";
+                                errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.GENERAL_ERROR}";
                                 break;
                         }
                     }
                     else
                     {
                         context.Response.StatusCode = 500;
-                        errorCode = $"{Constant.Application.Name}.{ErrorRespondCode.GENERAL_ERROR}";
+                        errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.GENERAL_ERROR}";
                         errorMessage = "An error has occurred.";
                     }
                     await context.Response.WriteAsync($@"

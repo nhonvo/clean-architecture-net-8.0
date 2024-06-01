@@ -11,19 +11,18 @@ public class UnitOfWork : IUnitOfWork
 {
     private IDbContextTransaction? _transaction;
     private bool _disposed;
-    //
+
     private readonly ApplicationDbContext _context;
 
     // repositories
 
     public IUserRepository UserRepository { get; }
     public IBookRepository BookRepository { get; }
-    //
+
     public UnitOfWork(ApplicationDbContext dbContext)
     {
         _context = dbContext;
         // repositories
-
         UserRepository = new UserRepository(_context);
         BookRepository = new BookRepository(_context);
     }
@@ -44,7 +43,7 @@ public class UnitOfWork : IUnitOfWork
     {
         if (_transaction == null)
         {
-            throw new UserFriendlyException(ErrorCode.Internal, "No transaction to commit");
+            throw TransactionException.TransactionNotCommitException();
         }
         try
         {
@@ -62,7 +61,7 @@ public class UnitOfWork : IUnitOfWork
     {
         if (_transaction == null)
         {
-            throw new UserFriendlyException(ErrorCode.Internal, "No transaction to commit");
+            throw TransactionException.TransactionNotCommitException();
         }
 
         try
@@ -82,7 +81,7 @@ public class UnitOfWork : IUnitOfWork
     {
         if (_transaction == null)
         {
-            throw new UserFriendlyException(ErrorCode.Internal, "No transaction to commit");
+            throw TransactionException.TransactionNotCommitException();
         }
 
         _transaction.Rollback();
@@ -94,7 +93,7 @@ public class UnitOfWork : IUnitOfWork
     {
         if (_transaction == null)
         {
-            throw new UserFriendlyException(ErrorCode.Internal, "No transaction to commit");
+            throw TransactionException.TransactionNotCommitException();
         }
 
         await _transaction.RollbackAsync();
@@ -135,8 +134,8 @@ public class UnitOfWork : IUnitOfWork
         }
         catch (Exception ex)
         {
-            await transaction.RollbackAsync();
-            throw new UserFriendlyException(ErrorCode.Internal, "Can't execute transaction: " + ex);
+            await transaction.RollbackAsync(token);
+            throw TransactionException.TransactionNotExecuteException(ex);
         }
     }
 
@@ -151,8 +150,8 @@ public class UnitOfWork : IUnitOfWork
         }
         catch (Exception ex)
         {
-            await transaction.RollbackAsync();
-            throw new UserFriendlyException(ErrorCode.Internal, "Can't execute transaction: " + ex);
+            await transaction.RollbackAsync(token);
+            throw TransactionException.TransactionNotExecuteException(ex);
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using CleanArchitecture.Application.Common.Models;
-using CleanArchitecture.Domain.Constants;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -34,8 +33,7 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
         => await _dbSet.CountAsync();
 
     public async Task<T> GetByIdAsync(object id)
-        => await _dbSet.FindAsync(id)
-        ?? throw new ArgumentNullException(ErrorMessage.NotFoundMessage);
+        => await _dbSet.FindAsync(id);
 
     public async Task<Pagination<T>> ToPagination(int pageIndex, int pageSize)
     {
@@ -82,8 +80,7 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter)
         => await _dbSet.IgnoreQueryFilters()
                         .AsNoTracking()
-                        .FirstOrDefaultAsync(filter)
-                        ?? throw new ArgumentNullException(ErrorMessage.NotFoundMessage);
+                        .FirstOrDefaultAsync(filter);
 
     #endregion
     #region Update & delete
