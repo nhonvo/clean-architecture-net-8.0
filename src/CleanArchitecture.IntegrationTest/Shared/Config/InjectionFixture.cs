@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CleanArchitecture.Unittest;
+namespace CleanArchitecture.IntegrationTest;
 public class InjectionFixture
 {
     public InjectionFixture()
@@ -16,8 +16,7 @@ public class InjectionFixture
         var service = new ServiceCollection();
 
         var serviceProvider = service.BuildServiceProvider();
-        var appSettings = serviceProvider.GetService<AppSettings>();
+        var appSettings = serviceProvider.GetService<AppSetting>();
         service.AddSingleton(appSettings);
-
     }
 }

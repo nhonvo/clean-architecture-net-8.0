@@ -1,6 +1,6 @@
 namespace CleanArchitecture.Unittest;
 
-public class AppSettings
+public class AppSetting
 {
 
 }
