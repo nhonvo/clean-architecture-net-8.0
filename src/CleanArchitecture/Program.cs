@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var configuration = builder.Configuration.Get<AppSettings>()
     ?? throw ProgramException.AppsettingNotSetException();
 
