@@ -40,8 +40,8 @@ The project includes a sample API to demonstrate the basic structure and functio
 Utilize EF Core Migrations to create and update the database schema. Seed the database with initial data using data seeding techniques.
 
 ```bash
-dotnet ef migrations add init --output-dir Infrastructure/Migrations
-dotnet ef database update
+dotnet ef migrations add init --output-dir Infrastructure/Migrations --context ApplicationDbContext
+dotnet ef database update --context ApplicationDbContext
 ```
 
 ### Logging Request-Response

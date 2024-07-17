@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Repositories;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure;
@@ -21,6 +22,10 @@ public static class ConfigureServices
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.ConnectionStrings.DefaultConnection));
         }
+
+        services.AddIdentity<ApplicationUser, RoleIdentity>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
         // register services
         services.AddScoped<IUserRepository, UserRepository>();
