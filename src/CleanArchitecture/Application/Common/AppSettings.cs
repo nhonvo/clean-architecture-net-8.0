@@ -21,6 +21,14 @@ public class AppSettings
     public bool UseInMemoryDatabase { get; set; }
     public Logging Logging { get; set; }
     public string[] Cors { get; set; }
+    public ApplicationDetail ApplicationDetail { get; set; }
+}
+public class ApplicationDetail
+{
+    public string ApplicationName { get; set; }
+    public string Description { get; set; }
+    public string ContactWebsite { get; set; }
+    public string LicenseDetail { get; set; }
 }
 
 public class Logging

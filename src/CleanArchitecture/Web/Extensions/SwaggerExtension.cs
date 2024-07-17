@@ -6,6 +6,7 @@ public static class SwaggerExtension
 {
     private static readonly string[] value = new[] { "Bearer" };
 
+    // AddSwaggerOpenAPI
     public static IServiceCollection AddSwaggerCustom(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>

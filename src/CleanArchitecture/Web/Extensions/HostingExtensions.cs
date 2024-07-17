@@ -8,23 +8,23 @@ namespace CleanArchitecture.Web.Extensions;
 
 public static class HostingExtensions
 {
-    public static WebApplication ConfigureServices(this WebApplicationBuilder builder, AppSettings configuration)
+    public static WebApplication ConfigureServices(this WebApplicationBuilder builder, AppSettings appsettings)
     {
-        builder.Services.AddInfrastructuresService(configuration);
+        builder.Services.AddInfrastructuresService(appsettings);
         builder.Services.AddApplicationService();
-        builder.Services.AddWebAPIService(configuration);
+        builder.Services.AddWebAPIService(appsettings);
 
         return builder.Build();
     }
 
-    public static async Task<WebApplication> ConfigurePipelineAsync(this WebApplication app, AppSettings configuration)
+    public static async Task<WebApplication> ConfigurePipelineAsync(this WebApplication app, AppSettings appsettings)
     {
         using var loggerFactory = LoggerFactory.Create(builder =>
         {
 
         });
         using var scope = app.Services.CreateScope();
-        if (!configuration.UseInMemoryDatabase)
+        if (!appsettings.UseInMemoryDatabase)
         {
             var initialize = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
             await initialize.InitializeAsync();
