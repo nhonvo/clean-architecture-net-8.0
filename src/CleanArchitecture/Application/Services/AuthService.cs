@@ -8,13 +8,13 @@ using CleanArchitecture.Infrastructure.Interface;
 
 namespace CleanArchitecture.Application.Services;
 
-public class UserService(IUnitOfWork unitOfWork,
+public class AuthService(IUnitOfWork unitOfWork,
                          IMapper mapper,
                          ITokenService tokenService,
                          ICurrentUser currentUser,
                          IUserRepository userRepository,
                          ICookieService cookieService
-                         ) : IUserService
+                         ) : IAuthService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;

@@ -31,7 +31,7 @@ public static class ConfigureServices
         services.AddCompressionCustom();
         services.AddCorsCustom(appsettings);
         services.AddHttpClient();
-        services.AddSwaggerCustom();
+        services.AddSwaggerOpenAPI();
         services.AddJWTCustom(appsettings);
         services.SetupHealthCheck(appsettings);
 

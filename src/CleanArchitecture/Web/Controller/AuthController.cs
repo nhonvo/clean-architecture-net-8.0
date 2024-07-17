@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Web.Controller;
 
-public class AuthController(IUserService userWriteService) : BaseController
+public class AuthController(IAuthService userWriteService) : BaseController
 {
-    private readonly IUserService _userService = userWriteService;
+    private readonly IAuthService _userService = userWriteService;
 
     [HttpPost("sign-in")]
     public async Task<IActionResult> SignIn(UserSignInRequest request)

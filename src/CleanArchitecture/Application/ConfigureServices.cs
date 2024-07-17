@@ -9,7 +9,7 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationService(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IBookService, BookService>();
 
         services.AddSingleton<ICurrentTime, CurrentTime>();
