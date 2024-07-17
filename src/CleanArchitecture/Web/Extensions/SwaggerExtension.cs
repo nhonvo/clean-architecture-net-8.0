@@ -11,7 +11,7 @@ public static class SwaggerExtension
     {
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("Clean Architecture Specification",
+            options.SwaggerDoc("OpenAPISpecification",
             new OpenApiInfo
             {
                 Title = appSettings.ApplicationDetail.ApplicationName,

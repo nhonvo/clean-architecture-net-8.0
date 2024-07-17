@@ -19,10 +19,7 @@ public static class HostingExtensions
 
     public static async Task<WebApplication> ConfigurePipelineAsync(this WebApplication app, AppSettings appsettings)
     {
-        using var loggerFactory = LoggerFactory.Create(builder =>
-        {
-
-        });
+        using var loggerFactory = LoggerFactory.Create(builder => { });
         using var scope = app.Services.CreateScope();
         if (!appsettings.UseInMemoryDatabase)
         {
@@ -31,7 +28,11 @@ public static class HostingExtensions
         }
 
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(setupAction =>
+        {
+            setupAction.SwaggerEndpoint("/swagger/OpenAPISpecification/swagger.json", "Clean Architecture Specification");
+            setupAction.RoutePrefix = "swagger";
+        });
 
         app.UseCors("AllowSpecificOrigin");
 
