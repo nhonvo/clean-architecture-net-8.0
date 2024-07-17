@@ -22,7 +22,17 @@ public class AppSettings
     public Logging Logging { get; set; }
     public string[] Cors { get; set; }
     public ApplicationDetail ApplicationDetail { get; set; }
+    public MailConfigurations MailConfigurations { get; set; }
 }
+
+public class MailConfigurations
+{
+    public string From { get; set; }
+    public string Host { get; set; }
+    public string Password { get; set; }
+    public int Port { get; set; }
+}
+
 public class ApplicationDetail
 {
     public string ApplicationName { get; set; }

@@ -7,7 +7,6 @@ using CleanArchitecture.Domain.Constants;
 using CleanArchitecture.Infrastructure.Interface;
 
 namespace CleanArchitecture.Application.Services;
-
 public class AuthService(IUnitOfWork unitOfWork,
                          IMapper mapper,
                          ITokenService tokenService,

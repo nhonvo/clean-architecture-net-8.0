@@ -10,7 +10,7 @@ namespace CleanArchitecture.Web;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddWebAPIService(this IServiceCollection services, AppSettings appsettings)
+    public static IServiceCollection AddWebAPIService(this IServiceCollection services, AppSettings appSettings)
     {
         services.AddControllers();
         services.AddEndpointsApiExplorer();
@@ -29,11 +29,11 @@ public static class ConfigureServices
         // Extension classes
         services.AddHealthChecks();
         services.AddCompressionCustom();
-        services.AddCorsCustom(appsettings);
+        services.AddCorsCustom(appSettings);
         services.AddHttpClient();
-        services.AddSwaggerOpenAPI();
-        services.AddJWTCustom(appsettings);
-        services.SetupHealthCheck(appsettings);
+        services.AddSwaggerOpenAPI(appSettings);
+        services.AddJWTCustom(appSettings);
+        services.SetupHealthCheck(appSettings);
 
         return services;
     }

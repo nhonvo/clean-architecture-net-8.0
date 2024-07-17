@@ -1,7 +1,6 @@
 using CleanArchitecture.Application.Common.Models.User;
 
 namespace CleanArchitecture.Application.Common.Interfaces;
-
 public interface IAuthService
 {
     Task<UserSignInResponse> SignIn(UserSignInRequest request);

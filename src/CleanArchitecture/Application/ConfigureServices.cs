@@ -11,6 +11,7 @@ public static class ConfigureServices
     {
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IMailService, MailService>();
 
         services.AddSingleton<ICurrentTime, CurrentTime>();
         services.AddSingleton<ICurrentUser, CurrentUser>();
