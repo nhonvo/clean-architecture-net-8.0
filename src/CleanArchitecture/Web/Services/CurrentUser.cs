@@ -16,4 +16,13 @@ public class CurrentUser(ITokenService tokenService, ICookieService cookieServic
 
         return int.Parse(userId);
     }
+
+    public Guid GetCurrentGuidUserId()
+    {
+        var jwtCookie = _cookieService.Get();
+        var token = _tokenService.ValidateToken(jwtCookie);
+        var userId = token.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+        return new Guid(userId);
+    }
 }
