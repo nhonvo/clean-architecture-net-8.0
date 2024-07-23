@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -11,12 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{5A2BE2AF-1F71-4069-928C-5281277AB00C}"
-	ProjectSection(SolutionItems) = preProject
-		Solution Items\data\book.json = Solution Items\data\book.json
-		Solution Items\data\user.json = Solution Items\data\user.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Unittest", "src\CleanArchitecture.Unittest\CleanArchitecture.Unittest.csproj", "{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}"
@@ -41,7 +35,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{94EEA393-1073-4715-9DB6-11188902DEA9} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
-		{5A2BE2AF-1F71-4069-928C-5281277AB00C} = {323399AD-7965-419C-8CB4-3D2B8DA1F092}
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
 	EndGlobalSection
 EndGlobal
