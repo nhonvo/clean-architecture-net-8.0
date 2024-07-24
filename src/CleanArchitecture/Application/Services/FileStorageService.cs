@@ -4,7 +4,7 @@ namespace CleanArchitecture.Application.Services;
 
 public class FileStorageService(IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor) : IFileStorageService
 {
-    public static string USER_CONTENT_FOLDER_NAME { get; set; } = "images";
+    public static string USER_CONTENT_FOLDER_NAME { get; set; } = "images/avatars";
 
     private string _userContentFolder = "";
 

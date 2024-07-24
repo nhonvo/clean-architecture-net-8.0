@@ -17,11 +17,13 @@ public static class ConfigureServices
         services.AddScoped<IFileStorageService, FileStorageService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IAuthIdentityService, AuthIdentityService>();
+        services.AddScoped<IPhotoService, PhotoService>();
+        services.AddScoped<IUserService, UserService>();
 
-        services.AddSingleton<ICurrentTime, CurrentTime>();
-        services.AddSingleton<ICurrentUser, CurrentUser>();
-        services.AddSingleton<ITokenService, TokenService>();
-        services.AddSingleton<ICookieService, CookieService>();
+        services.AddScoped<ICurrentTime, CurrentTime>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ICookieService, CookieService>();
 
         return services;
     }

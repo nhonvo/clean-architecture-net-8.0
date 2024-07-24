@@ -88,8 +88,16 @@ docker-compose up --build
 
 3. Access the API
 
+- docker
+
 ```bash
-http://localhost:3001/api/{your-endpoints}
+http://localhost:3001/swagger/index.html
+```
+
+- local
+
+```bash
+http://localhost:5240/swagger/index.html
 ```
 
 ## Contributing

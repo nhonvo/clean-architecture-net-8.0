@@ -2,21 +2,22 @@ using CleanArchitecture.Application.Common.Models.AuthIdentity.UsersIdentity;
 
 namespace CleanArchitecture.Application.Common.Interfaces;
 
+public interface IUserService
+{
+    Task<List<UserViewModel>> Get(CancellationToken cancellationToken);
+    Task Update(UserUpdateRequest request, CancellationToken cancellationToken);
+    Task Delete(string userId, CancellationToken cancellationToken);
+}
 public interface IAuthIdentityService
 {
-
-    Task<TokenResult> Authenticate(LoginRequest request);
-    Task Register(RegisterRequest request);
-    Task<List<UserViewModel>> Get();
-    Task<bool> Update(UserUpdateRequest request);
-    Task<UserViewModel> GetById(Guid? id);
-    Task<bool> Delete(string userId);
-    Task<bool> RoleAssign(Guid id, RoleAssignRequest request);
-    Task<TokenResult> SignInFacebook(string accessToken);
-    Task<TokenResult> SignInGoogle(string accessToken);
-    Task<TokenResult> SignInApple(string fullName, string identityToken);
-    Task<ForgotPassword> SendPasswordResetCode(string Email);
-    Task<ForgotPassword> ResetPassword(string email, string opt, string newPassword);
-    Task<TokenResult> RefreshTokenAsync(string token);
-    Task<UserViewModel> Profile();
+    Task<TokenResult> RefreshTokenAsync(string token, CancellationToken cancellationToken);
+    Task<TokenResult> Authenticate(LoginRequest request, CancellationToken cancellationToken);
+    Task Register(RegisterRequest request, CancellationToken cancellationToken);
+    Task<UserViewModel> Get(CancellationToken cancellationToken);
+    Task RoleAssign(RoleAssignRequest request, CancellationToken cancellationToken);
+    Task<TokenResult> SignInFacebook(string accessToken, CancellationToken cancellationToken);
+    Task<TokenResult> SignInGoogle(string accessToken, CancellationToken cancellationToken);
+    Task<TokenResult> SignInApple(string fullName, string identityToken, CancellationToken cancellationToken);
+    Task<ForgotPassword> SendPasswordResetCode(SendPasswordResetCodeRequest request, CancellationToken cancellationToken);
+    Task<ForgotPassword> ResetPassword(ResetPasswordRequest request, CancellationToken cancellationToken);
 }

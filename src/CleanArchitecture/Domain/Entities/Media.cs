@@ -6,7 +6,7 @@ public class Media
 
     public MediaType Type { get; set; }
 
-    public string PathMedia { get; set; }
+    public string PathMedia { get; set; } = "default.png";
 
     public string Caption { get; set; }
 

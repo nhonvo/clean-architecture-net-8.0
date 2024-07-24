@@ -1,6 +1,3 @@
 namespace CleanArchitecture.Infrastructure.Interface;
 
-public interface IUserRepository : IGenericRepository<User>
-{
-
-}
+public interface IUserRepository : IGenericRepository<User> { }
