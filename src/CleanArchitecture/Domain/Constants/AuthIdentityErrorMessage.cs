@@ -5,7 +5,7 @@ public static class AuthIdentityErrorMessage
     public const string TokenNotExistMessage = "The specified token does not exist.";
     public const string TokenNotActiveMessage = "The specified token is not active.";
     public const string AccountDoesNotExistMessage = "The account does not exist.";
-    public const string LoginUnsuccessfulMessage = "Login was unsuccessful.";
+    public const string LoginUnsuccessfulMessage = "Login was unsuccessful. Check you password again!";
     public const string RefreshTokenUnsuccessfulMessage = "Refresh token was unsuccessful.";
     public const string UsernameAvailableMessage = "The username is available.";
     public const string EmailAvailableMessage = "The email address is available.";

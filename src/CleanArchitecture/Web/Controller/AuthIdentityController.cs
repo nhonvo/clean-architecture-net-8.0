@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Web.Controller;
-
 public class AuthIdentityController(IAuthIdentityService authIdentityService) : BaseController
 {
     private readonly IAuthIdentityService _authIdentityService = authIdentityService;
@@ -47,28 +46,30 @@ public class AuthIdentityController(IAuthIdentityService authIdentityService) : 
     [HttpPost("resetPassword")]
     [AllowAnonymous]
     public async Task<IActionResult> ResetPassword(ResetPasswordRequest request, CancellationToken cancellationToken)
-        => Ok(await _authIdentityService.ResetPassword(request, cancellationToken));
-
+    {
+        await _authIdentityService.ResetPassword(request, cancellationToken);
+        return NoContent();
+    }
 
     [HttpPost("sendPasswordResetCode")]
     [AllowAnonymous]
     public async Task<IActionResult> SendPasswordResetCode(SendPasswordResetCodeRequest request, CancellationToken cancellationToken)
         => Ok(await _authIdentityService.SendPasswordResetCode(request, cancellationToken));
 
-    [HttpPost("SignInFacebook")]
-    [AllowAnonymous]
-    public async Task<IActionResult> SignInFacebook([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
-        => Ok(await _authIdentityService.SignInFacebook(request.AccessToken, cancellationToken));
+    // [HttpPost("SignInFacebook")]
+    // [AllowAnonymous]
+    // public async Task<IActionResult> SignInFacebook([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
+    //     => Ok(await _authIdentityService.SignInFacebook(request.AccessToken, cancellationToken));
 
-    [HttpPost("SignInGoogle")]
-    [AllowAnonymous]
-    public async Task<IActionResult> SignInGoogle([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
-        => Ok(await _authIdentityService.SignInGoogle(request.AccessToken, cancellationToken));
+    // [HttpPost("SignInGoogle")]
+    // [AllowAnonymous]
+    // public async Task<IActionResult> SignInGoogle([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
+    //     => Ok(await _authIdentityService.SignInGoogle(request.AccessToken, cancellationToken));
 
-    [HttpPost("SignInApple")]
-    [AllowAnonymous]
-    public async Task<IActionResult> SignInApple([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
-        => Ok(await _authIdentityService.SignInApple(request.FullName, request.AccessToken, cancellationToken));
+    // [HttpPost("SignInApple")]
+    // [AllowAnonymous]
+    // public async Task<IActionResult> SignInApple([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
+    //     => Ok(await _authIdentityService.SignInApple(request.FullName, request.AccessToken, cancellationToken));
 
     private string GetTokenInCookie() => Request.Cookies["token_key"];
 

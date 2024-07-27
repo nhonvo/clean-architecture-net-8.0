@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace CleanArchitecture.Web.Extensions;
-
 public static class HealthCheckExtensions
 {
     public static void SetupHealthCheck(this IServiceCollection services, AppSettings configuration)
@@ -21,7 +20,7 @@ public static class HealthCheckExtensions
         services.AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint("Basic Health Check", $"/healthz"))
                          .AddInMemoryStorage();
     }
-    public static void ConfigureHealthCheck(this IApplicationBuilder app)
+    public static void ConfigureHealthCheck(this WebApplication app)
     {
         app.UseHealthChecks("/healthz", new HealthCheckOptions
         {

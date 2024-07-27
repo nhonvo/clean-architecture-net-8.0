@@ -42,6 +42,7 @@ Utilize EF Core Migrations to create and update the database schema. Seed the da
 ```bash
 dotnet ef migrations add init --output-dir Infrastructure/Migrations --context ApplicationDbContext
 dotnet ef database update --context ApplicationDbContext
+dotnet ef database drop --context ApplicationDbContext (optional)
 ```
 
 ### Logging Request-Response
@@ -107,3 +108,14 @@ Feel free to contribute to this project by submitting issues, feature requests, 
 ## License
 
 This project is licensed under the MIT License.
+
+## For development
+
+pack a project command
+
+```bash
+dotnet new install ./ --force
+dotnet pack -o nupkg
+dotnet new install ./nupkg/CleanArchitecture.1.0.0.nupkg
+dotnet new cleanarch -n MyFirstProject
+```

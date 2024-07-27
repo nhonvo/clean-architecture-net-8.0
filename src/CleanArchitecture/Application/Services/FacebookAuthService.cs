@@ -25,7 +25,7 @@ public class FacebookAuthService(IHttpClientFactory httpClient) : IFacebookAuthS
     }
 
 
-    public async Task<FacebookTokenValidationResult> ValidationAcessTokenAsync(string accessToken)
+    public async Task<FacebookTokenValidationResult> ValidationAccessTokenAsync(string accessToken)
     {
         string AppId = "1001624143838277";
         string AppSecret = "a78ba77845f78f80b32337227240def5";

@@ -4,6 +4,6 @@ namespace CleanArchitecture.Application.Common.Interfaces;
 
 public interface IFacebookAuthService
 {
-    Task<FacebookTokenValidationResult> ValidationAcessTokenAsync(string accessToken);
+    Task<FacebookTokenValidationResult> ValidationAccessTokenAsync(string accessToken);
     Task<FacebookUserInfoResult> GetUsersInfoAsync(string accessToken);
 }

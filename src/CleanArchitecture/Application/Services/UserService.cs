@@ -1,25 +1,20 @@
-using System.Net.Http.Headers;
-using AutoMapper;
 using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CleanArchitecture.Application.Common.Models.AuthIdentity.UsersIdentity;
+using CleanArchitecture.Application.Common.Models.AuthIdentity.File;
 
 namespace CleanArchitecture.Application.Services;
 
-public class UserService(ApplicationDbContext context,
+public class UserService(
     IFileStorageService storageService,
     UserManager<ApplicationUser> userManager,
-    IUnitOfWork unitOfWork,
-    IMapper mapper) : IUserService
+    IUnitOfWork unitOfWork) : IUserService
 {
     private readonly IFileStorageService _storageService = storageService;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ApplicationDbContext _context = context;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
-    private readonly IMapper _mapper = mapper;
 
     public async Task<List<UserViewModel>> Get(CancellationToken cancellationToken)
     {
@@ -27,27 +22,28 @@ public class UserService(ApplicationDbContext context,
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
             .Include(u => u.Avatar)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: cancellationToken);
 
-        var query = users.Select(u => new UserQueryResult
+        List<UserViewModel> result = users.Select(x => new UserViewModel
         {
-            users = u,
-            role = u.UserRoles.Select(ur => ur.Role.Name).ToList(),
-            avatar = u.Avatar != null ? u.Avatar.PathMedia : null
+            UserId = x.Id,
+            Email = x.Email,
+            UserName = x.UserName,
+            FullName = x.Name,
+            Roles = x.UserRoles.Select(ur => ur.Role.Name).ToList(),
+            Avatar = x.Avatar != null ? x.Avatar.PathMedia : null
         }).ToList();
 
-        var data = _mapper.Map<List<UserViewModel>>(query);
-
-        data.ForEach(x => x.Avatar = !string.IsNullOrEmpty(x.Avatar)
-                        ? _storageService.GetFileUrl(x.Avatar)
-                        : x.Avatar);
-        return data;
+        // result.ForEach(x => x.Avatar = !string.IsNullOrEmpty(x.Avatar)
+        //                 ? _storageService.GetFileUrl(new AddFileRequest { FileName = x.Avatar })
+        //                 : x.Avatar);
+        return result;
     }
 
     public async Task Update(UserUpdateRequest request, CancellationToken cancellationToken)
     {
 
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == request.UserId)
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken: cancellationToken)
             ?? throw AuthIdentityException.ThrowUserNotExist();
 
         user.Email = request.Email ?? user.Email;
@@ -57,32 +53,18 @@ public class UserService(ApplicationDbContext context,
         if (request.MediaFile != null)
         {
             var thumb = await _unitOfWork.MediaRepository.FirstOrDefaultAsync(i => i.MediaId == user.AvatarId);
-            //Thêm mới Avatar nếu Tài khoản chưa có
-            if (thumb == null)
-            {
-                user.Avatar = new Media()
-                {
-                    Caption = "Avatar User",
-                    DateCreated = DateTime.Now,
-                    FileSize = request.MediaFile.Length,
-                    PathMedia = SaveFile(request.MediaFile, cancellationToken),
-                    Type = MediaType.Image,
-                    SortOrder = 1
-                };
-            }
-            else
-            {
-                //Cập nhật Avatar
-                if (thumb.PathMedia != null)
-                {
-                    _storageService.DeleteFile(thumb.PathMedia);
-                }
 
-                thumb.FileSize = request.MediaFile.Length;
-                thumb.PathMedia = SaveFile(request.MediaFile, cancellationToken);
-
-                _context.Media.Update(thumb);
+            //Cập nhật Avatar
+            if (thumb.PathMedia != null)
+            {
+                await _storageService.DeleteFileAsync(new DeleteFileRequest { FileName = thumb.PathMedia });
             }
+            var pathMedia = await _storageService.AddFileAsync(request.MediaFile);
+
+            thumb.FileSize = request.MediaFile.Length;
+            thumb.PathMedia = pathMedia.Path;
+
+            await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.MediaRepository.Update(thumb), cancellationToken);
         }
 
         var result = await _userManager.UpdateAsync(user);
@@ -100,13 +82,13 @@ public class UserService(ApplicationDbContext context,
             ?? throw AuthIdentityException.ThrowAccountDoesNotExist();
 
         //Xoá Avatar ra khỏi Source
-        var avatar = _context.Media.SingleOrDefault(x => x.MediaId == user.AvatarId);
+        var avatar = await _unitOfWork.MediaRepository.FirstOrDefaultAsync(x => x.MediaId == user.AvatarId);
 
         if (avatar != null)
         {
             if (avatar.PathMedia != null)
-                _storageService.DeleteFile(avatar.PathMedia);
-            _context.Media.Remove(avatar);
+                await _storageService.DeleteFileAsync(new DeleteFileRequest { FileName = avatar.PathMedia });
+            await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.MediaRepository.Delete(avatar), cancellationToken);
         }
 
         var result = await _userManager.DeleteAsync(user);
@@ -119,13 +101,32 @@ public class UserService(ApplicationDbContext context,
         }
     }
 
-
-    //Lưu ảnh
-    private string SaveFile(IFormFile file, CancellationToken cancellationToken)
+    //Gán quyền người dùng
+    public async Task RoleAssign(RoleAssignRequest request, CancellationToken cancellationToken)
     {
-        var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-        _storageService.SaveFile(file.OpenReadStream(), fileName);
-        return fileName;
+        var user = await _userManager.FindByIdAsync(request.UserId)
+            ?? throw AuthIdentityException.ThrowAccountDoesNotExist();
+
+        var removedRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
+
+        foreach (var roleName in removedRoles)
+        {
+            if (await _userManager.IsInRoleAsync(user, roleName) == true)
+            {
+                await _userManager.RemoveFromRoleAsync(user, roleName);
+            }
+        }
+
+        await _userManager.RemoveFromRolesAsync(user, removedRoles);
+
+        var addedRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
+
+        foreach (var roleName in addedRoles)
+        {
+            if (await _userManager.IsInRoleAsync(user, roleName) == false)
+            {
+                await _userManager.AddToRoleAsync(user, roleName);
+            }
+        }
     }
 }

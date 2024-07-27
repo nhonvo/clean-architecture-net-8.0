@@ -1,6 +1,6 @@
 namespace CleanArchitecture.Application.Common.Models.AuthIdentity.Media;
 
-public class NewsMediaCreateRequest
+public class MediaCreateRequest
 {
     public MediaType Type { get; set; }
 

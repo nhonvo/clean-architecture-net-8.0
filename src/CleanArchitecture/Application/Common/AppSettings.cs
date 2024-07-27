@@ -25,12 +25,23 @@ public class AppSettings
 {
     public ConnectionStrings ConnectionStrings { get; set; }
     public Jwt Jwt { get; set; }
-    public bool UseInMemoryDatabase { get; set; }
+    public bool UseInMemoryDatabase { get; set; } = false;
     public Logging Logging { get; set; }
+    [Required]
     public string[] Cors { get; set; }
     public ApplicationDetail ApplicationDetail { get; set; }
     public MailConfigurations MailConfigurations { get; set; }
     public CloudinarySettings Cloudinary { get; set; }
+    public FileStorageSettings FileStorage { get; set; }
+    [Required]
+    public string BaseURL { get; set; }
+}
+
+public class FileStorageSettings
+{
+    public bool LocalStorage { get; set; } = true;
+    [Required]
+    public string Path { get; set; }
 }
 
 public class MailConfigurations

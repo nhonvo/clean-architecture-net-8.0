@@ -55,6 +55,40 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     }
 
     public async Task<Pagination<T>> GetAsync(
+       Expression<Func<T, bool>>? filter = null,
+       Func<IQueryable<T>, IQueryable<T>>? include = null,
+       int pageIndex = 0,
+       int pageSize = 10)
+    {
+        var query = _dbSet.AsQueryable();
+
+        if (include != null)
+        {
+            query = include(query);
+        }
+
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        var itemCount = await query.CountAsync();
+
+        var items = await query.Skip(pageIndex * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
+
+        var result = new Pagination<T>()
+        {
+            PageIndex = pageIndex,
+            PageSize = pageSize,
+            TotalItemsCount = itemCount,
+            Items = items,
+        };
+
+        return result;
+    }
+    public async Task<Pagination<T>> GetAsync(
         Expression<Func<T, bool>> filter,
         int pageIndex = 0,
         int pageSize = 10)
@@ -81,6 +115,19 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
         => await _dbSet.IgnoreQueryFilters()
                         .AsNoTracking()
                         .FirstOrDefaultAsync(filter);
+
+    public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter,
+        Expression<Func<T, object>> sort, bool ascending = true)
+    {
+        var query = _dbSet.IgnoreQueryFilters()
+                          .AsNoTracking()
+                          .Where(filter);
+
+        query = ascending ? query.OrderBy(sort) : query.OrderByDescending(sort);
+
+        return await query.FirstOrDefaultAsync();
+    }
+
 
     #endregion
     #region Update & delete

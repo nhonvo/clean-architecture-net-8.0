@@ -1,12 +1,5 @@
-// check third party login
-
-// check send email
-// upload image to cloudary
-// check role and avatar
-
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using AutoMapper;
 using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Utilities;
@@ -22,7 +15,6 @@ public class AuthIdentityService(ApplicationDbContext context,
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
     IFacebookAuthService facebookAuthService,
-    IMapper mapper,
     ILogger<AuthIdentityService> logger,
     ITokenService tokenService,
     IUnitOfWork unitOfWork,
@@ -33,45 +25,18 @@ public class AuthIdentityService(ApplicationDbContext context,
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
     private readonly IFacebookAuthService _facebookAuthService = facebookAuthService;
-    private readonly IMapper _mapper = mapper;
     private readonly ILogger<AuthIdentityService> _logger = logger;
     private readonly IMailService _emailSender = emailSender;
     private readonly ITokenService _tokenService = tokenService;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ICurrentUser _currentUser = currentUser;
 
-    //Refresh Token
-    public async Task<TokenResult> RefreshTokenAsync(string token, CancellationToken cancellationToken)
-    {
-        var user = await _userManager.Users.Include(x => x.RefreshTokens).SingleOrDefaultAsync(
-            x => x.Id == new Guid(_currentUser.GetCurrentStringUserId()),
-            cancellationToken) ?? throw AuthIdentityException.ThrowAccountDoesNotExist();
-
-        var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
-
-        if (!refreshToken.IsActive)
-        {
-            throw AuthIdentityException.ThrowTokenNotActive();
-        }
-
-        // recall current token
-        refreshToken.Revoked = DateTime.UtcNow;
-
-        var res = await _tokenService.GenerateToken(user, cancellationToken);
-
-        var result = new TokenResult
-        {
-            UserId = res.UserId,
-            Expires = res.Expires,
-            Token = res.Token,
-        };
-        return result;
-    }
-
     public async Task<TokenResult> Authenticate(LoginRequest request, CancellationToken cancellationToken)
     {
 
-        var user = await _userManager.FindByNameAsync(request.UserName)
+        var user = await _userManager.Users
+            .Include(x => x.Avatar)
+            .FirstOrDefaultAsync(x => x.UserName == request.UserName, cancellationToken)
             ?? throw AuthIdentityException.ThrowAccountDoesNotExist();
 
         var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
@@ -80,13 +45,6 @@ public class AuthIdentityService(ApplicationDbContext context,
         {
             throw AuthIdentityException.ThrowLoginUnsuccessful(result.ToString());
         }
-
-        if (user.AvatarId != null)
-        {
-            var avatar = _unitOfWork.MediaRepository.FirstOrDefaultAsync(m => m.MediaId == user.AvatarId).Result.PathMedia;
-            user.Avatar.PathMedia = avatar ?? string.Empty;
-        }
-
         var token = await _tokenService.GenerateToken(user, cancellationToken);
 
         return token;
@@ -128,59 +86,119 @@ public class AuthIdentityService(ApplicationDbContext context,
         }
     }
 
-    public async Task<UserViewModel> Get(CancellationToken cancellationToken)
+    //Refresh Token
+    public async Task<TokenResult> RefreshTokenAsync(string token, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users.Include(x => x.RefreshTokens).SingleOrDefaultAsync(
             x => x.Id == new Guid(_currentUser.GetCurrentStringUserId()),
             cancellationToken) ?? throw AuthIdentityException.ThrowAccountDoesNotExist();
-        var roles = await _userManager.GetRolesAsync(user);
 
-        var result = new UserViewModel
+        var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+
+        if (!refreshToken.IsActive)
         {
-            UserId = user.Id,
-            Email = user.Email,
-            UserName = user.UserName,
-            FullName = user.Name,
-            Roles = roles,
-            Avatar = user.Avatar.PathMedia
+            throw AuthIdentityException.ThrowTokenNotActive();
+        }
+
+        // recall current token
+        refreshToken.Revoked = DateTime.UtcNow;
+
+        var res = await _tokenService.GenerateToken(user, cancellationToken);
+
+        var result = new TokenResult
+        {
+            UserId = res.UserId,
+            Expires = res.Expires,
+            Token = res.Token,
         };
         return result;
     }
 
-    //Gán quyền người dùng
-    public async Task RoleAssign(RoleAssignRequest request, CancellationToken cancellationToken)
+    public async Task<UserViewModel> Get(CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByIdAsync(request.UserId)
-        ?? throw AuthIdentityException.ThrowAccountDoesNotExist();
+        var users = await _userManager.Users
+                    .Include(u => u.UserRoles)
+                        .ThenInclude(ur => ur.Role)
+                    .Include(u => u.Avatar)
+                    .SingleOrDefaultAsync(x => x.Id == new Guid(_currentUser.GetCurrentStringUserId()), cancellationToken)
+                    ?? throw AuthIdentityException.ThrowAccountDoesNotExist();
 
-        var removedRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
-
-        foreach (var roleName in removedRoles)
+        var result = new UserViewModel
         {
-            if (await _userManager.IsInRoleAsync(user, roleName) == true)
-            {
-                await _userManager.RemoveFromRoleAsync(user, roleName);
-            }
-        }
-
-        await _userManager.RemoveFromRolesAsync(user, removedRoles);
-
-        var addedRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
-
-        foreach (var roleName in addedRoles)
-        {
-            if (await _userManager.IsInRoleAsync(user, roleName) == false)
-            {
-                await _userManager.AddToRoleAsync(user, roleName);
-            }
-        }
+            UserId = users.Id,
+            Email = users.Email,
+            UserName = users.UserName,
+            FullName = users.Name,
+            Roles = users.UserRoles.Select(ur => ur.Role.Name).ToList(),
+            Avatar = users?.Avatar?.PathMedia
+        };
+        return result;
     }
 
+    public async Task<ForgotPassword> SendPasswordResetCode(SendPasswordResetCodeRequest request, CancellationToken cancellationToken)
+    {
+        //Get identity user details user manager
+        var user = await _userManager.FindByEmailAsync(request.Email)
+            ?? throw AuthIdentityException.ThrowUserNotFound();
+
+        //Generate password reset token
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        //Generate OTP
+        int otp = StringHelper.GenerateRandom(100000, 999999);
+
+        var resetPassword = new ForgotPassword()
+        {
+            Email = request.Email,
+            OTP = otp.ToString(),
+            Token = token,
+            UserId = user.Id,
+            DateTime = DateTime.Now
+        };
+
+        //save data into db with OTP
+        await _unitOfWork.ExecuteTransactionAsync(
+            async () => await _unitOfWork.ForgotPasswordRepository.AddAsync(resetPassword), cancellationToken);
+
+        //To do: Send token in email
+        await _emailSender.SendEmailAsync(request.Email, "Reset Password OTP", "Hello "
+            + request.Email +
+            "<br><br>Please find the reset password token below<br><br><b>"
+            + otp +
+            "<b><br><br>Thanks<br>nhonvo.github.io");
+
+        return resetPassword;
+    }
+
+    public async Task ResetPassword(ResetPasswordRequest request, CancellationToken cancellationToken)
+    {
+        //Get identity user details user manager
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        //Getting token from otp
+        var resetPasswordDetails = await _unitOfWork.ForgotPasswordRepository.FirstOrDefaultAsync(
+            x => x.OTP == request.OTP
+            && x.UserId == user.Id,
+                x => x.DateTime, false);
+
+        //Verify if token is older than 3 minutes
+        var expirationDateTime = resetPasswordDetails.DateTime.AddMinutes(3);
+
+        if (expirationDateTime < DateTime.Now)
+        {
+            throw AuthIdentityException.ThrowGenerateTheNewOTP();
+        }
+
+        var res = await _userManager.ResetPasswordAsync(user, resetPasswordDetails.Token, request.NewPassword);
+
+        if (!res.Succeeded)
+            throw AuthIdentityException.ThrowOTPWrong();
+    }
 
     //Đăng nhập bằng Facebook
     public async Task<TokenResult> SignInFacebook(string accessToken, CancellationToken cancellationToken)
     {
-        var validatedTokenResult = await _facebookAuthService.ValidationAcessTokenAsync(accessToken);
+        var validatedTokenResult = await _facebookAuthService.ValidationAccessTokenAsync(accessToken);
 
         if (!validatedTokenResult.Data.IsValid)
         {
@@ -191,7 +209,7 @@ public class AuthIdentityService(ApplicationDbContext context,
         var userInfo = await _facebookAuthService.GetUsersInfoAsync(accessToken);
 
         //Cắt Email thành UsernName
-        string userName = (userInfo.Email).Split('@')[0];
+        string userName = userInfo.Email.Split('@')[0];
 
         //Tạo FullName
         string fullName = (userInfo.LastName + userInfo.FirstName).ToString();
@@ -238,7 +256,7 @@ public class AuthIdentityService(ApplicationDbContext context,
             }
             else //Tài khoản đăng nhập lần đầu
             {
-                var indentityuser = new ApplicationUser
+                var identityUser = new ApplicationUser
                 {
                     Id = Guid.NewGuid(),
                     Email = userInfo.Email,
@@ -246,18 +264,18 @@ public class AuthIdentityService(ApplicationDbContext context,
                     Name = fullName
                 };
 
-                var result = await _userManager.CreateAsync(indentityuser);
+                var result = await _userManager.CreateAsync(identityUser);
 
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddLoginAsync(indentityuser, info);
+                    result = await _userManager.AddLoginAsync(identityUser, info);
 
                     if (!result.Succeeded)
                     {
                         throw AuthIdentityException.ThrowErrorLinkedFacebook();
                     }
 
-                    var roles = await _userManager.AddToRoleAsync(indentityuser, "Subscriber");
+                    var roles = await _userManager.AddToRoleAsync(identityUser, Role.User.ToString());
 
                     var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
                     return tokenResult;
@@ -284,7 +302,7 @@ public class AuthIdentityService(ApplicationDbContext context,
         var checkLinked = await _signInManager.ExternalLoginSignInAsync("Google", payload.Subject, false);
 
         //Cắt Email thành UserName
-        string userName = (payload.Email).Split('@')[0];
+        string userName = payload.Email.Split('@')[0];
 
         //Tạo FullName
         string fullName = (payload.FamilyName + payload.GivenName).ToString();
@@ -330,7 +348,7 @@ public class AuthIdentityService(ApplicationDbContext context,
             }
             else //Tài khoản đăng nhập lần đầu
             {
-                var indentityuser = new ApplicationUser
+                var identityUser = new ApplicationUser
                 {
                     Id = Guid.NewGuid(),
                     Email = payload.Email,
@@ -338,18 +356,18 @@ public class AuthIdentityService(ApplicationDbContext context,
                     Name = fullName
                 };
 
-                var result = await _userManager.CreateAsync(indentityuser);
+                var result = await _userManager.CreateAsync(identityUser);
 
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddLoginAsync(indentityuser, info);
+                    result = await _userManager.AddLoginAsync(identityUser, info);
 
                     if (!result.Succeeded)
                     {
                         throw AuthIdentityException.ThrowErrorLinkedGoogle();
                     }
 
-                    var roles = await _userManager.AddToRoleAsync(indentityuser, "Subscriber");
+                    var roles = await _userManager.AddToRoleAsync(identityUser, Role.User.ToString());
 
 
                     var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
@@ -423,7 +441,7 @@ public class AuthIdentityService(ApplicationDbContext context,
             }
             else //Tài khoản đăng nhập lần đầu
             {
-                var indentityuser = new ApplicationUser
+                var identityUser = new ApplicationUser
                 {
                     Id = Guid.NewGuid(),
                     Email = email,
@@ -431,18 +449,18 @@ public class AuthIdentityService(ApplicationDbContext context,
                     Name = fullName
                 };
 
-                var result = await _userManager.CreateAsync(indentityuser);
+                var result = await _userManager.CreateAsync(identityUser);
 
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddLoginAsync(indentityuser, info);
+                    result = await _userManager.AddLoginAsync(identityUser, info);
 
                     if (!result.Succeeded)
                     {
                         throw AuthIdentityException.ThrowErrorLinkedApple();
                     }
 
-                    var roles = await _userManager.AddToRoleAsync(indentityuser, "Subscriber");
+                    var roles = await _userManager.AddToRoleAsync(identityUser, Role.User.ToString());
 
                     var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
 
@@ -456,63 +474,5 @@ public class AuthIdentityService(ApplicationDbContext context,
                 }
             }
         }
-    }
-
-    public async Task<ForgotPassword> SendPasswordResetCode(SendPasswordResetCodeRequest request, CancellationToken cancellationToken)
-    {
-        //Get identity user details user manager
-        var user = await _userManager.FindByEmailAsync(request.Email)
-            ?? throw AuthIdentityException.ThrowUserNotFound();
-
-        //Generate password reset token
-        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-        //Generate OTP
-        int otp = StringHelper.GenerateRandom(100000, 999999);
-
-        var resetPassword = new ForgotPassword()
-        {
-            Email = request.Email,
-            OTP = otp.ToString(),
-            Token = token,
-            UserId = user.Id,
-            DateTime = DateTime.Now
-        };
-
-        //save data into db with OTP
-        await _unitOfWork.ExecuteTransactionAsync(
-            async () => await _unitOfWork.ForgotPasswordRepository.AddAsync(resetPassword), cancellationToken);
-
-        //To do: Send token in email
-        await _emailSender.SendEmailAsync(request.Email, "Reset Password OTP", "Hello "
-            + request.Email +
-            "<br><br>Please find the reset password token below<br><br><b>"
-            + otp +
-            "<b><br><br>Thanks<br>truongnhon.tk");
-
-        return resetPassword;
-    }
-
-    public async Task<ForgotPassword> ResetPassword(ResetPasswordRequest request, CancellationToken cancellationToken)
-    {
-        //Get identity user details user manager
-        var user = await _userManager.FindByEmailAsync(request.Email);
-
-        //Getting token from otp
-        var resetPasswordDetails = await _context.ForgotPassword
-            .Where(x => x.OTP == request.OTP && x.UserId == user.Id)
-            .OrderByDescending(x => x.DateTime).FirstOrDefaultAsync();
-
-        //Verify if token is older than 3 minutes
-        var expirationDateTime = resetPasswordDetails.DateTime.AddMinutes(3);
-
-        if (expirationDateTime < DateTime.Now)
-        {
-            throw AuthIdentityException.ThrowGenerateTheNewOTP();
-        }
-
-        var res = await _userManager.ResetPasswordAsync(user, resetPasswordDetails.Token, request.NewPassword);
-
-        return !res.Succeeded ? throw AuthIdentityException.ThrowOTPWrong() : new ForgotPassword();
     }
 }

@@ -3,6 +3,13 @@ using CleanArchitecture.Application.Common.Models.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Web.Controller;
+
+
+public class MediaController(IFileStorageService fileStorageService) : BaseController
+{
+    private readonly IFileStorageService _fileStorageService = fileStorageService;
+
+}
 public class AuthController(IAuthService authService) : BaseController
 {
     private readonly IAuthService _userService = authService;
