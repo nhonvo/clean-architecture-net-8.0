@@ -199,7 +199,7 @@ publish/
 PublishScripts/
 
 # NuGet Packages
-*.nupkg
+# *.nupkg
 # NuGet Symbol Packages
 *.snupkg
 # The packages folder can be ignored because of Package Restore
@@ -483,3 +483,5 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 .vscode
+src/CleanArchitecture/appsettings.Development.json
+src/CleanArchitecture/appsettings.docker.json

@@ -20,7 +20,6 @@
     <license type="expression">MIT</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>clean-architecture project template csharp dotnet angular react</tags>
-    <icon>icon.png</icon>
     <readme>README.md</readme>
 
     <packageTypes>
