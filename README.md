@@ -102,7 +102,7 @@ This project is licensed under the MIT License.
 
 ## For development
 
-pack a project command
+pack a project command 
 
 ```bash
 dotnet new install ./ --force
