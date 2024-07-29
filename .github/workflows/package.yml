@@ -29,4 +29,4 @@ jobs:
         run: nuget pack CleanArchitecture.nuspec -NoDefaultExcludes
 
       - name: Publish the package
-        run: nuget push *.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+        run: nuget push ./nupkg/CleanArchitecture.1.0.0.nupkg -Source nuget.org -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate

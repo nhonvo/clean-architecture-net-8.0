@@ -22,11 +22,11 @@ jobs:
       - name: build and push docker image
         uses: docker/build-push-action@v2
         with:
-          context: ./CleanArchitecture/
+          context: ./
           file: ./src/CleanArchitecture/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/CleanArchitecture:v1
+          tags: ${{ secrets.DOCKER_USERNAME }}/cleanarchitecture:v1
 
       - name: verify
         run: echo ${{ steps.docker_build.outputs.digest}}
