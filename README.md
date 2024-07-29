@@ -99,3 +99,14 @@ Feel free to contribute to this project by submitting issues, feature requests, 
 ## License
 
 This project is licensed under the MIT License.
+
+## For development
+
+pack a project command
+
+```bash
+dotnet new install ./ --force
+dotnet pack -o nupkg
+dotnet new install ./nupkg/CleanArchitecture.1.0.0.nupkg
+dotnet new cleanarch -n MyFirstProject
+```
