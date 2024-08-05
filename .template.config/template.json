@@ -1,0 +1,37 @@
+{
+  "author": "Truong Nhon",
+  "description": "A template Clean Architecture project in C#",
+  "name": "Clean Architecture",
+  "classifications": ["WebAPI", "C#"],
+  "defaultName": "cleanarch",
+  "identity": "Clean.Architecture.Solution.CSharp",
+  "groupIdentity": "Clean.Architecture.Solution",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "shortName": "cleanarch",
+  "sourceName": "CleanArchitecture",
+  "preferNameDirectory": true,
+  "guids": [],
+  "symbols": {
+    "ProjectName": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The name of the project.",
+      "replaces": "MyProject",
+      "defaultValue": "MyProject"
+    }
+  },
+  "primaryOutputs": [
+    {
+      "path": "src\\CleanArchitecture\\CleanArchitecture.csproj"
+    },
+    {
+      "path": "src\\CleanArchitecture.Unittest\\CleanArchitecture.Unittest.csproj"
+    },
+    {
+      "path": "src\\CleanArchitecture.IntegrationTest\\CleanArchitecture.IntegrationTest.csproj"
+    }
+  ]
+}

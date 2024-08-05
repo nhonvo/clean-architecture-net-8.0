@@ -31,7 +31,7 @@ public class DependencyInjectionTests
     public DependencyInjectionTests()
     {
         var service = new ServiceCollection();
-        service.AddApplicationService();
+        service.AddApplicationService(_appSettings);
         service.AddInfrastructuresService(_appSettings);
         service.AddWebAPIService(_appSettings);
 
