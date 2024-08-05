@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -10,11 +9,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{323399AD-7965-419C-8CB4-3D2B8DA1F092}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		README.md = README.md
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Unittest", "src\CleanArchitecture.Unittest\CleanArchitecture.Unittest.csproj", "{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.Unittest", "src\CleanArchitecture.Unittest\CleanArchitecture.Unittest.csproj", "{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.IntegrationTest", "src\CleanArchitecture.IntegrationTest\CleanArchitecture.IntegrationTest.csproj", "{2CA912C6-F637-4653-9D5C-5638400A46AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +31,10 @@ Global
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CA912C6-F637-4653-9D5C-5638400A46AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CA912C6-F637-4653-9D5C-5638400A46AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CA912C6-F637-4653-9D5C-5638400A46AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CA912C6-F637-4653-9D5C-5638400A46AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,5 +42,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{94EEA393-1073-4715-9DB6-11188902DEA9} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
+		{2CA912C6-F637-4653-9D5C-5638400A46AA} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
 	EndGlobalSection
 EndGlobal

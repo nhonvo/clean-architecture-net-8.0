@@ -11,7 +11,7 @@ public static class HostingExtensions
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder, AppSettings appsettings)
     {
         builder.Services.AddInfrastructuresService(appsettings);
-        builder.Services.AddApplicationService();
+        builder.Services.AddApplicationService(appsettings);
         builder.Services.AddWebAPIService(appsettings);
 
         return builder.Build();
@@ -35,27 +35,16 @@ public static class HostingExtensions
         });
 
         app.UseCors("AllowSpecificOrigin");
-
         app.UseMiddleware<GlobalExceptionMiddleware>();
-
         app.UseMiddleware<PerformanceMiddleware>();
-
         app.UseResponseCompression();
-
-        app.UseResponseCompression();
-
         app.UseHttpsRedirection();
-
         app.ConfigureHealthCheck();
-
+        app.AddEndpoints();
         app.UseMiddleware<LoggingMiddleware>();
-
         app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions"));
-
         app.UseAuthentication();
-
         app.UseAuthorization();
-
         app.MapControllers();
 
         return app;

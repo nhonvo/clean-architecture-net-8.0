@@ -40,8 +40,9 @@ The project includes a sample API to demonstrate the basic structure and functio
 Utilize EF Core Migrations to create and update the database schema. Seed the database with initial data using data seeding techniques.
 
 ```bash
-dotnet ef migrations add init --output-dir Infrastructure/Migrations
-dotnet ef database update
+dotnet ef migrations add init --output-dir Infrastructure/Migrations --context ApplicationDbContext
+dotnet ef database update --context ApplicationDbContext
+dotnet ef database drop --context ApplicationDbContext (optional)
 ```
 
 ### Logging Request-Response
@@ -88,8 +89,16 @@ docker-compose up --build
 
 3. Access the API
 
+- docker
+
 ```bash
-http://localhost:3001/api/{your-endpoints}
+http://localhost:3001/swagger/index.html
+```
+
+- local
+
+```bash
+http://localhost:5240/swagger/index.html
 ```
 
 ## Contributing
@@ -102,7 +111,7 @@ This project is licensed under the MIT License.
 
 ## For development
 
-pack a project command 
+pack a project command
 
 ```bash
 dotnet new install ./ --force

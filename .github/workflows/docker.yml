@@ -1,7 +1,5 @@
 name: Push Image to Docker Hub
-on:
-  pull_request:
-    branches: ["main"]
+on: workflow_dispatch
 jobs:
   clean-architechture:
     runs-on: ubuntu-latest
