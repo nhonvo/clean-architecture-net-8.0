@@ -19,7 +19,7 @@ public class LocalFileStorageService : IFileStorageService
     {
         _webHostEnvironment = webHostEnvironment;
         _logger = logger;
-        _fileStorage = appSettings.FileStorage;
+        _fileStorage = appSettings.FileStorageSettings;
         _userContentFolder = Path.Combine(_webHostEnvironment.ContentRootPath, _fileStorage.Path);
         _baseUrl = appSettings.BaseURL;
 

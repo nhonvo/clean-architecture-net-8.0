@@ -32,7 +32,7 @@ public class AppSettings
     public ApplicationDetail ApplicationDetail { get; set; }
     public MailConfigurations MailConfigurations { get; set; }
     public CloudinarySettings Cloudinary { get; set; }
-    public FileStorageSettings FileStorage { get; set; }
+    public FileStorageSettings FileStorageSettings { get; set; }
     [Required]
     public string BaseURL { get; set; }
 }

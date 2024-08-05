@@ -18,7 +18,7 @@ public static class ConfigureServices
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IAuthIdentityService, AuthIdentityService>();
 
-        if (appsettings.FileStorage.LocalStorage)
+        if (appsettings.FileStorageSettings.LocalStorage)
         {
             services.AddScoped<IFileStorageService, LocalFileStorageService>();
         }
