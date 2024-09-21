@@ -7,5 +7,5 @@ public interface ITokenService
 {
     string GenerateToken(User user);
     ClaimsPrincipal ValidateToken(string token);
-    Task<TokenResult> GenerateToken(ApplicationUser user, CancellationToken cancellationToken);
+    Task<TokenResult> GenerateToken(ApplicationUser user, string[] scopes, CancellationToken cancellationToken);
 }

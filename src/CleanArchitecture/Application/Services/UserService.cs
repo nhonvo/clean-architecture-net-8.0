@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CleanArchitecture.Application.Common.Models.AuthIdentity.UsersIdentity;
 using CleanArchitecture.Application.Common.Models.AuthIdentity.File;
+using System.Security.Claims;
 
 namespace CleanArchitecture.Application.Services;
 
@@ -100,33 +101,52 @@ public class UserService(
             throw AuthIdentityException.ThrowDeleteUnsuccessful();
         }
     }
-
-    //Gán quyền người dùng
+    // Gán quyền người dùng và cập nhật scope
     public async Task RoleAssign(RoleAssignRequest request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(request.UserId)
             ?? throw AuthIdentityException.ThrowAccountDoesNotExist();
 
-        var removedRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
-
+        // Handle Role Removal
+        var removedRoles = request.Roles.Where(x => !x.Selected).Select(x => x.Name).ToList();
         foreach (var roleName in removedRoles)
         {
-            if (await _userManager.IsInRoleAsync(user, roleName) == true)
+            if (await _userManager.IsInRoleAsync(user, roleName))
             {
                 await _userManager.RemoveFromRoleAsync(user, roleName);
             }
         }
 
-        await _userManager.RemoveFromRolesAsync(user, removedRoles);
-
+        // Handle Role Assignment
         var addedRoles = request.Roles.Where(x => x.Selected).Select(x => x.Name).ToList();
-
         foreach (var roleName in addedRoles)
         {
-            if (await _userManager.IsInRoleAsync(user, roleName) == false)
+            if (!await _userManager.IsInRoleAsync(user, roleName))
             {
                 await _userManager.AddToRoleAsync(user, roleName);
             }
+        }
+
+        // Manage Scope Claims
+
+        // Retrieve the existing scope claim
+        var existingClaims = await _userManager.GetClaimsAsync(user);
+        var scopeClaim = existingClaims.FirstOrDefault(c => c.Type == "scope");
+
+        // Get scopes from the request
+        var newScopes = request.Scopes.Where(x => x.Selected).Select(x => x.Name).ToList();
+
+        if (scopeClaim != null)
+        {
+            // If there is an existing scope claim, remove it
+            await _userManager.RemoveClaimAsync(user, scopeClaim);
+        }
+
+        if (newScopes.Any())
+        {
+            // Add the new scope claim
+            var newScopeClaim = new Claim("scope", string.Join(" ", newScopes));
+            await _userManager.AddClaimAsync(user, newScopeClaim);
         }
     }
 }

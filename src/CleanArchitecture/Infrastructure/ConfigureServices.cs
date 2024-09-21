@@ -1,8 +1,10 @@
 using CleanArchitecture.Application;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Repositories;
+using CleanArchitecture.Domain.Authorization;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +38,7 @@ public static class ConfigureServices
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ApplicationDbContextInitializer>();
 
+        services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
         return services;
     }
 }

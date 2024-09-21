@@ -1,5 +1,4 @@
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.LoginSocial;
 using CleanArchitecture.Application.Common.Models.AuthIdentity.UsersIdentity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +39,8 @@ public class AuthIdentityController(IAuthIdentityService authIdentityService) : 
 
     [HttpGet("profile")]
     [Authorize]
+    [Authorize(Policy = "user_read")]
+    [Authorize(Policy ="user_write")]
     public async Task<IActionResult> Profile(CancellationToken cancellationToken)
         => Ok(await _authIdentityService.Get(cancellationToken));
 

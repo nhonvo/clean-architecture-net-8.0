@@ -28,12 +28,12 @@ public class TokenService(AppSettings appSettings,
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
         };
 
         var token = new JwtSecurityToken(
                 claims: claims,
-                expires: _time.GetCurrentTime().AddMinutes(10),
+                expires: _time.GetCurrentTime().AddMinutes(30),
                 audience: _appSettings.Jwt.Audience,
                 issuer: _appSettings.Jwt.Issuer,
                 signingCredentials: credentials
@@ -61,7 +61,7 @@ public class TokenService(AppSettings appSettings,
         return principal;
     }
 
-    public async Task<TokenResult> GenerateToken(ApplicationUser user, CancellationToken cancellationToken)
+    public async Task<TokenResult> GenerateToken(ApplicationUser user, string[] scopes, CancellationToken cancellationToken)
     {
         var result = new TokenResult();
 
@@ -75,6 +75,7 @@ public class TokenService(AppSettings appSettings,
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Uri, user?.Avatar?.PathMedia ?? "default.png"),
             new Claim(ClaimTypes.Role, roles == null ? Role.User.ToString() : string.Join(";", roles)),
+            new Claim("scope", string.Join(" ", scopes)) // Adding scope claim
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));

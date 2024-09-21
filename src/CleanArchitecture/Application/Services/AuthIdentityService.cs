@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
 using Payload = Google.Apis.Auth.GoogleJsonWebSignature.Payload;
 using CleanArchitecture.Application.Common.Models.AuthIdentity.UsersIdentity;
+using CleanArchitecture.Application.Common;
 
 namespace CleanArchitecture.Application.Services;
 public class AuthIdentityService(ApplicationDbContext context,
@@ -19,7 +20,8 @@ public class AuthIdentityService(ApplicationDbContext context,
     ITokenService tokenService,
     IUnitOfWork unitOfWork,
     IMailService emailSender,
-    ICurrentUser currentUser) : IAuthIdentityService
+    ICurrentUser currentUser,
+    AppSettings appSettings) : IAuthIdentityService
 {
     private readonly ApplicationDbContext _context = context;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
@@ -30,6 +32,7 @@ public class AuthIdentityService(ApplicationDbContext context,
     private readonly ITokenService _tokenService = tokenService;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ICurrentUser _currentUser = currentUser;
+    private readonly AppSettings _appSettings = appSettings;
 
     public async Task<TokenResult> Authenticate(LoginRequest request, CancellationToken cancellationToken)
     {
@@ -45,7 +48,15 @@ public class AuthIdentityService(ApplicationDbContext context,
         {
             throw AuthIdentityException.ThrowLoginUnsuccessful(result.ToString());
         }
-        var token = await _tokenService.GenerateToken(user, cancellationToken);
+
+        // Retrieve user's claims, including scope claim
+        var userClaims = await _userManager.GetClaimsAsync(user);
+        var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
+
+        // Extract scopes from the claim, if it exists
+        var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+        var token = await _tokenService.GenerateToken(user, scopes, cancellationToken);
 
         return token;
     }
@@ -77,6 +88,15 @@ public class AuthIdentityService(ApplicationDbContext context,
         if (result.Succeeded)
         {
             await _userManager.AddToRoleAsync(user, Role.User.ToString());
+            // Add custom scope claim to the user
+            string readScope = _appSettings.Jwt.ScopeBaseDomain + "/read";
+            string writeScope = _appSettings.Jwt.ScopeBaseDomain + "/write";
+            string[] scopes = [readScope, writeScope];
+
+            // Add custom scope claim to the user
+            var scopeClaim = new Claim("scope", string.Join(" ", scopes)); // Space-separated scopes
+            
+            await _userManager.AddClaimAsync(user, scopeClaim);
         }
         else
         {
@@ -103,7 +123,15 @@ public class AuthIdentityService(ApplicationDbContext context,
         // recall current token
         refreshToken.Revoked = DateTime.UtcNow;
 
-        var res = await _tokenService.GenerateToken(user, cancellationToken);
+        // Retrieve user's claims, including scope claim
+        var userClaims = await _userManager.GetClaimsAsync(user);
+        var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
+
+
+        // Extract scopes from the claim, if it exists
+        var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+        var res = await _tokenService.GenerateToken(user, scopes, cancellationToken);
 
         var result = new TokenResult
         {
@@ -225,7 +253,15 @@ public class AuthIdentityService(ApplicationDbContext context,
             var avatar = _context.Media.Where(m => m.MediaId == exist_user.AvatarId).Select(m => m.PathMedia)
                 .FirstOrDefault();
 
-            var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+
+            // Retrieve user's claims, including scope claim
+            var userClaims = await _userManager.GetClaimsAsync(exist_user);
+            var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
+
+            // Extract scopes from the claim, if it exists
+            var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+            var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
 
             return tokenResult;
         }
@@ -245,8 +281,14 @@ public class AuthIdentityService(ApplicationDbContext context,
                     var avatar = _context.Media.Where(m => m.MediaId == exist_user.AvatarId)
                         .Select(m => m.PathMedia).FirstOrDefault();
 
-                    var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+                    // Retrieve user's claims, including scope claim
+                    var userClaims = await _userManager.GetClaimsAsync(exist_user);
+                    var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
 
+                    // Extract scopes from the claim, if it exists
+                    var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+                    var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
                     return tokenResult;
                 }
                 else
@@ -277,7 +319,14 @@ public class AuthIdentityService(ApplicationDbContext context,
 
                     var roles = await _userManager.AddToRoleAsync(identityUser, Role.User.ToString());
 
-                    var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+                    // Retrieve user's claims, including scope claim
+                    var userClaims = await _userManager.GetClaimsAsync(exist_user);
+                    var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
+
+                    // Extract scopes from the claim, if it exists
+                    var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+                    var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
                     return tokenResult;
                 }
                 else
@@ -315,8 +364,14 @@ public class AuthIdentityService(ApplicationDbContext context,
             var avatar = _context.Media.Where(m => m.MediaId == exist_user.AvatarId).Select(m => m.PathMedia)
                 .FirstOrDefault();
 
-            var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+            // Retrieve user's claims, including scope claim
+            var userClaims = await _userManager.GetClaimsAsync(exist_user);
+            var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
 
+            // Extract scopes from the claim, if it exists
+            var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+            var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
             return tokenResult;
         }
         else //Chưa được liên kết với Google
@@ -336,8 +391,14 @@ public class AuthIdentityService(ApplicationDbContext context,
                     var avatar = _context.Media.Where(m => m.MediaId == exist_user.AvatarId)
                         .Select(m => m.PathMedia).FirstOrDefault();
 
-                    var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+                    // Retrieve user's claims, including scope claim
+                    var userClaims = await _userManager.GetClaimsAsync(exist_user);
+                    var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
 
+                    // Extract scopes from the claim, if it exists
+                    var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+                    var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
 
                     return tokenResult;
                 }
@@ -370,8 +431,14 @@ public class AuthIdentityService(ApplicationDbContext context,
                     var roles = await _userManager.AddToRoleAsync(identityUser, Role.User.ToString());
 
 
-                    var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+                    // Retrieve user's claims, including scope claim
+                    var userClaims = await _userManager.GetClaimsAsync(exist_user);
+                    var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
 
+                    // Extract scopes from the claim, if it exists
+                    var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+                    var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
                     return tokenResult;
                 }
                 else
@@ -407,8 +474,14 @@ public class AuthIdentityService(ApplicationDbContext context,
             var avatar = _context.Media.Where(m => m.MediaId == exist_user.AvatarId).Select(m => m.PathMedia)
                 .FirstOrDefault();
 
-            var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+            // Retrieve user's claims, including scope claim
+            var userClaims = await _userManager.GetClaimsAsync(exist_user);
+            var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
 
+            // Extract scopes from the claim, if it exists
+            var scopes = scopeClaim?.Value.Split(' ') ?? [];
+
+            var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
 
             return tokenResult;
         }
@@ -429,9 +502,14 @@ public class AuthIdentityService(ApplicationDbContext context,
                     var avatar = _context.Media.Where(m => m.MediaId == exist_user.AvatarId)
                         .Select(m => m.PathMedia).FirstOrDefault();
 
+                    // Retrieve user's claims, including scope claim
+                    var userClaims = await _userManager.GetClaimsAsync(exist_user);
+                    var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
 
-                    var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+                    // Extract scopes from the claim, if it exists
+                    var scopes = scopeClaim?.Value.Split(' ') ?? [];
 
+                    var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
                     return tokenResult;
                 }
                 else
@@ -461,9 +539,14 @@ public class AuthIdentityService(ApplicationDbContext context,
                     }
 
                     var roles = await _userManager.AddToRoleAsync(identityUser, Role.User.ToString());
+                    // Retrieve user's claims, including scope claim
+                    var userClaims = await _userManager.GetClaimsAsync(exist_user);
+                    var scopeClaim = userClaims.FirstOrDefault(c => c.Type == "scope");
 
-                    var tokenResult = await _tokenService.GenerateToken(exist_user, cancellationToken);
+                    // Extract scopes from the claim, if it exists
+                    var scopes = scopeClaim?.Value.Split(' ') ?? [];
 
+                    var tokenResult = await _tokenService.GenerateToken(exist_user, scopes, cancellationToken);
                     return tokenResult;
                 }
                 else

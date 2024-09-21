@@ -18,6 +18,10 @@ public class Jwt
     public string Issuer { get; set; }
     [Required]
     public string Audience { get; set; }
+    [Required]
+    public string ScopeBaseDomain { get; set; }
+    [Required]
+    public bool ValidateHttps { get; set; }
     public int ExpiredTime { get; set; } = 10;
 }
 
