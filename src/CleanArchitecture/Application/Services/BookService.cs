@@ -12,7 +12,13 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
 
     public async Task<Pagination<Book>> Get(int pageIndex, int pageSize)
     {
-        var books = await _unitOfWork.BookRepository.ToPagination(pageIndex, pageSize);
+        var books = await _unitOfWork.BookRepository.ToPagination(
+            pageIndex:pageIndex, 
+            pageSize: pageSize,
+            orderBy: x => x.Title,
+            ascending:true
+            );
+
         return books;
     }
 
