@@ -1,4 +1,5 @@
 using System.Reflection;
+using CleanArchitecture.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Data;
@@ -12,5 +13,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        builder.Seed();
     }
 }

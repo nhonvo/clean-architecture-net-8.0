@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Models;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Interface;
@@ -39,14 +38,14 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     public async Task<Pagination<T>> ToPagination(
         int pageIndex,
         int pageSize,
-        Expression<Func<T, object>>? orderBy = null, 
+        Expression<Func<T, object>>? orderBy = null,
         bool ascending = true)
     {
         var itemCount = await _dbSet.CountAsync();
 
         IQueryable<T> query = _dbSet.AsNoTracking();
 
-        orderBy ??= x => EF.Property<object>(x, "Id"); 
+        orderBy ??= x => EF.Property<object>(x, "Id");
 
         query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
 
@@ -70,7 +69,7 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     public async Task<Pagination<T>> GetAsync(
         Expression<Func<T, bool>> filter,
         int pageIndex = 0,
-        int pageSize = 10, 
+        int pageSize = 10,
         Expression<Func<T, object>>? orderBy = null,
         bool ascending = true)
     {

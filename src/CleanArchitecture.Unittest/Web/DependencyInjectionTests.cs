@@ -19,8 +19,7 @@ public class DependencyInjectionTests
         {
             ApplicationName = "app",
             ContactWebsite = "http://dummy.html",
-            Description = "description",
-            LicenseDetail = "dummy"
+            Description = "description"
         },
         ConnectionStrings = new ConnectionStrings
         {

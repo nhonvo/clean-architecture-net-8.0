@@ -2,7 +2,7 @@ using CleanArchitecture.Application.Common.Models;
 
 namespace CleanArchitecture.Domain.Entities;
 
-public class User: BaseModel
+public class User : BaseModel
 {
     public string UserName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;

@@ -13,10 +13,10 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
     public async Task<Pagination<Book>> Get(int pageIndex, int pageSize)
     {
         var books = await _unitOfWork.BookRepository.ToPagination(
-            pageIndex:pageIndex, 
+            pageIndex: pageIndex,
             pageSize: pageSize,
             orderBy: x => x.Title,
-            ascending:true
+            ascending: true
             );
 
         return books;
@@ -33,11 +33,13 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
         var book = _mapper.Map<Book>(request);
         await _unitOfWork.ExecuteTransactionAsync(async () => await _unitOfWork.BookRepository.AddAsync(book), token);
     }
+
     public async Task Update(Book request, CancellationToken token)
     {
         var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == request.Id);
         await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Update(book), token);
     }
+
     public async Task Delete(int id, CancellationToken token)
     {
 

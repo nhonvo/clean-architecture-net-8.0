@@ -12,5 +12,5 @@ var app = await builder.ConfigureServices(configuration).ConfigurePipelineAsync(
 
 await app.RunAsync();
 
-// this line tell integration test
+// this line for integration test
 public partial class Program { }

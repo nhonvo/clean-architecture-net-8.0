@@ -1,6 +1,6 @@
 name: Push Image to Docker Hub
 on:
-  pull_request:
+  push:
     branches: ["main"]
 jobs:
   clean-architechture:
