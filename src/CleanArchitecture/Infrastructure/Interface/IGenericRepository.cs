@@ -3,7 +3,7 @@ using CleanArchitecture.Application.Common.Models;
 
 namespace CleanArchitecture.Infrastructure.Interface;
 
-public interface IGenericRepository<T> where T : class
+public interface IGenericRepository<T> where T : BaseModel
 {
     public Task AddAsync(T entity);
     public Task AddRangeAsync(IEnumerable<T> entities);
@@ -15,8 +15,10 @@ public interface IGenericRepository<T> where T : class
     public Task<Pagination<T>> GetAsync(
        Expression<Func<T, bool>> filter,
        int pageIndex = 0,
-       int pageSize = 10);
-    public Task<Pagination<T>> ToPagination(int pageIndex, int pageSize);
+       int pageSize = 10, 
+       Expression<Func<T, object>>? orderBy = null, 
+       bool ascending = true);
+    public Task<Pagination<T>> ToPagination(int pageIndex, int pageSize, Expression<Func<T, object>>? orderBy = null, bool ascending = true);
 
     public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter);
     public void Update(T entity);
