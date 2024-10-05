@@ -15,8 +15,8 @@ public interface IGenericRepository<T> where T : BaseModel
     public Task<Pagination<T>> GetAsync(
        Expression<Func<T, bool>> filter,
        int pageIndex = 0,
-       int pageSize = 10, 
-       Expression<Func<T, object>>? orderBy = null, 
+       int pageSize = 10,
+       Expression<Func<T, object>>? orderBy = null,
        bool ascending = true);
     public Task<Pagination<T>> ToPagination(int pageIndex, int pageSize, Expression<Func<T, object>>? orderBy = null, bool ascending = true);
 

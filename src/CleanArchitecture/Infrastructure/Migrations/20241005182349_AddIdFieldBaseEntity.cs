@@ -2,21 +2,20 @@
 
 #nullable disable
 
-namespace CleanArchitecture.Infrastructure.Migrations
+namespace CleanArchitecture.Infrastructure.Migrations;
+
+/// <inheritdoc />
+public partial class AddIdFieldBaseEntity : Migration
 {
     /// <inheritdoc />
-    public partial class AddIdFieldBaseEntity : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
 
-        }
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
 
-        }
     }
 }
