@@ -7,9 +7,11 @@ using CleanArchitecture.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using CleanArchitecture.Application.Common.Mappings;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CleanArchitecture.Unittest;
 
+[ExcludeFromCodeCoverage]
 public class SetupTest : IDisposable
 {
 

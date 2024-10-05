@@ -1,6 +1,8 @@
+using CleanArchitecture.Application.Common.Models;
+
 namespace CleanArchitecture.Domain.Entities;
 
-public class Media
+public class Media: BaseModel
 {
     public int MediaId { get; set; }
     public MediaType Type { get; set; }

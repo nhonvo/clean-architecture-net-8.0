@@ -9,9 +9,8 @@ public static class HealthCheckExtensions
 {
     public static void SetupHealthCheck(this IServiceCollection services, AppSettings configuration)
     {
-        services.AddHealthChecks();
         services.AddHealthChecks()
-           .AddDbContextCheck<ApplicationDbContext>(name: "Application DB Context", failureStatus: HealthStatus.Degraded)
+           .AddDbContextCheck<ApplicationDbContext>(name: nameof(ApplicationDbContext), failureStatus: HealthStatus.Degraded)
            .AddUrlGroup(new Uri(configuration.ApplicationDetail.ContactWebsite),
                            name: configuration.ApplicationDetail.ApplicationName,
                            failureStatus: HealthStatus.Degraded)

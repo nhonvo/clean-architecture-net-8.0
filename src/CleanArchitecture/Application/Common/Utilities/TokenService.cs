@@ -33,7 +33,7 @@ public class TokenService(AppSettings appSettings,
 
         var token = new JwtSecurityToken(
                 claims: claims,
-                expires: _time.GetCurrentTime().AddMinutes(30),
+                expires: _time.GetCurrentTime().AddDays(1),
                 audience: _appSettings.Jwt.Audience,
                 issuer: _appSettings.Jwt.Issuer,
                 signingCredentials: credentials

@@ -1,8 +1,10 @@
+
+using CleanArchitecture.Application.Common.Models;
+
 namespace CleanArchitecture.Domain.Entities;
 
-public class ForgotPassword
+public class ForgotPassword : BaseModel
 {
-    public int Id { get; set; }
     public Guid UserId { get; set; }
     public string Email { get; set; }
     public string Token { get; set; }

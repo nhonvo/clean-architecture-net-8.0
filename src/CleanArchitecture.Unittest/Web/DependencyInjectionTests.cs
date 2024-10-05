@@ -15,6 +15,12 @@ public class DependencyInjectionTests
     private readonly ServiceProvider _serviceProvider;
     private readonly AppSettings _appSettings = new AppSettings
     {
+        ApplicationDetail = new ApplicationDetail
+        {
+            ApplicationName = "app",
+            ContactWebsite = "http://dummy.html",
+            Description = "description"
+        },
         ConnectionStrings = new ConnectionStrings
         {
             DefaultConnection = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"
@@ -35,16 +41,9 @@ public class DependencyInjectionTests
             }
         },
         Cors = new[]
-    {
+        {
         "http://localhost:4200",
         "https://myapp.com"
-    },
-        ApplicationDetail = new ApplicationDetail
-        {
-            ApplicationName = "MyApp",
-            Description = "This is a sample application.",
-            ContactWebsite = "https://myapp.com/contact",
-            LicenseDetail = "MIT License"
         },
         MailConfigurations = new MailConfigurations
         {

@@ -146,6 +146,43 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Book", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "A comprehensive guide to C# programming.",
+                            Price = 29.989999999999998,
+                            Title = "C# Programming"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Learn how to build web applications using ASP.NET Core.",
+                            Price = 35.5,
+                            Title = "ASP.NET Core Development"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Master the Entity Framework Core ORM for .NET development.",
+                            Price = 40.0,
+                            Title = "Entity Framework Core In Action"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Everything you need to know about building Blazor WebAssembly applications.",
+                            Price = 45.990000000000002,
+                            Title = "Blazor WebAssembly: The Complete Guide"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Implement common design patterns in C# to improve code structure.",
+                            Price = 50.0,
+                            Title = "Design Patterns in C#"
+                        });
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.Entities.ForgotPassword", b =>

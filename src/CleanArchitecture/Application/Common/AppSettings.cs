@@ -4,6 +4,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CleanArchitecture.Application.Common;
 
+public class AppSettings
+{
+    public ApplicationDetail ApplicationDetail { get; set; }
+    public ConnectionStrings ConnectionStrings { get; set; }
+    public Logging Logging { get; set; }
+    public Jwt Jwt { get; set; }
+    public MailConfigurations MailConfigurations { get; set; }
+    public FileStorageSettings FileStorageSettings { get; set; }
+    public CloudinarySettings Cloudinary { get; set; }
+    public bool UseInMemoryDatabase { get; set; }
+    public string[] Cors { get; set; }
+    public string BaseURL { get; set; }
+}
+
+public class ApplicationDetail
+{
+    public string ApplicationName { get; set; }
+    public string Description { get; set; }
+    public string ContactWebsite { get; set; }
+}
+
 public class ConnectionStrings
 {
     [Required]
@@ -25,29 +46,6 @@ public class Jwt
     public int ExpiredTime { get; set; } = 10;
 }
 
-public class AppSettings
-{
-    public ConnectionStrings ConnectionStrings { get; set; }
-    public Jwt Jwt { get; set; }
-    public bool UseInMemoryDatabase { get; set; } = false;
-    public Logging Logging { get; set; }
-    [Required]
-    public string[] Cors { get; set; }
-    public ApplicationDetail ApplicationDetail { get; set; }
-    public MailConfigurations MailConfigurations { get; set; }
-    public CloudinarySettings Cloudinary { get; set; }
-    public FileStorageSettings FileStorageSettings { get; set; }
-    [Required]
-    public string BaseURL { get; set; }
-}
-
-public class FileStorageSettings
-{
-    public bool LocalStorage { get; set; } = true;
-    [Required]
-    public string Path { get; set; }
-}
-
 public class MailConfigurations
 {
     [Required]
@@ -58,19 +56,6 @@ public class MailConfigurations
     public string Password { get; set; }
     [Required]
     public int Port { get; set; }
-}
-
-public class ApplicationDetail
-{
-
-    [Required]
-    public string ApplicationName { get; set; }
-    [Required]
-    public string Description { get; set; }
-    [Required]
-    public string ContactWebsite { get; set; }
-    [Required]
-    public string LicenseDetail { get; set; }
 }
 
 public class Logging
@@ -92,4 +77,10 @@ public class CloudinarySettings
     public string ApiKey { get; set; } = string.Empty;
     [Required]
     public string ApiSecret { get; set; } = string.Empty;
+}
+public class FileStorageSettings
+{
+    public bool LocalStorage { get; set; } = true;
+    [Required]
+    public string Path { get; set; }
 }

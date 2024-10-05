@@ -4,7 +4,7 @@ public class UserFriendlyException : Exception
 {
     public string UserFriendlyMessage { get; set; }
     public ErrorCode ErrorCode { get; set; }
-    
+
     public UserFriendlyException(ErrorCode errorCode, string userFriendlyMessage, Exception? innerException = null) : base(userFriendlyMessage, innerException)
     {
         ErrorCode = errorCode;

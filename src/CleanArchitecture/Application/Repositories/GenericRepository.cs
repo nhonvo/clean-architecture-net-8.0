@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Repositories;
 
-public class GenericRepository<T>(ApplicationDbContext context) : IGenericRepository<T> where T : class
+public class GenericRepository<T>(ApplicationDbContext context) : IGenericRepository<T> where T : BaseModel
 {
     protected DbSet<T> _dbSet = context.Set<T>();
 
@@ -35,13 +35,24 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     public async Task<T> GetByIdAsync(object id)
         => await _dbSet.FindAsync(id);
 
-    public async Task<Pagination<T>> ToPagination(int pageIndex, int pageSize)
+    public async Task<Pagination<T>> ToPagination(
+        int pageIndex,
+        int pageSize,
+        Expression<Func<T, object>>? orderBy = null,
+        bool ascending = true)
     {
         var itemCount = await _dbSet.CountAsync();
-        var items = await _dbSet.Skip(pageIndex * pageSize)
-                                .Take(pageSize)
-                                .AsNoTracking()
-                                .ToListAsync();
+
+        IQueryable<T> query = _dbSet.AsNoTracking();
+
+        orderBy ??= x => EF.Property<object>(x, "Id");
+
+        query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
+
+        var items = await query
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
 
         var result = new Pagination<T>()
         {
@@ -53,6 +64,7 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
 
         return result;
     }
+
 
     public async Task<Pagination<T>> GetAsync(
        Expression<Func<T, bool>>? filter = null,
@@ -91,14 +103,20 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     public async Task<Pagination<T>> GetAsync(
         Expression<Func<T, bool>> filter,
         int pageIndex = 0,
-        int pageSize = 10)
+        int pageSize = 10,
+        Expression<Func<T, object>>? orderBy = null,
+        bool ascending = true)
     {
         var itemCount = await _dbSet.CountAsync();
-        var items = await _dbSet.Where(filter)
-                                .Skip(pageIndex * pageSize)
-                                .Take(pageSize)
-                                .AsNoTracking()
-                                .ToListAsync();
+
+        IQueryable<T> query = _dbSet.AsNoTracking().Where(filter);
+        orderBy ??= x => EF.Property<object>(x, "Id");
+        query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
+
+        var items = await query
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
 
         var result = new Pagination<T>()
         {

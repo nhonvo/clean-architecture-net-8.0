@@ -1,5 +1,6 @@
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Web.Controller;
@@ -34,6 +35,7 @@ public class AuthController(IAuthService authService) : BaseController
         => Ok(await _userService.RefreshToken());
 
     [HttpGet("profile")]
+    [Authorize]
     public async Task<IActionResult> GetProfile()
         => Ok(await _userService.GetProfile());
 }
