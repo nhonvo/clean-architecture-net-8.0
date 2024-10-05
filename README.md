@@ -92,6 +92,8 @@ docker-compose up --build
 
 - Update connect string to database local in `appsettings.Development.json`
 
+- docker
+
 ```bash
 dotnet run
 ```

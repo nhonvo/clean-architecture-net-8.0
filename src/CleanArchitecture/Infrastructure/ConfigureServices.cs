@@ -1,8 +1,11 @@
 using CleanArchitecture.Application;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Repositories;
+using CleanArchitecture.Domain.Authorization;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure;
@@ -22,12 +25,20 @@ public static class ConfigureServices
                 options.UseSqlServer(configuration.ConnectionStrings.DefaultConnection));
         }
 
+        services.AddIdentity<ApplicationUser, RoleIdentity>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
         // register services
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IMediaRepository, MediaRepository>();
+        services.AddScoped<IForgotPasswordRepository, ForgotPasswordRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ApplicationDbContextInitializer>();
 
+        services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
         return services;
     }
 }

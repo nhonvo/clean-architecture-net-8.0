@@ -18,8 +18,7 @@ public static class ConfigureServices
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
-        services.AddAuthentication();
-        services.AddAuthorization();
+        services.AddAuth(appSettings.Jwt);
 
         // Middleware
         services.AddSingleton<GlobalExceptionMiddleware>();

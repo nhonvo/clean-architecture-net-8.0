@@ -5,9 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Web.Controller;
 
-public class AuthController(IAuthService userWriteService) : BaseController
+
+public class MediaController(IFileStorageService fileStorageService) : BaseController
 {
-    private readonly IAuthService _userService = userWriteService;
+    private readonly IFileStorageService _fileStorageService = fileStorageService;
+
+}
+public class AuthController(IAuthService authService) : BaseController
+{
+    private readonly IAuthService _userService = authService;
 
     [HttpPost("sign-in")]
     public async Task<IActionResult> SignIn(UserSignInRequest request)

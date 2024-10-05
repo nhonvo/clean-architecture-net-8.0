@@ -13,7 +13,7 @@ namespace CleanArchitecture.Unittest.Web;
 public class DependencyInjectionTests
 {
     private readonly ServiceProvider _serviceProvider;
-    private readonly AppSettings _appSettings = new()
+    private readonly AppSettings _appSettings = new AppSettings
     {
         ApplicationDetail = new ApplicationDetail
         {
@@ -23,14 +23,53 @@ public class DependencyInjectionTests
         },
         ConnectionStrings = new ConnectionStrings
         {
-            DefaultConnection = "dummy"
-        }
+            DefaultConnection = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"
+        },
+        Jwt = new Jwt
+        {
+            Key = "your_jwt_key",
+            Issuer = "your_jwt_issuer",
+            Audience = "your_jwt_audience",
+            ExpiredTime = 10
+        },
+        UseInMemoryDatabase = false,
+        Logging = new Logging
+        {
+            RequestResponse = new RequestResponse
+            {
+                IsEnabled = true
+            }
+        },
+        Cors = new[]
+        {
+        "http://localhost:4200",
+        "https://myapp.com"
+        },
+        MailConfigurations = new MailConfigurations
+        {
+            From = "noreply@myapp.com",
+            Host = "smtp.myapp.com",
+            Password = "your_password",
+            Port = 587
+        },
+        Cloudinary = new CloudinarySettings
+        {
+            CloudName = "mycloudname",
+            ApiKey = "myapikey",
+            ApiSecret = "myapisecret"
+        },
+        FileStorageSettings = new FileStorageSettings
+        {
+            LocalStorage = true,
+            Path = "C:/FileStorage"
+        },
+        BaseURL = "https://myapp.com"
     };
 
     public DependencyInjectionTests()
     {
         var service = new ServiceCollection();
-        service.AddApplicationService();
+        service.AddApplicationService(_appSettings);
         service.AddInfrastructuresService(_appSettings);
         service.AddWebAPIService(_appSettings);
 

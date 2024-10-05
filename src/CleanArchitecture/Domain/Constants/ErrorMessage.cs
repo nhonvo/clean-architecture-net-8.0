@@ -2,9 +2,9 @@ namespace CleanArchitecture.Domain.Constants;
 
 public static class ErrorMessage
 {
-    public static string Internal = "something went wrong";
-    public static string NotFoundMessage = "Could not find";
-    public static string AppConfigurationMessage = "Can not get appsetting variables";
-    public static string TransactionNotCommit = "Transaction can not commit";
-    public static string TransactionNotExecute = "Transaction can not execute";
+    public const string InternalError = "Something went wrong. Please try again later.";
+    public const string NotFoundMessage = "The requested resource could not be found.";
+    public const string AppConfigurationMessage = "Unable to retrieve application settings.";
+    public const string TransactionNotCommit = "The transaction could not be committed.";
+    public const string TransactionNotExecute = "The transaction could not be executed.";
 }

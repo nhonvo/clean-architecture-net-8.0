@@ -11,7 +11,7 @@ public static class HostingExtensions
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder, AppSettings appsettings)
     {
         builder.Services.AddInfrastructuresService(appsettings);
-        builder.Services.AddApplicationService();
+        builder.Services.AddApplicationService(appsettings);
         builder.Services.AddWebAPIService(appsettings);
 
         return builder.Build();
@@ -21,11 +21,15 @@ public static class HostingExtensions
     {
         using var loggerFactory = LoggerFactory.Create(builder => { });
         using var scope = app.Services.CreateScope();
+
         if (!appsettings.UseInMemoryDatabase)
         {
             var initialize = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
             await initialize.InitializeAsync();
         }
+
+        app.UseMiddleware<GlobalExceptionMiddleware>(); // Global exception handling first
+        app.UseResponseCompression();  // Compression should be high up
 
         app.UseSwagger();
         app.UseSwaggerUI(setupAction =>
@@ -36,28 +40,24 @@ public static class HostingExtensions
 
         app.UseCors("AllowSpecificOrigin");
 
-        app.UseMiddleware<GlobalExceptionMiddleware>();
+        app.UseHttpsRedirection(); // Ensure HTTPS redirection for security
 
-        app.UseMiddleware<PerformanceMiddleware>();
+        app.UseMiddleware<PerformanceMiddleware>(); // Performance middleware after other setup steps
 
-        app.UseResponseCompression();
+        app.ConfigureHealthCheck(); // Health checks
 
-        app.UseResponseCompression();
+        app.AddEndpoints(); // Add custom endpoints (if any)
 
-        app.UseHttpsRedirection();
+        app.UseAuthentication(); // Authentication before authorization
+        app.UseMiddleware<LoggingMiddleware>(); // Logging middleware after authentication to log authenticated requests
 
-        app.ConfigureHealthCheck();
+        app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions")); // Global exception handler
 
-        app.UseMiddleware<LoggingMiddleware>();
+        app.UseAuthorization(); // Authorization after authentication
 
-        app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions"));
-
-        app.UseAuthentication();
-
-        app.UseAuthorization();
-
-        app.MapControllers();
+        app.MapControllers(); // Map controllers after authentication and authorization
 
         return app;
     }
+
 }
