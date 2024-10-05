@@ -25,7 +25,7 @@ public class TokenService(AppSettings appSettings, ICurrentTime time) : ITokenSe
 
         var token = new JwtSecurityToken(
                 claims: claims,
-                expires: _time.GetCurrentTime().AddMinutes(10),
+                expires: _time.GetCurrentTime().AddDays(1),
                 audience: _appSettings.Jwt.Audience,
                 issuer: _appSettings.Jwt.Issuer,
                 signingCredentials: credentials

@@ -2,7 +2,9 @@ using CleanArchitecture.Application.Common.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Data;
-
+/// <summary>
+/// Another way to seed data use DbContext
+/// </summary>
 public class ApplicationDbContextInitializer(ApplicationDbContext context, ILoggerFactory logger)
 {
     private readonly ApplicationDbContext _context = context;
