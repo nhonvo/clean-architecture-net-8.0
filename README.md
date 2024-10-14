@@ -74,8 +74,8 @@ Note: For development
 pack a project command
 
 ```bash
-dotnet new install ./ --force
 dotnet pack -o nupkg
-dotnet new install ./nupkg/CleanArchitecture.1.0.0.nupkg
+dotnet new install ./ --force
+# dotnet new install ./nupkg/CleanArchitecture.1.0.0.nupkg
 dotnet new cleanarch -n MyFirstProject
 ```
