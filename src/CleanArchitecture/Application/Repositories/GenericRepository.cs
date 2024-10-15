@@ -38,6 +38,8 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     public async Task<Pagination<T>> ToPagination(
         int pageIndex,
         int pageSize,
+        Expression<Func<T, bool>>? filter = null,
+        Func<IQueryable<T>, IQueryable<T>>? include = null,
         Expression<Func<T, object>>? orderBy = null,
         bool ascending = true)
     {
@@ -45,6 +47,16 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
 
         IQueryable<T> query = _dbSet.AsNoTracking();
 
+        if (include != null)
+        {
+            query = include(query);
+        }
+
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
         orderBy ??= x => EF.Property<object>(x, "Id");
 
         query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
@@ -65,40 +77,19 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
         return result;
     }
 
-
-    public async Task<Pagination<T>> GetAsync(
-        Expression<Func<T, bool>> filter,
-        int pageIndex = 0,
-        int pageSize = 10,
-        Expression<Func<T, object>>? orderBy = null,
-        bool ascending = true)
+    public async Task<T?> FirstOrDefaultAsync(
+    Expression<Func<T, bool>> filter,
+    Func<IQueryable<T>, IQueryable<T>>? include = null)
     {
-        var itemCount = await _dbSet.CountAsync();
+        IQueryable<T> query = _dbSet.IgnoreQueryFilters().AsNoTracking();
 
-        IQueryable<T> query = _dbSet.AsNoTracking().Where(filter);
-        orderBy ??= x => EF.Property<object>(x, "Id");
-        query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
-
-        var items = await query
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-
-        var result = new Pagination<T>()
+        if (include != null)
         {
-            PageIndex = pageIndex,
-            PageSize = pageSize,
-            TotalItemsCount = itemCount,
-            Items = items,
-        };
+            query = include(query);
+        }
 
-        return result;
+        return await query.FirstOrDefaultAsync(filter);
     }
-
-    public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter)
-        => await _dbSet.IgnoreQueryFilters()
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(filter);
 
     #endregion
     #region Update & delete
