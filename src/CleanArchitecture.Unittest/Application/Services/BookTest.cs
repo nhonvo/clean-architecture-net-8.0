@@ -5,6 +5,7 @@ using CleanArchitecture.Application.Common.Models;
 using CleanArchitecture.Application.Common.Models.Book;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace CleanArchitecture.Unittest.Application.Services;
@@ -27,7 +28,7 @@ public class BookTest
             Description = "A comprehensive guide to C# programming.",
             Price = 29.99
         };
-        _unitOfWorkMock.Setup(u => u.BookRepository.FirstOrDefaultAsync(b => b.Id == bookId))
+        _unitOfWorkMock.Setup(u => u.BookRepository.FirstOrDefaultAsync(b => b.Id == bookId, null))
                        .ReturnsAsync(expectedResult);
 
         _bookService = new BookService(_unitOfWorkMock.Object, _mapperMock.Object);
@@ -75,7 +76,13 @@ public class BookTest
 
         // Setup the mock for the repository's ToPagination method
         _unitOfWorkMock
-            .Setup(u => u.BookRepository.ToPagination(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Expression<Func<Book, object>>>(), It.IsAny<bool>()))
+            .Setup(u => u.BookRepository.ToPagination(
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<Expression<Func<Book, bool>>>(),
+                It.IsAny<Func<IQueryable<Book>, IQueryable<Book>>>(),
+                It.IsAny<Expression<Func<Book, object>>>(),
+                It.IsAny<bool>()))
             .ReturnsAsync(expectedResult);
 
         _bookService = new BookService(_unitOfWorkMock.Object, _mapperMock.Object);
@@ -156,7 +163,9 @@ public class BookTest
             Price = 30.00
         };
 
-        _unitOfWorkMock.Setup(u => u.BookRepository.FirstOrDefaultAsync(It.IsAny<Expression<Func<Book, bool>>>()))
+        _unitOfWorkMock.Setup(u => u.BookRepository.FirstOrDefaultAsync(
+            It.IsAny<Expression<Func<Book, bool>>>(),
+            It.IsAny<Func<IQueryable<Book>, IQueryable<Book>>>()))
                        .ReturnsAsync(existingBook);
 
         //_unitOfWorkMock.Setup(u => u.BookRepository.Update(It.IsAny<Book>())).Returns(Task.CompletedTask);
@@ -168,7 +177,9 @@ public class BookTest
         await _bookService.Update(updateRequest, CancellationToken.None);
 
         // Assert
-        _unitOfWorkMock.Verify(u => u.BookRepository.FirstOrDefaultAsync(It.IsAny<Expression<Func<Book, bool>>>()), Times.Once);
+        _unitOfWorkMock.Verify(u => u.BookRepository.FirstOrDefaultAsync(
+            It.IsAny<Expression<Func<Book, bool>>>(),
+            It.IsAny<Func<IQueryable<Book>, IQueryable<Book>>>()), Times.Once);
         //_unitOfWorkMock.Verify(u => u.BookRepository.Update(It.Is<Book>(b => b.Id == updateRequest.Id)), Times.Once);
         //_unitOfWorkMock.Verify(u => u.ExecuteTransactionAsync(It.IsAny<Func<Task>>(), CancellationToken.None), Times.Once);
     }
@@ -186,7 +197,9 @@ public class BookTest
             Price = 20.00
         };
 
-        _unitOfWorkMock.Setup(u => u.BookRepository.FirstOrDefaultAsync(It.IsAny<Expression<Func<Book, bool>>>()))
+        _unitOfWorkMock.Setup(u => u.BookRepository.FirstOrDefaultAsync(
+            It.IsAny<Expression<Func<Book, bool>>>(),
+            It.IsAny<Func<IQueryable<Book>, IQueryable<Book>>>()))
                        .ReturnsAsync(bookToDelete);
 
         //_unitOfWorkMock.Setup(u => u.BookRepository.Delete(It.IsAny<Book>())).Returns(Task.CompletedTask);
@@ -198,7 +211,9 @@ public class BookTest
         await _bookService.Delete(bookId, CancellationToken.None);
 
         // Assert
-        _unitOfWorkMock.Verify(u => u.BookRepository.FirstOrDefaultAsync(It.IsAny<Expression<Func<Book, bool>>>()), Times.Once);
+        _unitOfWorkMock.Verify(u => u.BookRepository.FirstOrDefaultAsync(
+            It.IsAny<Expression<Func<Book, bool>>>(),
+            It.IsAny<Func<IQueryable<Book>, IQueryable<Book>>>()), Times.Once);
         //_unitOfWorkMock.Verify(u => u.BookRepository.Delete(It.Is<Book>(b => b.Id == bookId)), Times.Once);
         //_unitOfWorkMock.Verify(u => u.ExecuteTransactionAsync(It.IsAny<Func<Task>>(), CancellationToken.None), Times.Once);
     }

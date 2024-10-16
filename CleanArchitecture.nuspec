@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-
     <id>Clean.Architecture.Solution.Template</id>
-    <version>8.0.5</version>
+    <version>1.0.0</version>
     <title>Clean Architecture Solution Template</title>
     <authors>Truong Nhon</authors>
     <description>Clean Architecture Solution Template for .NET 8.</description>
-    <summary>
-        A template Clean Architecture project in C#
-    </summary>
-    <releaseNotes>
-      🐛 Disabled simplified build outputs due to EF Core compatability issue.
-    </releaseNotes>
-
-    <projectUrl>https://github.com/nhonvo/clean-architecture-net-8.0</projectUrl>
+    <summary>A template Clean Architecture project in C#</summary>
+    <releaseNotes>Initial release of the Clean Architecture Template</releaseNotes>
+    <projectUrl>https://github.com/nhonvo/clean-architecture-net-8.0.git</projectUrl>
     <repository type="git" url="https://github.com/nhonvo/clean-architecture-net-8.0.git" branch="main" />
-
     <license type="expression">MIT</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>clean-architecture project template csharp dotnet angular react</tags>

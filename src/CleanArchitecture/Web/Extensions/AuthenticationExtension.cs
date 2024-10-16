@@ -27,19 +27,20 @@ public static class AuthenticationExtensions
         });
 
         //custom policy scheme using AddPolicyScheme in ASP.NET Core, it allows you to dynamically choose an authentication scheme based on the incoming request. This is useful if you have multiple authentication methods (e.g., JWT Bearer, Cookies, etc.)
-        authenticationBuilder.AddPolicyScheme("CustomScheme", "CustomScheme", options =>
-        {
-            options.ForwardDefaultSelector = context =>
-            {
-                // Example logic to select authentication scheme
-                if (context.Request.Headers.ContainsKey("Authorization"))
-                {
-                    return "Bearer"; // Use JWT Bearer if there's an Authorization header
-                }
+        // MAKE YOUR PROJECT RESPONSE LONGER
+        // authenticationBuilder.AddPolicyScheme("CustomScheme", "CustomScheme", options =>
+        // {
+        //     options.ForwardDefaultSelector = context =>
+        //     {
+        //         // Example logic to select authentication scheme
+        //         if (context.Request.Headers.ContainsKey("Authorization"))
+        //         {
+        //             return "Bearer"; // Use JWT Bearer if there's an Authorization header
+        //         }
 
-                return "Cookie"; // Default to Cookie
-            };
-        });
+        //         return "Cookie"; // Default to Cookie
+        //     };
+        // });
 
         services.AddAuthorization(options =>
         {

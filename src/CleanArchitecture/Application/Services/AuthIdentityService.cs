@@ -205,9 +205,7 @@ public class AuthIdentityService(ApplicationDbContext context,
 
         //Getting token from otp
         var resetPasswordDetails = await _unitOfWork.ForgotPasswordRepository.FirstOrDefaultAsync(
-            x => x.OTP == request.OTP
-            && x.UserId == user.Id,
-                x => x.DateTime, false);
+            filter: x => x.OTP == request.OTP && x.UserId == user.Id, x => x.DateTime, false);
 
         //Verify if token is older than 3 minutes
         var expirationDateTime = resetPasswordDetails.DateTime.AddMinutes(3);
