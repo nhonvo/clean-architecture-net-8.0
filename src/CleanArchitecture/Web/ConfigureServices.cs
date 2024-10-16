@@ -20,6 +20,8 @@ public static class ConfigureServices
         services.AddFluentValidationClientsideAdapters();
         services.AddAuthentication();
         services.AddAuthorization();
+        services.AddDistributedMemoryCache();
+        services.AddMemoryCache();
 
         // Middleware
         services.AddSingleton<GlobalExceptionMiddleware>();
@@ -32,7 +34,6 @@ public static class ConfigureServices
         services.AddCorsCustom(appSettings);
         services.AddHttpClient();
         services.AddSwaggerOpenAPI(appSettings);
-        services.AddJWTCustom(appSettings);
         services.SetupHealthCheck(appSettings);
 
         return services;
