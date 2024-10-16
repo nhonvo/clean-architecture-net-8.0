@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Repositories;
 
-public class GenericRepository<T>(ApplicationDbContext context) : IGenericRepository<T> where T : BaseModel
+public class GenericRepository<T>(ApplicationDbContext context) : IGenericRepository<T> where T : class
 {
     protected DbSet<T> _dbSet = context.Set<T>();
 
