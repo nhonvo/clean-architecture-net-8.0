@@ -11,18 +11,26 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     protected DbSet<T> _dbSet = context.Set<T>();
 
     public async Task AddAsync(T entity)
-        => await _dbSet.AddAsync(entity);
+    {
+        await _dbSet.AddAsync(entity);
+    }
 
     public async Task AddRangeAsync(IEnumerable<T> entities)
-        => await _dbSet.AddRangeAsync(entities);
+    {
+        await _dbSet.AddRangeAsync(entities);
+    }
 
     #region  Read
 
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> filter)
-        => await _dbSet.AnyAsync(filter);
+    {
+        return await _dbSet.AnyAsync(filter);
+    }
 
     public async Task<bool> AnyAsync()
-        => await _dbSet.AnyAsync();
+    {
+        return await _dbSet.AnyAsync();
+    }
 
     public async Task<int> CountAsync(Expression<Func<T, bool>> filter)
     {
@@ -30,10 +38,14 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
     }
 
     public async Task<int> CountAsync()
-        => await _dbSet.CountAsync();
+    {
+        return await _dbSet.CountAsync();
+    }
 
     public async Task<T> GetByIdAsync(object id)
-        => await _dbSet.FindAsync(id);
+    {
+        return await _dbSet.FindAsync(id);
+    }
 
     public async Task<Pagination<T>> ToPagination(
         int pageIndex,
@@ -91,20 +103,40 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
         return await query.FirstOrDefaultAsync(filter);
     }
 
+    public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter,
+        Expression<Func<T, object>> sort, bool ascending = true)
+    {
+        var query = _dbSet.IgnoreQueryFilters()
+                          .AsNoTracking()
+                          .Where(filter);
+
+        query = ascending ? query.OrderBy(sort) : query.OrderByDescending(sort);
+
+        return await query.FirstOrDefaultAsync();
+    }
+
     #endregion
     #region Update & delete
 
     public void Update(T entity)
-        => _dbSet.Update(entity);
+    {
+        _dbSet.Update(entity);
+    }
 
     public void UpdateRange(IEnumerable<T> entities)
-        => _dbSet.UpdateRange(entities);
+    {
+        _dbSet.UpdateRange(entities);
+    }
 
     public void Delete(T entity)
-        => _dbSet.Remove(entity);
+    {
+        _dbSet.Remove(entity);
+    }
 
     public void DeleteRange(IEnumerable<T> entities)
-        => _dbSet.RemoveRange(entities);
+    {
+        _dbSet.RemoveRange(entities);
+    }
 
     public async Task Delete(object id)
     {
