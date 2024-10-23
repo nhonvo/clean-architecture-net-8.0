@@ -43,7 +43,7 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
         Expression<Func<T, object>>? orderBy = null,
         bool ascending = true)
     {
-        var itemCount = await _dbSet.CountAsync();
+        var itemCount = await this.CountAsync(filter);
 
         IQueryable<T> query = _dbSet.AsNoTracking();
 
