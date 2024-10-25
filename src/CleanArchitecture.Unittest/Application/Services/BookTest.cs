@@ -5,15 +5,14 @@ using CleanArchitecture.Application.Common.Models;
 using CleanArchitecture.Application.Common.Models.Book;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace CleanArchitecture.Unittest.Application.Services;
 
 public class BookTest
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new Mock<IUnitOfWork>();
-    private readonly Mock<IMapper> _mapperMock = new Mock<IMapper>();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<IMapper> _mapperMock = new();
     private BookService _bookService;
 
     [Fact]
@@ -66,13 +65,7 @@ public class BookTest
             }
         };
 
-        var expectedResult = new Pagination<Book>
-        {
-            TotalItemsCount = expectedBooks.Count,
-            PageSize = 2,
-            PageIndex = 0,
-            Items = expectedBooks
-        };
+        var expectedResult = new Pagination<Book>(expectedBooks, expectedBooks.Count, 0, 2);
 
         // Setup the mock for the repository's ToPagination method
         _unitOfWorkMock
@@ -92,8 +85,12 @@ public class BookTest
 
         // Assert
         Assert.NotNull(actualResult);
-        Assert.Equal(expectedResult.TotalItemsCount, actualResult.TotalItemsCount);
-        Assert.Equal(expectedResult.TotalPagesCount, actualResult.TotalPagesCount);
+        Assert.Equal(expectedResult.CurrentPage, actualResult.CurrentPage);
+        Assert.Equal(expectedResult.TotalPages, actualResult.TotalPages);
+        Assert.Equal(expectedResult.PageSize, actualResult.PageSize);
+        Assert.Equal(expectedResult.TotalCount, actualResult.TotalCount);
+        Assert.Equal(expectedResult.HasNext, actualResult.HasNext);
+        Assert.Equal(expectedResult.HasPrevious, actualResult.HasPrevious);
         Assert.Equal(expectedResult.Items.Count, actualResult.Items.Count);
 
 
