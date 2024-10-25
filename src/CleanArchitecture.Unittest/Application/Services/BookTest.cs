@@ -11,8 +11,8 @@ namespace CleanArchitecture.Unittest.Application.Services;
 
 public class BookTest
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-    private readonly Mock<IMapper> _mapperMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new Mock<IUnitOfWork>();
+    private readonly Mock<IMapper> _mapperMock = new Mock<IMapper>();
     private BookService _bookService;
 
     [Fact]
@@ -89,20 +89,20 @@ public class BookTest
         Assert.Equal(expectedResult.TotalPages, actualResult.TotalPages);
         Assert.Equal(expectedResult.PageSize, actualResult.PageSize);
         Assert.Equal(expectedResult.TotalCount, actualResult.TotalCount);
-        Assert.Equal(expectedResult.HasNext, actualResult.HasNext);
         Assert.Equal(expectedResult.HasPrevious, actualResult.HasPrevious);
-        Assert.Equal(expectedResult.Items.Count, actualResult.Items.Count);
+        Assert.Equal(expectedResult.HasNext, actualResult.HasNext);
+        Assert.Equal(expectedResult.Items?.Count, actualResult.Items?.Count);
 
 
-        var expect = expectedResult.Items.ToList();
-        var actual = actualResult.Items.ToList();
+        var expect = expectedResult.Items?.ToList();
+        var actual = actualResult.Items?.ToList();
 
-        for (int i = 0; i < expectedResult.Items.Count; i++)
+        for (int i = 0; i < expectedResult.Items?.Count; i++)
         {
-            Assert.Equal(expect[i].Id, actual[i].Id);
-            Assert.Equal(expect[i].Title, actual[i].Title);
-            Assert.Equal(expect[i].Description, actual[i].Description);
-            Assert.Equal(expect[i].Price, actual[i].Price);
+            Assert.Equal(expect?[i].Id, actual?[i].Id);
+            Assert.Equal(expect?[i].Title, actual?[i].Title);
+            Assert.Equal(expect?[i].Description, actual?[i].Description);
+            Assert.Equal(expect?[i].Price, actual?[i].Price);
         }
     }
 

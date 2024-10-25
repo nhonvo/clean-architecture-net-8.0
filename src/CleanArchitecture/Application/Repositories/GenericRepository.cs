@@ -60,7 +60,7 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
 
         query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
 
-        var result = Pagination<T>.ToPagedList(query, pageIndex, pageSize);
+        var result = await Pagination<T>.ToPagedList(query, pageIndex, pageSize);
        
         return result;
     }
