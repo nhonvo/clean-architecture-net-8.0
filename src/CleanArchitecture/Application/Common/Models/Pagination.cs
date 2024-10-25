@@ -1,23 +1,22 @@
 namespace CleanArchitecture.Application.Common.Models;
 
-public class Pagination<T>
+public class Pagination<T>(List<T> items, int count, int pageIndex, int pageSize)
 {
-    public int TotalItemsCount { get; set; }
-    public int PageSize { get; set; }
-    public int TotalPagesCount
-    {
-        get
-        {
-            var temp = TotalItemsCount / PageSize;
-            return TotalItemsCount % PageSize == 0 ? temp : temp;
-        }
-    }
-    public int PageIndex { get; set; }
+    public int CurrentPage { get; private set; } = pageIndex;
+    public int TotalPages { get; private set; } = (int)Math.Ceiling(count / (double)pageSize);
+    public int PageSize { get; private set; } = pageSize;
+    public int TotalCount { get; private set; } = count;
+    public bool HasPrevious => CurrentPage > 1;
+    public bool HasNext => CurrentPage < TotalPages;
+    public List<T>? Items { get; private set; } = items;
 
-    /// <summary>
-    /// page number start from 0
-    /// </summary>
-    public bool Next => PageIndex + 1 < TotalPagesCount;
-    public bool Previous => PageIndex > 0;
-    public ICollection<T>? Items { get; set; }
+    public static Pagination<T> ToPagedList(IQueryable<T> source, int pageIndex, int pageSize)
+    {
+        pageIndex = pageIndex <= 0 ? 1 : pageIndex;
+        pageSize = pageSize <= 0 ? 10 : pageSize;
+
+        var count = source.Count();
+        var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+        return new Pagination<T>(items, count, pageIndex, pageSize);
+    }
 }
