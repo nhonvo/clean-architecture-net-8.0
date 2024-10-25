@@ -55,7 +55,6 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
         Expression<Func<T, object>>? orderBy = null,
         bool ascending = true)
     {
-        var itemCount = await _dbSet.CountAsync();
 
         IQueryable<T> query = _dbSet.AsNoTracking();
 
@@ -73,19 +72,8 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
 
         query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
 
-        var items = await query
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-
-        var result = new Pagination<T>()
-        {
-            PageIndex = pageIndex,
-            PageSize = pageSize,
-            TotalItemsCount = itemCount,
-            Items = items,
-        };
-
+        var result = await Pagination<T>.ToPagedList(query, pageIndex, pageSize);
+       
         return result;
     }
 

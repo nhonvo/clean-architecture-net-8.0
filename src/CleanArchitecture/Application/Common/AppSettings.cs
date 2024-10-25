@@ -8,7 +8,6 @@ public class AppSettings
 {
     public ApplicationDetail ApplicationDetail { get; set; }
     public ConnectionStrings ConnectionStrings { get; set; }
-    public Logging Logging { get; set; }
     public Jwt Jwt { get; set; }
     public MailConfigurations MailConfigurations { get; set; }
     public FileStorageSettings FileStorageSettings { get; set; }
@@ -56,11 +55,6 @@ public class MailConfigurations
     public string Password { get; set; }
     [Required]
     public int Port { get; set; }
-}
-
-public class Logging
-{
-    public RequestResponse RequestResponse { get; set; }
 }
 
 public class RequestResponse

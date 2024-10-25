@@ -33,18 +33,11 @@ public class DependencyInjectionTests
             ExpiredTime = 10
         },
         UseInMemoryDatabase = false,
-        Logging = new Logging
-        {
-            RequestResponse = new RequestResponse
-            {
-                IsEnabled = true
-            }
-        },
-        Cors = new[]
-        {
+        Cors =
+        [
         "http://localhost:4200",
         "https://myapp.com"
-        },
+        ],
         MailConfigurations = new MailConfigurations
         {
             From = "noreply@myapp.com",

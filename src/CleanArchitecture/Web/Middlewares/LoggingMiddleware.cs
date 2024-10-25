@@ -1,5 +1,5 @@
+using System.Text.Json;
 using CleanArchitecture.Application.Common.Utilities;
-using Newtonsoft.Json;
 
 namespace CleanArchitecture.Web.Middlewares;
 
@@ -29,6 +29,7 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
             {
                 ExecuteLogRequest("File Upload", logString: $"File: {file.FileName}, Size: {file.Length} bytes");
             }
+            return true;
         }
         else
         {
@@ -42,16 +43,16 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
 
             try
             {
-                ExecuteLogRequest("Request", logString: JsonConvert.SerializeObject(JsonConvert.DeserializeObject(requestAsText)));
+                ExecuteLogRequest("Request", logString: JsonSerializer.Serialize(requestAsText));
             }
             catch (Exception exception)
             {
                 ExecuteLogRequest("Request", logString: requestAsText.Replace(Environment.NewLine, string.Empty));
-                _logger.LogError($"Exception: {exception}");
+                _logger.LogError("Exception: {exceptionMessage}", exception);
                 return false;
             }
+            return true;
         }
-        return true;
     }
 
     private void ExecuteLogRequest(string path, string logString)
@@ -73,7 +74,7 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
 
         LogHelper.LogResponse(
             _logger, "Response",
-            JsonConvert.SerializeObject(responseAsText),
+            JsonSerializer.Serialize(responseAsText),
             context.Response.StatusCode
             );
 
