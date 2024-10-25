@@ -1,6 +1,6 @@
+using System.Text.Json;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Common.Utilities;
-using Newtonsoft.Json;
 
 namespace CleanArchitecture.Web.Middlewares;
 
@@ -29,7 +29,7 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
     private async Task<bool> LogRequest(HttpContext context)
     {
         context.Request.EnableBuffering();
-        using MemoryStream memStream = new MemoryStream();
+        using MemoryStream memStream = new();
         context.Request.Body.Position = 0;
         await context.Request.Body.CopyToAsync(memStream);
         memStream.Seek(0, SeekOrigin.Begin);
@@ -40,12 +40,12 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
 
         try
         {
-            ExecuteLogRequest("Request", logString: JsonConvert.SerializeObject(JsonConvert.DeserializeObject(requestAsText)));
+            ExecuteLogRequest("Request", logString: JsonSerializer.Serialize(requestAsText));
         }
         catch (Exception exception)
         {
-            ExecuteLogRequest("Request", logString: requestAsText.Replace(System.Environment.NewLine, string.Empty));
-            _logger.LogError($"Exception:{exception}");
+            ExecuteLogRequest("Request", logString: requestAsText.Replace(Environment.NewLine, string.Empty));
+            _logger.LogError("Exception:{exceptionMessage}", exception);
             return false;
         }
 
@@ -71,7 +71,7 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
 
         LogHelper.LogResponse(
             _logger, "Response",
-            JsonConvert.SerializeObject(responseAsText),
+            JsonSerializer.Serialize(responseAsText),
             context.Response.StatusCode,
             _appSettings.Logging.RequestResponse.IsEnabled
             );
