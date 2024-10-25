@@ -11,7 +11,9 @@ COPY *.sln .
 #Copy all csproj files in our project
 COPY src/*/*.csproj ./
 RUN for file in $(ls *.csproj); do mkdir -p src/${file%.*}/ && mv $file src/${file%.*}/; done
- 
+
+COPY Directory.Packages.props ./
+
 #Run dotnet restore to cache nuget packages
 RUN dotnet restore *.sln
  
@@ -20,7 +22,8 @@ COPY ./src ./src
  
 #Publish the project with --no-restore flag to take advantage of docker caching
 RUN dotnet publish ./src/CleanArchitecture/CleanArchitecture.csproj -c Release -o /app/out
- 
+
+
 #Switch to the runtime container
 FROM base as final
 WORKDIR /app
