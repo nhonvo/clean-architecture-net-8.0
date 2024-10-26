@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using CleanArchitecture.Domain.Constants;
 
 namespace CleanArchitecture.Application.Common.Exceptions;
 
+[ExcludeFromCodeCoverage]
 public static class UserException
 {
     public static UserFriendlyException UserAlreadyExistsException(string field)

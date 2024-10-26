@@ -10,7 +10,7 @@ public static class AuthenticationExtensions
     public static void AddAuth(this IServiceCollection services, Jwt identitySettings)
     {
         var authenticationBuilder = services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
-        authenticationBuilder.AddJwtBearer($"{JwtBearerDefaults.AuthenticationScheme}_{identitySettings.Issuer}", async options =>
+        authenticationBuilder.AddJwtBearer($"{JwtBearerDefaults.AuthenticationScheme}_{identitySettings.Issuer}", options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {

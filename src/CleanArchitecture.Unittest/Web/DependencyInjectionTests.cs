@@ -15,6 +15,7 @@ public class DependencyInjectionTests
     private readonly ServiceProvider _serviceProvider;
     private readonly AppSettings _appSettings = new AppSettings
     {
+        AppUrl = "",
         ApplicationDetail = new ApplicationDetail
         {
             ApplicationName = "app",

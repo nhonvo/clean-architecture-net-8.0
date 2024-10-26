@@ -1,5 +1,4 @@
 using AutoMapper;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.UsersIdentity;
 using CleanArchitecture.Application.Common.Models.Book;
 using CleanArchitecture.Application.Common.Models.User;
 
