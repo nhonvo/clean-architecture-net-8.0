@@ -1,5 +1,4 @@
 using CleanArchitecture.Application.Common;
-using CleanArchitecture.Infrastructure.Data;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -10,32 +9,42 @@ public static class HealthCheckExtensions
     public static void SetupHealthCheck(this IServiceCollection services, AppSettings configuration)
     {
         services.AddHealthChecks()
-           .AddDbContextCheck<ApplicationDbContext>(name: nameof(ApplicationDbContext), failureStatus: HealthStatus.Degraded)
-           .AddUrlGroup(new Uri(configuration.ApplicationDetail.ContactWebsite),
-                           name: configuration.ApplicationDetail.ApplicationName,
-                           failureStatus: HealthStatus.Degraded)
-           .AddSqlServer(configuration.ConnectionStrings.DefaultConnection);
+                .AddSqlServer(configuration.ConnectionStrings.DefaultConnection, tags: ["local", "database"]);
 
-        services.AddHealthChecksUI(setup => setup.AddHealthCheckEndpoint("Basic Health Check", $"/healthz"))
-                         .AddInMemoryStorage();
+        services.AddHealthChecksUI(setup =>
+            setup.AddHealthCheckEndpoint("Basic Health Check", "/healthz"))
+                .AddInMemoryStorage();
     }
+
     public static void ConfigureHealthCheck(this WebApplication app)
     {
-        app.UseHealthChecks("/healthz", new HealthCheckOptions
+        app.MapHealthChecks("/healthz", new HealthCheckOptions
         {
             Predicate = _ => true,
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
             ResultStatusCodes =
-                {
-                    [HealthStatus.Healthy] = StatusCodes.Status200OK,
-                    [HealthStatus.Degraded] = StatusCodes.Status500InternalServerError,
-                    [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
-                },
-        }).UseHealthChecksUI(setup =>
+            {
+                [HealthStatus.Healthy] = StatusCodes.Status200OK,
+                [HealthStatus.Degraded] = StatusCodes.Status429TooManyRequests,
+                [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+            },
+            AllowCachingResponses = true
+        });
+
+        // Custom health check response writer
+        app.MapHealthChecks("/health", new HealthCheckOptions
+        {
+            ResponseWriter = async (context, report) =>
+            {
+                context.Response.ContentType = "text/plain"; 
+                await context.Response.WriteAsync("Health"); 
+            }
+        });
+
+        app.UseHealthChecksUI(setup =>
         {
             setup.ApiPath = "/healthcheck";
             setup.UIPath = "/healthcheck-ui";
-            // setup.AddCustomStylesheet("Customization\\custom.css");
         });
     }
 }

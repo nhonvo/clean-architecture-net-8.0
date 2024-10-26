@@ -6,6 +6,7 @@ namespace CleanArchitecture.Application.Common;
 
 public class AppSettings
 {
+    public string AppUrl { get; set; }
     public ApplicationDetail ApplicationDetail { get; set; }
     public ConnectionStrings ConnectionStrings { get; set; }
     public Jwt Jwt { get; set; }

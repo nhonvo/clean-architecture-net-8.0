@@ -4,16 +4,11 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <EnablePackageVersionOverride>true</EnablePackageVersionOverride>
   </PropertyGroup>
-  <PropertyGroup>
-    <IsPublishable>false</IsPublishable>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI" Version="8.0.1" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="8.0.1" />
-    <PackageVersion Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="AutoMapper" Version="12.0.1" />

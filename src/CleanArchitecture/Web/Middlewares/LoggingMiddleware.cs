@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Common.Utilities;
 
 namespace CleanArchitecture.Web.Middlewares;
