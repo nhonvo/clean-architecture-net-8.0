@@ -27,7 +27,7 @@ public class UserService(
 
         List<UserViewModel> result = users.Select(x => new UserViewModel
         {
-            UserId = x.Id,
+            Id = x.Id,
             Email = x.Email,
             UserName = x.UserName,
             FullName = x.Name,
@@ -35,9 +35,6 @@ public class UserService(
             Avatar = x.Avatar != null ? x.Avatar.PathMedia : null
         }).ToList();
 
-        // result.ForEach(x => x.Avatar = !string.IsNullOrEmpty(x.Avatar)
-        //                 ? _storageService.GetFileUrl(new AddFileRequest { FileName = x.Avatar })
-        //                 : x.Avatar);
         return result;
     }
 

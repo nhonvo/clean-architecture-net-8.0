@@ -13,11 +13,8 @@ public static class AuthIdentityException
     public static UserFriendlyException ThrowAccountDoesNotExist()
         => throw new UserFriendlyException(ErrorCode.NotFound, AuthIdentityErrorMessage.AccountDoesNotExistMessage, AuthIdentityErrorMessage.AccountDoesNotExistMessage);
 
-    public static UserFriendlyException ThrowLoginUnsuccessful(string result)
-        => throw new UserFriendlyException(ErrorCode.BadRequest, AuthIdentityErrorMessage.LoginUnsuccessfulMessage, result);
-
-    public static UserFriendlyException ThrowRefreshTokenUnsuccessful()
-        => throw new UserFriendlyException(ErrorCode.BadRequest, AuthIdentityErrorMessage.RefreshTokenUnsuccessfulMessage, AuthIdentityErrorMessage.RefreshTokenUnsuccessfulMessage);
+    public static UserFriendlyException ThrowLoginUnsuccessful()
+        => throw new UserFriendlyException(ErrorCode.BadRequest, AuthIdentityErrorMessage.LoginUnsuccessfulMessage, AuthIdentityErrorMessage.LoginUnsuccessfulMessage);
 
     public static UserFriendlyException ThrowUsernameAvailable()
         => throw new UserFriendlyException(ErrorCode.NotFound, AuthIdentityErrorMessage.UsernameAvailableMessage, AuthIdentityErrorMessage.UsernameAvailableMessage);
@@ -70,21 +67,9 @@ public static class AuthIdentityException
     public static UserFriendlyException ThrowUserNotFound()
         => throw new UserFriendlyException(ErrorCode.NotFound, AuthIdentityErrorMessage.UserNotFoundMessage, AuthIdentityErrorMessage.UserNotFoundMessage);
 
-    public static UserFriendlyException ThrowEmailAndPasswordNotNull()
-        => throw new UserFriendlyException(ErrorCode.BadRequest, AuthIdentityErrorMessage.EmailAndPasswordNotNullMessage, AuthIdentityErrorMessage.EmailAndPasswordNotNullMessage);
-
     public static UserFriendlyException ThrowGenerateTheNewOTP()
         => throw new UserFriendlyException(ErrorCode.BadRequest, AuthIdentityErrorMessage.GenerateTheNewOTPMessage, AuthIdentityErrorMessage.GenerateTheNewOTPMessage);
 
     public static UserFriendlyException ThrowOTPWrong()
         => throw new UserFriendlyException(ErrorCode.BadRequest, AuthIdentityErrorMessage.OTPWrongMessage, AuthIdentityErrorMessage.OTPWrongMessage);
-
-    public static ForgotPassword ThrowOrReturnForgotPassword(bool resSucceeded)
-    {
-        if (!resSucceeded)
-        {
-            ThrowOTPWrong();
-        }
-        return new ForgotPassword();
-    }
 }

@@ -7,3 +7,4 @@ public static class UserErrorMessage
     public const string UserNotExist = "The specified user does not exist.";
     public const string PasswordIncorrect = "The password entered is incorrect.";
 }
+

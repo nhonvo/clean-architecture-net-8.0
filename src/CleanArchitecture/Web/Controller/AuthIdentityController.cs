@@ -26,6 +26,16 @@ public class AuthIdentityController(IAuthIdentityService authIdentityService) : 
         return NoContent();
     }
 
+    [HttpDelete("logout")]
+    public async Task<IActionResult> Logout()
+    {
+
+        await _authIdentityService.LogOut();
+        Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+        RemoveTokenInCookie();
+        return NoContent();
+    }
+
     [HttpGet("refreshToken")]
     [Authorize]
     public async Task<IActionResult> RefreshToken(CancellationToken cancellationToken)
@@ -57,20 +67,6 @@ public class AuthIdentityController(IAuthIdentityService authIdentityService) : 
     public async Task<IActionResult> SendPasswordResetCode(SendPasswordResetCodeRequest request, CancellationToken cancellationToken)
         => Ok(await _authIdentityService.SendPasswordResetCode(request, cancellationToken));
 
-    // [HttpPost("SignInFacebook")]
-    // [AllowAnonymous]
-    // public async Task<IActionResult> SignInFacebook([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
-    //     => Ok(await _authIdentityService.SignInFacebook(request.AccessToken, cancellationToken));
-
-    // [HttpPost("SignInGoogle")]
-    // [AllowAnonymous]
-    // public async Task<IActionResult> SignInGoogle([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
-    //     => Ok(await _authIdentityService.SignInGoogle(request.AccessToken, cancellationToken));
-
-    // [HttpPost("SignInApple")]
-    // [AllowAnonymous]
-    // public async Task<IActionResult> SignInApple([FromBody] LoginSocialRequest request, CancellationToken cancellationToken)
-    //     => Ok(await _authIdentityService.SignInApple(request.FullName, request.AccessToken, cancellationToken));
 
     private string GetTokenInCookie() => Request.Cookies["token_key"];
 
@@ -82,5 +78,10 @@ public class AuthIdentityController(IAuthIdentityService authIdentityService) : 
             Expires = DateTime.UtcNow.AddDays(10),
         };
         Response.Cookies.Append("token_key", refreshToken, cookieOptions);
+    }
+    
+    private void RemoveTokenInCookie()
+    {
+        Response.Cookies.Delete("token_key");
     }
 }
