@@ -31,7 +31,7 @@ WORKDIR /app
 #Copy build artifacts to the working directory of the runtime containers
 COPY --from=build-env /app/out .
  
-ENV ASPNETCORE_URLS=http://+:80
-EXPOSE 80
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
  
 ENTRYPOINT ["dotnet", "CleanArchitecture.dll"]
