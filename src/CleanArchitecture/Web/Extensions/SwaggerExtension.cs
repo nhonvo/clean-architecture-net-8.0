@@ -49,7 +49,7 @@ public static class SwaggerExtension
 
             options.AddSecurityRequirement(securityRequirement);
             options.SchemaFilter<EnumSchemaFilter>();
-
+            options.DocumentFilter<HealthChecksFilter>();
         });
         return services;
     }
