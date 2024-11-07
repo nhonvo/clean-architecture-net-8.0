@@ -27,12 +27,7 @@ public static class HostingExtensions
             await initialize.InitializeAsync();
         }
 
-        app.UseSwagger();
-        app.UseSwaggerUI(setupAction =>
-        {
-            setupAction.SwaggerEndpoint("/swagger/OpenAPISpecification/swagger.json", "Clean Architecture Specification");
-            setupAction.RoutePrefix = "swagger";
-        });
+        app.UseSwagger(appsettings);
 
         app.UseCors("AllowSpecificOrigin");
 
@@ -57,6 +52,8 @@ public static class HostingExtensions
         app.UseAuthorization();
 
         app.MapControllers();
+
+        // app.
 
         return app;
     }

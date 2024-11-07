@@ -1,4 +1,5 @@
 using CleanArchitecture.Application.Common;
+using CleanArchitecture.Infrastructure.SchemaFilter;
 using Microsoft.OpenApi.Models;
 
 namespace CleanArchitecture.Web.Extensions;
@@ -11,8 +12,7 @@ public static class SwaggerExtension
     {
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("OpenAPISpecification",
-            new OpenApiInfo
+            var openApiInfo = new OpenApiInfo
             {
                 Title = appSettings.ApplicationDetail.ApplicationName,
                 Version = "v1",
@@ -28,14 +28,13 @@ public static class SwaggerExtension
                     Name = "MIT License",
                     Url = new Uri("https://opensource.org/licenses/MIT")
                 }
-            });
+            };
+            options.SwaggerDoc("v1", openApiInfo);
 
             var securityScheme = new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                 Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
                 Scheme = "bearer",
                 Reference = new OpenApiReference
                 {
@@ -49,7 +48,25 @@ public static class SwaggerExtension
             var securityRequirement = new OpenApiSecurityRequirement { { securityScheme, Value } };
 
             options.AddSecurityRequirement(securityRequirement);
+            options.SchemaFilter<EnumSchemaFilter>();
+
         });
         return services;
+    }
+
+    public static void UseSwagger(this IApplicationBuilder app, AppSettings appSettings)
+    {
+        app.UseSwagger(c =>
+        {
+            c.RouteTemplate = "swagger/{documentName}/swagger.json";
+            c.PreSerializeFilters.Add((swaggerDoc, httpReq)
+                => swaggerDoc.Servers = [new OpenApiServer { Url = appSettings.AppUrl }]);
+        });
+
+        app.UseSwaggerUI(setupAction =>
+        {
+            setupAction.SwaggerEndpoint("v1/swagger.json", "CleanArchitecture.api v1");
+            setupAction.RoutePrefix = "swagger";
+        });
     }
 }
