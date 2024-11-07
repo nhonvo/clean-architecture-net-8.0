@@ -12,13 +12,23 @@ public static class HealthCheckExtensions
                 .AddSqlServer(configuration.ConnectionStrings.DefaultConnection, tags: ["local", "database"]);
 
         services.AddHealthChecksUI(setup =>
-            setup.AddHealthCheckEndpoint("Basic Health Check", "/healthz"))
+            setup.AddHealthCheckEndpoint("Basic Health Check", "/health/full"))
                 .AddInMemoryStorage();
     }
 
     public static void ConfigureHealthCheck(this WebApplication app)
     {
-        app.MapHealthChecks("/healthz", new HealthCheckOptions
+        app.UseHealthChecks("/health", new HealthCheckOptions
+        {
+            ResponseWriter = async (context, report) =>
+            {
+                context.Response.ContentType = "text/plain";
+                await context.Response.WriteAsync("Health");
+            }
+        });
+
+        // Custom health check response writer
+        app.UseHealthChecks("/health/full", new HealthCheckOptions
         {
             Predicate = _ => true,
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
@@ -31,20 +41,11 @@ public static class HealthCheckExtensions
             AllowCachingResponses = true
         });
 
-        // Custom health check response writer
-        app.MapHealthChecks("/health", new HealthCheckOptions
-        {
-            ResponseWriter = async (context, report) =>
-            {
-                context.Response.ContentType = "text/plain"; 
-                await context.Response.WriteAsync("Health"); 
-            }
-        });
-
         app.UseHealthChecksUI(setup =>
         {
             setup.ApiPath = "/healthcheck";
             setup.UIPath = "/healthcheck-ui";
+            // setup.AddCustomStylesheet("Customization\\custom.css");
         });
     }
 }

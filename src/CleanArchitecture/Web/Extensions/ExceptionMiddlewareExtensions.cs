@@ -1,5 +1,6 @@
 using System.Net;
 using CleanArchitecture.Application.Common.Exceptions;
+using CleanArchitecture.Domain;
 using CleanArchitecture.Domain.Constants;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -84,17 +85,8 @@ public static class ExceptionMiddlewareExtensions
                         errorCode = $"{ApplicationConstants.Name}.{ErrorRespondCode.GENERAL_ERROR}";
                         errorMessage = "An error has occurred.";
                     }
-                    await context.Response.WriteAsync($@"
-                                {{
-                                    ""errors"":[
-                                        {{
-                                            ""code"":""{errorCode}"",
-                                            ""message"":""{errorMessage}, ErrorId:{errorId}""
-                                        }}
-                                    ]
-                                }}");
-
-                    logger.LogError($"ErrorId:{errorId} Exception:{contextFeature.Error}");
+                    await context.Response.WriteAsync(new Error(errorCode, errorMessage, errorId));
+                    logger.LogError("ErrorId:{errorId} Exception:{contextFeature.Error}", errorId, contextFeature.Error);
                 }
             }
         });

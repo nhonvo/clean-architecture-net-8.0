@@ -1,5 +1,4 @@
 using System.Text.Json;
-using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Common.Utilities;
 
 namespace CleanArchitecture.Web.Middlewares;
@@ -64,20 +63,35 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
     private async Task LogResponse(HttpContext context)
     {
         var originalBodyStream = context.Response.Body;
+
         using var responseBody = new MemoryStream();
         context.Response.Body = responseBody;
-        await _next(context);
-        context.Response.Body.Seek(0, SeekOrigin.Begin);
-        using var reader = new StreamReader(context.Response.Body);
-        var responseAsText = await reader.ReadToEndAsync();
-        context.Response.Body.Seek(0, SeekOrigin.Begin);
-        var path = context.Request.Path.ToString();
 
-        LogHelper.LogResponse(
-            _logger, "Response",
-            JsonSerializer.Serialize(responseAsText),
-            context.Response.StatusCode
+        await _next(context);
+
+        context.Response.Body.Seek(0, SeekOrigin.Begin);
+        var responseAsText = await new StreamReader(context.Response.Body).ReadToEndAsync();
+        context.Response.Body.Seek(0, SeekOrigin.Begin);
+
+        try
+        {
+            var response = JsonSerializer.Deserialize<object>(responseAsText);
+            LogHelper.LogResponse(
+                _logger,
+                "Response",
+                JsonSerializer.Serialize(response),
+                context.Response.StatusCode
             );
+        }
+        catch
+        {
+            LogHelper.LogResponse(
+                _logger,
+                "Response",
+                responseAsText, // Log raw text if deserialization fails
+                context.Response.StatusCode
+            );
+        }
 
         await responseBody.CopyToAsync(originalBodyStream);
     }

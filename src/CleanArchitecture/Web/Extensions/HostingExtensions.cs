@@ -27,35 +27,18 @@ public static class HostingExtensions
             var initialize = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
             await initialize.InitializeAsync();
         }
-
-        app.UseMiddleware<GlobalExceptionMiddleware>(); // Global exception handling first
-        app.UseResponseCompression();  // Compression should be high up
-
-        app.UseSwagger();
-        app.UseSwaggerUI(setupAction =>
-        {
-            setupAction.SwaggerEndpoint("/swagger/OpenAPISpecification/swagger.json", "Clean Architecture Specification");
-            setupAction.RoutePrefix = "swagger";
-        });
-
+        app.UseMiddleware<LoggingMiddleware>(); 
+        app.UseMiddleware<PerformanceMiddleware>(); 
+        app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions")); 
+        app.UseMiddleware<GlobalExceptionMiddleware>(); 
+        app.UseHttpsRedirection(); 
+        app.UseResponseCompression();  
         app.UseCors("AllowSpecificOrigin");
-
-        app.UseHttpsRedirection(); // Ensure HTTPS redirection for security
-
-        app.UseMiddleware<PerformanceMiddleware>(); // Performance middleware after other setup steps
-
-        app.ConfigureHealthCheck(); // Health checks
-
-        app.AddEndpoints(); // Add custom endpoints (if any)
-
-        app.UseAuthentication(); // Authentication before authorization
-        app.UseMiddleware<LoggingMiddleware>(); // Logging middleware after authentication to log authenticated requests
-
-        app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions")); // Global exception handler
-
-        app.UseAuthorization(); // Authorization after authentication
-
-        app.MapControllers(); // Map controllers after authentication and authorization
+        app.UseSwagger(appsettings);
+        app.ConfigureHealthCheck(); 
+        app.UseAuthentication(); 
+        app.UseAuthorization(); 
+        app.MapControllers(); 
 
         return app;
     }

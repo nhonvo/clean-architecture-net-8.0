@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Domain.Authorization;
 using CleanArchitecture.Web.Extensions;
@@ -38,6 +40,14 @@ public static class ConfigureServices
                 services.AddSwaggerOpenAPI(appSettings);
                 services.SetupHealthCheck(appSettings);
 
-                return services;
-        }
+        // Json configuration
+        services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.WriteIndented = true;
+            options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+        return services;
+    }
 }
