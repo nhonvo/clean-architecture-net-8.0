@@ -82,3 +82,16 @@ This project is licensed under the MIT License.
 ## Contact
 
 For any inquiries, contact the repository owner [here](https://github.com/nhonvo).
+
+Note: For development
+
+pack a project command
+
+```bash
+dotnet pack -o nupkg
+dotnet new install ./ --force
+# dotnet new install ./nupkg/CleanArchitecture.1.0.0.nupkg
+dotnet new cleanarch -n MyFirstProject
+```
+
+TODO: build gate way via docker 

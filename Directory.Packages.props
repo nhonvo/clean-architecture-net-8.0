@@ -9,6 +9,10 @@
     <PackageVersion Include="AspNetCore.HealthChecks.UI" Version="8.0.1" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="AutoMapper" Version="12.0.1" />
@@ -36,7 +40,9 @@
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.6" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="Moq" Version="4.20.70" />
-    <PackageVersion Include="xunit" Version="2.5.3" />
+    <PackageVersion Include="xunit" Version="2.7.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageVersion Include="Xunit.Extensions.AssemblyFixture" Version="2.6.0" />
+    <PackageVersion Include="xunit.extensibility.core" Version="2.7.0" />
   </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.Unittest", "src\CleanArchitecture.Unittest\CleanArchitecture.Unittest.csproj", "{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.IntegrationTest", "src\CleanArchitecture.IntegrationTest\CleanArchitecture.IntegrationTest.csproj", "{2CA912C6-F637-4653-9D5C-5638400A46AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.IntegrationTest", "src\CleanArchitecture.IntegrationTest\CleanArchitecture.IntegrationTest.csproj", "{C1D83BB3-18AC-4D2E-8DF5-8482242E5987}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,10 @@ Global
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CA912C6-F637-4653-9D5C-5638400A46AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CA912C6-F637-4653-9D5C-5638400A46AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CA912C6-F637-4653-9D5C-5638400A46AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CA912C6-F637-4653-9D5C-5638400A46AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1D83BB3-18AC-4D2E-8DF5-8482242E5987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1D83BB3-18AC-4D2E-8DF5-8482242E5987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1D83BB3-18AC-4D2E-8DF5-8482242E5987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1D83BB3-18AC-4D2E-8DF5-8482242E5987}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +42,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{94EEA393-1073-4715-9DB6-11188902DEA9} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
-		{2CA912C6-F637-4653-9D5C-5638400A46AA} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
+		{C1D83BB3-18AC-4D2E-8DF5-8482242E5987} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
 	EndGlobalSection
 EndGlobal
