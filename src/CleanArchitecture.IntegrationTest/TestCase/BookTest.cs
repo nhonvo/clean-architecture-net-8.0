@@ -22,7 +22,7 @@ public class BookTest : IClassFixture<InjectionFixture>
 }
 // todo: check set up client, refer resharp
 // return a object to assert
-// set up docker, port
+// set up docker, port, api gateway
 // gen code
 // move model to shared
 // write auth local use dummy token
