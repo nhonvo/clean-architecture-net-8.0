@@ -1,5 +1,5 @@
 using CleanArchitecture.Application.Common.Models;
-using CleanArchitecture.Application.Common.Models.Book;
+using CleanArchitecture.Shared.Models.Book;
 
 namespace CleanArchitecture.Application.Common.Interfaces;
 

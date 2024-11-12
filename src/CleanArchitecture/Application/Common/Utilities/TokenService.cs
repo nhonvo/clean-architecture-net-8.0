@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.UsersIdentity;
+using CleanArchitecture.Shared.Models.AuthIdentity.UsersIdentity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;

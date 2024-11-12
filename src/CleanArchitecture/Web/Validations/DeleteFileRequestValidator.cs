@@ -1,4 +1,4 @@
-using CleanArchitecture.Application.Common.Models.AuthIdentity.File;
+using CleanArchitecture.Shared.Models.AuthIdentity.File;
 using FluentValidation;
 
 namespace CleanArchitecture.Web.Validations;

@@ -1,4 +1,4 @@
-using CleanArchitecture.Application.Common.Models.AuthIdentity.Media;
+using CleanArchitecture.Shared.Models.AuthIdentity.Media;
 
 namespace CleanArchitecture.Application.Common.Interfaces;
 

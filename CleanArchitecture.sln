@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		Directory.Packages.props = Directory.Packages.props
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -50,5 +51,8 @@ Global
 		{96C06FA3-C2DB-4FEC-9E21-B94B7042344F} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
 		{C1D83BB3-18AC-4D2E-8DF5-8482242E5987} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
 		{54643CBD-C1BF-49A6-9F9C-63B4D8BA62B7} = {FEDFAE83-4630-4D06-A6F1-D60957E44EA6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4A639A9-8267-47FF-A412-6E8A56B716B7}
 	EndGlobalSection
 EndGlobal

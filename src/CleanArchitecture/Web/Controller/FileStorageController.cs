@@ -1,5 +1,5 @@
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.File;
+using CleanArchitecture.Shared.Models.AuthIdentity.File;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Web.Controller;

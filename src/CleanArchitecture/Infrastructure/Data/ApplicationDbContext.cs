@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : 
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
             IdentityDbContext<ApplicationUser, RoleIdentity, Guid,
             IdentityUserClaim<Guid>, UserRoles, IdentityUserLogin<Guid>,
             IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>(options)

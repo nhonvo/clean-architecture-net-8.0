@@ -1,7 +1,7 @@
 using AutoMapper;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Models;
-using CleanArchitecture.Application.Common.Models.Book;
+using CleanArchitecture.Shared.Models.Book;
 
 namespace CleanArchitecture.Application.Services;
 

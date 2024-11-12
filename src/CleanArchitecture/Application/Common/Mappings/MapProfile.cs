@@ -1,6 +1,6 @@
 using AutoMapper;
-using CleanArchitecture.Application.Common.Models.Book;
-using CleanArchitecture.Application.Common.Models.User;
+using CleanArchitecture.Shared.Models.Book;
+using CleanArchitecture.Shared.Models.User;
 
 namespace CleanArchitecture.Application.Common.Mappings;
 

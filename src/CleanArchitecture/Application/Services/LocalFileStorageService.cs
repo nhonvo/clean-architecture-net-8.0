@@ -1,8 +1,8 @@
 using System.Net.Http.Headers;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.File;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.Media;
+using CleanArchitecture.Shared.Models.AuthIdentity.File;
+using CleanArchitecture.Shared.Models.AuthIdentity.Media;
 
 namespace CleanArchitecture.Application.Services;
 public class LocalFileStorageService : IFileStorageService

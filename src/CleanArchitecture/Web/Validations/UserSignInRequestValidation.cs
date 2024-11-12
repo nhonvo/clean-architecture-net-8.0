@@ -1,4 +1,4 @@
-using CleanArchitecture.Application.Common.Models.User;
+using CleanArchitecture.Shared.Models.User;
 using FluentValidation;
 
 namespace CleanArchitecture.Web.Validations;

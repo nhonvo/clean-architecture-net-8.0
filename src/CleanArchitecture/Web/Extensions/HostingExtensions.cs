@@ -27,18 +27,18 @@ public static class HostingExtensions
             var initialize = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
             await initialize.InitializeAsync();
         }
-        app.UseMiddleware<LoggingMiddleware>(); 
-        app.UseMiddleware<PerformanceMiddleware>(); 
-        app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions")); 
-        app.UseMiddleware<GlobalExceptionMiddleware>(); 
-        app.UseHttpsRedirection(); 
-        app.UseResponseCompression();  
+        app.UseMiddleware<LoggingMiddleware>();
+        app.UseMiddleware<PerformanceMiddleware>();
+        app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions"));
+        app.UseMiddleware<GlobalExceptionMiddleware>();
+        app.UseHttpsRedirection();
+        app.UseResponseCompression();
         app.UseCors("AllowSpecificOrigin");
         app.UseSwagger(appsettings);
-        app.ConfigureHealthCheck(); 
-        app.UseAuthentication(); 
-        app.UseAuthorization(); 
-        app.MapControllers(); 
+        app.ConfigureHealthCheck();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapControllers();
 
         return app;
     }

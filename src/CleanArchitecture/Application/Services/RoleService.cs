@@ -1,5 +1,5 @@
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.Roles;
+using CleanArchitecture.Shared.Models.AuthIdentity.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

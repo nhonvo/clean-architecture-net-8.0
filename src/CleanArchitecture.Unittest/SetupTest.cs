@@ -1,13 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
 using AutoFixture;
 using AutoMapper;
-using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application;
+using CleanArchitecture.Application.Common.Interfaces;
+using CleanArchitecture.Application.Common.Mappings;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using CleanArchitecture.Application.Common.Mappings;
-using System.Diagnostics.CodeAnalysis;
 
 namespace CleanArchitecture.Unittest;
 

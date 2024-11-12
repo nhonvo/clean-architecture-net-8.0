@@ -1,10 +1,10 @@
+using System.Security.Claims;
 using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Common.Interfaces;
+using CleanArchitecture.Shared.Models.AuthIdentity.File;
+using CleanArchitecture.Shared.Models.AuthIdentity.UsersIdentity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.UsersIdentity;
-using CleanArchitecture.Application.Common.Models.AuthIdentity.File;
-using System.Security.Claims;
 
 namespace CleanArchitecture.Application.Services;
 

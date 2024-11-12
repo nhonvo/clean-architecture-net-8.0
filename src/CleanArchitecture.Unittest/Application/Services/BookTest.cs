@@ -2,9 +2,9 @@ using System.Linq.Expressions;
 using AutoMapper;
 using CleanArchitecture.Application;
 using CleanArchitecture.Application.Common.Models;
-using CleanArchitecture.Application.Common.Models.Book;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Shared.Models.Book;
 using Moq;
 
 namespace CleanArchitecture.Unittest.Application.Services;

@@ -22,7 +22,7 @@ public interface IGenericRepository<T> where T : class
     Task<T?> FirstOrDefaultAsync(
        Expression<Func<T, bool>> filter,
        Func<IQueryable<T>, IQueryable<T>>? include = null);
-   Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter, Expression<Func<T, object>> sort, bool ascending = true);
+    Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter, Expression<Func<T, object>> sort, bool ascending = true);
     void Update(T entity);
     void UpdateRange(IEnumerable<T> entities);
     void Delete(T entity);

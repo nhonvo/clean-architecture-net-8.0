@@ -9,10 +9,13 @@
     <PackageVersion Include="AspNetCore.HealthChecks.UI" Version="8.0.1" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="AutoMapper" Version="12.0.1" />
@@ -31,7 +34,6 @@
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Filters" Version="8.0.0" />
     <PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageVersion Include="Google.Apis.Auth" Version="1.68.0" />
     <PackageVersion Include="CloudinaryDotNet" Version="1.26.2" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,10 @@
 using AutoMapper;
 using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.Common.Models.User;
 using CleanArchitecture.Application.Common.Utilities;
 using CleanArchitecture.Domain.Constants;
 using CleanArchitecture.Infrastructure.Interface;
+using CleanArchitecture.Shared.Models.User;
 
 namespace CleanArchitecture.Application.Services;
 public class AuthService(IUnitOfWork unitOfWork,

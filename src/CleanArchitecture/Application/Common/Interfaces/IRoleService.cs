@@ -1,4 +1,4 @@
-using CleanArchitecture.Application.Common.Models.AuthIdentity.Roles;
+using CleanArchitecture.Shared.Models.AuthIdentity.Roles;
 
 namespace CleanArchitecture.Application.Common.Interfaces;
 

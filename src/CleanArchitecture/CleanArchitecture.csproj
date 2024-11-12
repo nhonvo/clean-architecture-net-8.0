@@ -24,7 +24,6 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="FluentValidation.AspNetCore" />
-    <PackageReference Include="Google.Apis.Auth" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
@@ -39,5 +38,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" />
     <PackageReference Include="BCrypt.Net-Next" />
     <PackageReference Include="CloudinaryDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CleanArchitecture.Shared\CleanArchitecture.Shared.csproj" />
   </ItemGroup>
 </Project>

@@ -5,6 +5,6 @@ public class MapperConfigurationTest
     [Fact]
     public void TestMapper()
     {
-     
+
     }
 }
