@@ -26,4 +26,7 @@ public class BookTest : IClassFixture<InjectionFixture>
 // gen code
 // move model to shared
 // write auth local use dummy token
+// update docker config
+
+// push up awn uong
 

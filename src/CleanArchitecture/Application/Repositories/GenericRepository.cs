@@ -47,15 +47,15 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
         return await _dbSet.FindAsync(id);
     }
 
-    public async Task<Pagination<T>> ToPagination(
+    public async Task<Pagination<TResult>> ToPagination<TResult>(
         int pageIndex,
         int pageSize,
         Expression<Func<T, bool>>? filter = null,
         Func<IQueryable<T>, IQueryable<T>>? include = null,
         Expression<Func<T, object>>? orderBy = null,
-        bool ascending = true)
+        bool ascending = true,
+        Expression<Func<T, TResult>> selector = null)
     {
-
         IQueryable<T> query = _dbSet.AsNoTracking();
 
         if (include != null)
@@ -72,7 +72,9 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
 
         query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
 
-        var result = await Pagination<T>.ToPagedList(query, pageIndex, pageSize);
+        var projectedQuery = query.Select(selector);
+
+        var result = await Pagination<TResult>.ToPagedList(projectedQuery, pageIndex, pageSize);
 
         return result;
     }

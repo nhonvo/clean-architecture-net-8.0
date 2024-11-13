@@ -9,6 +9,9 @@ public class MapProfile : Profile
     public MapProfile()
     {
         CreateMap<Book, BookDTO>().ReverseMap();
+        CreateMap<Book, AddBookRequest>().ReverseMap();
+        CreateMap<Book, UpdateBookRequest>().ReverseMap();
+
 
         CreateMap<User, UserSignInRequest>().ReverseMap();
         CreateMap<User, UserSignInResponse>().ReverseMap();

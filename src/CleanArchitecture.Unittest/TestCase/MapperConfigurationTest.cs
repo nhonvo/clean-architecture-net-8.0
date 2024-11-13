@@ -1,4 +1,4 @@
-namespace CleanArchitecture.Unittest.Application.Common.Mappings;
+namespace CleanArchitecture.Unittest.TestCase;
 
 public class MapperConfigurationTest
 {

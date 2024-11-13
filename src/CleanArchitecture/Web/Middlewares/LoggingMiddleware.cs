@@ -20,7 +20,7 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
     private async Task<bool> LogRequest(HttpContext context)
     {
         context.Request.EnableBuffering();
-        var isMultipart = context.Request.HasFormContentType && context.Request.Form.Files.Count > 0;
+        var isMultipart = context.Request.HasFormContentType;
 
         if (isMultipart)
         {
@@ -62,37 +62,65 @@ public class LoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactor
 
     private async Task LogResponse(HttpContext context)
     {
+        // Store the original response stream
         var originalBodyStream = context.Response.Body;
 
+        // Create a new memory stream to capture the response
         using var responseBody = new MemoryStream();
         context.Response.Body = responseBody;
 
-        await _next(context);
-
-        context.Response.Body.Seek(0, SeekOrigin.Begin);
-        var responseAsText = await new StreamReader(context.Response.Body).ReadToEndAsync();
-        context.Response.Body.Seek(0, SeekOrigin.Begin);
-
         try
         {
-            var response = JsonSerializer.Deserialize<object>(responseAsText);
-            LogHelper.LogResponse(
-                _logger,
-                "Response",
-                JsonSerializer.Serialize(response),
-                context.Response.StatusCode
-            );
-        }
-        catch
-        {
-            LogHelper.LogResponse(
-                _logger,
-                "Response",
-                responseAsText, // Log raw text if deserialization fails
-                context.Response.StatusCode
-            );
-        }
+            // Call the next middleware in the pipeline
+            await _next(context);
 
-        await responseBody.CopyToAsync(originalBodyStream);
+            // Reset the position to the beginning of the stream to read it
+            context.Response.Body.Seek(0, SeekOrigin.Begin);
+            var responseAsText = await new StreamReader(responseBody).ReadToEndAsync();
+
+            // Check if the response content is JSON and attempt to deserialize it
+            if (context.Response.ContentType != null && context.Response.ContentType.Contains("application/json"))
+            {
+                try
+                {
+                    var response = JsonSerializer.Deserialize<object>(responseAsText);
+                    LogHelper.LogResponse(
+                        _logger,
+                        "Response",
+                        JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }),
+                        context.Response.StatusCode
+                    );
+                }
+                catch (JsonException)
+                {
+                    // If deserialization fails, log as raw text
+                    LogHelper.LogResponse(
+                        _logger,
+                        "Response",
+                        responseAsText,
+                        context.Response.StatusCode
+                    );
+                }
+            }
+            else
+            {
+                // Log as plain text if the content type is not JSON
+                LogHelper.LogResponse(
+                    _logger,
+                    "Response",
+                    responseAsText,
+                    context.Response.StatusCode
+                );
+            }
+
+            // Reset the position of the memory stream and copy to the original response stream
+            context.Response.Body.Seek(0, SeekOrigin.Begin);
+            await responseBody.CopyToAsync(originalBodyStream);
+        }
+        finally
+        {
+            // Restore the original response body stream
+            context.Response.Body = originalBodyStream;
+        }
     }
 }

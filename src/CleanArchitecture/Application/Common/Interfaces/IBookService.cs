@@ -5,9 +5,9 @@ namespace CleanArchitecture.Application.Common.Interfaces;
 
 public interface IBookService
 {
-    Task<Pagination<Book>> Get(int pageIndex, int pageSize);
-    Task<Book> Get(int id);
-    Task Add(BookDTO request, CancellationToken token);
-    Task Update(Book request, CancellationToken token);
-    Task Delete(int id, CancellationToken token);
+    Task<Pagination<BookDTO>> Get(int pageIndex, int pageSize);
+    Task<BookDTO> Get(int id);
+    Task<BookDTO> Add(AddBookRequest request, CancellationToken token);
+    Task<BookDTO> Update(UpdateBookRequest request, CancellationToken token);
+    Task<BookDTO> Delete(int id, CancellationToken token);
 }
