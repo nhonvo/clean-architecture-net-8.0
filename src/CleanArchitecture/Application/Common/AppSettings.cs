@@ -9,7 +9,7 @@ public class AppSettings
     public string AppUrl { get; set; }
     public ApplicationDetail ApplicationDetail { get; set; }
     public ConnectionStrings ConnectionStrings { get; set; }
-    public Jwt Jwt { get; set; }
+    public Identity Identity { get; set; }
     public MailConfigurations MailConfigurations { get; set; }
     public FileStorageSettings FileStorageSettings { get; set; }
     public CloudinarySettings Cloudinary { get; set; }
@@ -31,8 +31,10 @@ public class ConnectionStrings
     public string DefaultConnection { get; set; }
 }
 
-public class Jwt
+public class Identity
 {
+    [Required]
+    public bool IsLocal { get; set; } = false;
     [Required]
     public string Key { get; set; }
     [Required]

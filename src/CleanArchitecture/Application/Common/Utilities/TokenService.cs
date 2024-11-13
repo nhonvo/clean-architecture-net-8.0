@@ -15,14 +15,14 @@ public class TokenService(AppSettings appSettings,
     UserManager<ApplicationUser> userManager) : ITokenService
 {
     private readonly AppSettings _appSettings = appSettings;
-    private readonly Jwt _jwt = appSettings.Jwt;
+    private readonly Identity _jwt = appSettings.Identity;
     private readonly ICurrentTime _time = time;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     public string GenerateToken(User user)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Jwt.Key));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Identity.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new[]
         {
@@ -34,8 +34,8 @@ public class TokenService(AppSettings appSettings,
         var token = new JwtSecurityToken(
                 claims: claims,
                 expires: _time.GetCurrentTime().AddDays(1),
-                audience: _appSettings.Jwt.Audience,
-                issuer: _appSettings.Jwt.Issuer,
+                audience: _appSettings.Identity.Audience,
+                issuer: _appSettings.Identity.Issuer,
                 signingCredentials: credentials
             );
 
@@ -47,9 +47,9 @@ public class TokenService(AppSettings appSettings,
         IdentityModelEventSource.ShowPII = true;
         TokenValidationParameters validationParameters = new()
         {
-            ValidIssuer = _appSettings.Jwt.Issuer,
-            ValidAudience = _appSettings.Jwt.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Jwt.Key)),
+            ValidIssuer = _appSettings.Identity.Issuer,
+            ValidAudience = _appSettings.Identity.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Identity.Key)),
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = false,

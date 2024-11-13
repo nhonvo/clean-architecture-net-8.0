@@ -22,7 +22,11 @@ public static class ConfigureServices
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
-        services.AddAuth(appSettings.Jwt);
+        if (appSettings.Identity.IsLocal)
+        {
+            services.AddAuthLocal(appSettings.Identity);
+        }
+        services.AddAuth(appSettings.Identity);
         services.AddDistributedMemoryCache();
         services.AddMemoryCache();
         services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();

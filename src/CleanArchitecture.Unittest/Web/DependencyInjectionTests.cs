@@ -26,7 +26,7 @@ public class DependencyInjectionTests
         {
             DefaultConnection = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"
         },
-        Jwt = new Jwt
+        Identity = new Identity
         {
             Key = "your_jwt_key",
             Issuer = "your_jwt_issuer",

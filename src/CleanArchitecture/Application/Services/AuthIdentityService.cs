@@ -88,8 +88,8 @@ public class AuthIdentityService(ApplicationDbContext context,
 
         await _userManager.AddToRoleAsync(user, Role.User.ToString());
         // Add custom scope claim to the user
-        string readScope = _appSettings.Jwt.ScopeBaseDomain + "/read";
-        string writeScope = _appSettings.Jwt.ScopeBaseDomain + "/write";
+        string readScope = _appSettings.Identity.ScopeBaseDomain + "/read";
+        string writeScope = _appSettings.Identity.ScopeBaseDomain + "/write";
         string[] scopes = [readScope, writeScope];
 
         // Add custom scope claim to the user

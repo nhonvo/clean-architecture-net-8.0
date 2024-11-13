@@ -93,5 +93,3 @@ dotnet new install ./ --force
 # dotnet new install ./nupkg/CleanArchitecture.1.0.0.nupkg
 dotnet new cleanarch -n MyFirstProject
 ```
-
-TODO: build gate way via docker 
