@@ -83,13 +83,10 @@ This project is licensed under the MIT License.
 
 For any inquiries, contact the repository owner [here](https://github.com/nhonvo).
 
-Note: For development
+TODO:
 
-pack a project command
-
-```bash
-dotnet pack -o nupkg
-dotnet new install ./ --force
-# dotnet new install ./nupkg/CleanArchitecture.1.0.0.nupkg
-dotnet new cleanarch -n MyFirstProject
-```
+- [ ]: Config integration test, setup docker, run pipeline
+- [ ]: Fix warning
+- [ ]: Enhance pipeline separate build, unit test, integration test
+- [ ]: Config hangfire
+- [ ]: Config Job apply sidecar
