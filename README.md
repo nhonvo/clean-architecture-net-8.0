@@ -14,7 +14,7 @@ This project serves as a template for building a Clean Architecture Web API in A
 - [x] Unit testing
 - [x] Middleware for Exception Handling and Validation
 - [ ] Integration test, GA pipeline
-- [ ] Unit test for auth identity code
+- [ ] Unit test for auth identity code 
 - [ ] fix: scope assign
 
 ## Getting Started
