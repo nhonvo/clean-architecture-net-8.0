@@ -1,6 +1,6 @@
 using AutoMapper;
-using CleanArchitecture.Application.Common.Models.Book;
-using CleanArchitecture.Application.Common.Models.User;
+using CleanArchitecture.Shared.Models.Book;
+using CleanArchitecture.Shared.Models.User;
 
 namespace CleanArchitecture.Application.Common.Mappings;
 
@@ -9,6 +9,9 @@ public class MapProfile : Profile
     public MapProfile()
     {
         CreateMap<Book, BookDTO>().ReverseMap();
+        CreateMap<Book, AddBookRequest>().ReverseMap();
+        CreateMap<Book, UpdateBookRequest>().ReverseMap();
+
 
         CreateMap<User, UserSignInRequest>().ReverseMap();
         CreateMap<User, UserSignInResponse>().ReverseMap();

@@ -8,7 +8,7 @@ public class HealthChecksFilter : IDocumentFilter
     public void Apply(OpenApiDocument openApiDocument, DocumentFilterContext context)
     {
         // Add the /healthz endpoint to Swagger
-        openApiDocument.Paths.Add("/healthz", new OpenApiPathItem
+        openApiDocument.Paths.Add("/health/full", new OpenApiPathItem
         {
             Operations =
             {

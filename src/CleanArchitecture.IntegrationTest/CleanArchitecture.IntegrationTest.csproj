@@ -9,6 +9,8 @@
     <IsPackable>true</IsPackable>
     <RootNamespace>CleanArchitecture.IntegrationTest</RootNamespace>
     <AssemblyName>CleanArchitecture.IntegrationTest</AssemblyName>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
 
   </PropertyGroup>
 

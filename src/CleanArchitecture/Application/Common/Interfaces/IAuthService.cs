@@ -1,4 +1,4 @@
-using CleanArchitecture.Application.Common.Models.User;
+using CleanArchitecture.Shared.Models.User;
 
 namespace CleanArchitecture.Application.Common.Interfaces;
 public interface IAuthService

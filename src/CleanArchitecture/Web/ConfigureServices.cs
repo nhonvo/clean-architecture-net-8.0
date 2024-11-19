@@ -3,10 +3,12 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CleanArchitecture.Application.Common;
+using CleanArchitecture.Domain.Authorization;
 using CleanArchitecture.Web.Extensions;
 using CleanArchitecture.Web.Middlewares;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CleanArchitecture.Web;
 
@@ -20,10 +22,14 @@ public static class ConfigureServices
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
-        services.AddAuthentication();
-        services.AddAuthorization();
+        if (appSettings.Identity.IsLocal)
+        {
+            services.AddAuthLocal(appSettings.Identity);
+        }
+        services.AddAuth(appSettings.Identity);
         services.AddDistributedMemoryCache();
         services.AddMemoryCache();
+        services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
         // Middleware
         services.AddSingleton<GlobalExceptionMiddleware>();

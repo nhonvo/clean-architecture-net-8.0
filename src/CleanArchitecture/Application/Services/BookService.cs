@@ -1,7 +1,8 @@
 using AutoMapper;
+using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Models;
-using CleanArchitecture.Application.Common.Models.Book;
+using CleanArchitecture.Shared.Models.Book;
 
 namespace CleanArchitecture.Application.Services;
 
@@ -10,40 +11,54 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<Pagination<Book>> Get(int pageIndex, int pageSize)
+    public async Task<Pagination<BookDTO>> Get(int pageIndex, int pageSize)
     {
         var books = await _unitOfWork.BookRepository.ToPagination(
             pageIndex: pageIndex,
             pageSize: pageSize,
             orderBy: x => x.Title,
-            ascending: true
-            );
+            ascending: true,
+            selector: x => new BookDTO
+            {
+                Title = x.Title,
+                Price = x.Price,
+                Description = x.Description
+            }
+        );
 
         return books;
     }
 
-    public async Task<Book> Get(int id)
+    public async Task<BookDTO> Get(int id)
     {
         var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == id);
-        return book;
+        return _mapper.Map<BookDTO>(book);
     }
 
-    public async Task Add(BookDTO request, CancellationToken token)
+    public async Task<BookDTO> Add(AddBookRequest request, CancellationToken token)
     {
         var book = _mapper.Map<Book>(request);
         await _unitOfWork.ExecuteTransactionAsync(async () => await _unitOfWork.BookRepository.AddAsync(book), token);
+        return _mapper.Map<BookDTO>(book);
     }
 
-    public async Task Update(Book request, CancellationToken token)
+    public async Task<BookDTO> Update(UpdateBookRequest request, CancellationToken token)
     {
-        var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == request.Id);
+        if (await _unitOfWork.BookRepository.AnyAsync(x => x.Id != request.Id))
+            throw new UserFriendlyException("Book not found", "Book not found");
+
+        var book = _mapper.Map<Book>(request);
         await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Update(book), token);
+        return _mapper.Map<BookDTO>(book);
     }
 
-    public async Task Delete(int id, CancellationToken token)
+    public async Task<BookDTO> Delete(int id, CancellationToken token)
     {
 
-        var book = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == id);
-        await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Delete(book), token);
+        var existBook = await _unitOfWork.BookRepository.FirstOrDefaultAsync(x => x.Id == id)
+            ?? throw new UserFriendlyException("Book not found", "Book not found");
+
+        await _unitOfWork.ExecuteTransactionAsync(() => _unitOfWork.BookRepository.Delete(existBook), token);
+        return _mapper.Map<BookDTO>(existBook);
     }
 }

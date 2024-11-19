@@ -34,7 +34,7 @@ public class InjectionFixture : IDisposable
             client.DefaultRequestHeaders.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", appSettings.Token);
         });
-        
+
         ServiceProvider = new AddServiceCollection()._serviceProvider;
         // Register HttpClient and IBookClient
         services.AddHttpClient<IBookClient, BookClient>(client =>

@@ -1,9 +1,11 @@
 using System.Security.Claims;
+using CleanArchitecture.Shared.Models.AuthIdentity.UsersIdentity;
 
 namespace CleanArchitecture.Application.Common.Interfaces;
 
 public interface ITokenService
 {
-    public string GenerateToken(User user);
-    public ClaimsPrincipal ValidateToken(string token);
+    string GenerateToken(User user);
+    ClaimsPrincipal ValidateToken(string token);
+    Task<TokenResult> GenerateToken(ApplicationUser user, string[] scopes, CancellationToken cancellationToken);
 }

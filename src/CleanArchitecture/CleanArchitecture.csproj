@@ -37,5 +37,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" />
     <PackageReference Include="BCrypt.Net-Next" />
+    <PackageReference Include="CloudinaryDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CleanArchitecture.Shared\CleanArchitecture.Shared.csproj" />
   </ItemGroup>
 </Project>

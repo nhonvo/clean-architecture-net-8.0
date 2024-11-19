@@ -1,10 +1,9 @@
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.Common.Models.Book;
+using CleanArchitecture.Shared.Models.Book;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Web.Controller;
-
 
 public class BookController(IBookService bookService) : BaseController
 {
@@ -19,25 +18,16 @@ public class BookController(IBookService bookService) : BaseController
         => Ok(await _bookService.Get(pageIndex, pageSize));
 
     [HttpPost]
-    public async Task<IActionResult> Add(BookDTO request, CancellationToken token)
-    {
-        await _bookService.Add(request, token);
-        return NoContent();
-    }
+    public async Task<IActionResult> Add(AddBookRequest request, CancellationToken token)
+        => Ok(await _bookService.Add(request, token));
 
     [Authorize]
     [HttpPut]
-    public async Task<IActionResult> Update(Book request, CancellationToken token)
-    {
-        await _bookService.Update(request, token);
-        return NoContent();
-    }
+    public async Task<IActionResult> Update(UpdateBookRequest request, CancellationToken token)
+        => Ok(await _bookService.Update(request, token));
 
     [Authorize]
     [HttpDelete]
     public async Task<IActionResult> Delete(int id, CancellationToken token)
-    {
-        await _bookService.Delete(id, token);
-        return NoContent();
-    }
+        => Ok(await _bookService.Delete(id, token));
 }

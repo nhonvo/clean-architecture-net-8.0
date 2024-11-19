@@ -20,7 +20,7 @@ jobs:
         with:
           dotnet-version: 8.0
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ./CleanArchitecture.sln
       - name: Build
         run: dotnet build --no-restore
       - name: Test

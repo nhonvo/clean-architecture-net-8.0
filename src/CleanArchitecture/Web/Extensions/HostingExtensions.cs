@@ -11,7 +11,7 @@ public static class HostingExtensions
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder, AppSettings appsettings)
     {
         builder.Services.AddInfrastructuresService(appsettings);
-        builder.Services.AddApplicationService();
+        builder.Services.AddApplicationService(appsettings);
         builder.Services.AddWebAPIService(appsettings);
 
         return builder.Build();
@@ -21,40 +21,25 @@ public static class HostingExtensions
     {
         using var loggerFactory = LoggerFactory.Create(builder => { });
         using var scope = app.Services.CreateScope();
+
         if (!appsettings.UseInMemoryDatabase)
         {
             var initialize = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
             await initialize.InitializeAsync();
         }
-
-        app.UseSwagger(appsettings);
-
-        app.UseCors("AllowSpecificOrigin");
-
         app.UseMiddleware<GlobalExceptionMiddleware>();
-
-        app.UseMiddleware<PerformanceMiddleware>();
-
-        app.UseResponseCompression();
-
-        app.UseResponseCompression();
-
-        app.UseHttpsRedirection();
-
-        app.ConfigureHealthCheck();
-
-        app.UseMiddleware<LoggingMiddleware>();
-
         app.ConfigureExceptionHandler(loggerFactory.CreateLogger("Exceptions"));
-
+        app.UseMiddleware<LoggingMiddleware>();
+        app.UseMiddleware<PerformanceMiddleware>();
+        app.UseHttpsRedirection();
+        app.UseCors("AllowSpecificOrigin");
+        app.UseSwagger(appsettings);
+        app.ConfigureHealthCheck();
         app.UseAuthentication();
-
         app.UseAuthorization();
-
         app.MapControllers();
-
-        // app.
 
         return app;
     }
+
 }

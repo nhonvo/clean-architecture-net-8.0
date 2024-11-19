@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace CleanArchitecture.Web.Extensions;
-
 public static class HealthCheckExtensions
 {
     public static void SetupHealthCheck(this IServiceCollection services, AppSettings configuration)
@@ -44,8 +43,9 @@ public static class HealthCheckExtensions
 
         app.UseHealthChecksUI(setup =>
         {
-            setup.ApiPath = "/health/api";
-            setup.UIPath = "/health/dashboard";
+            setup.ApiPath = "/healthcheck";
+            setup.UIPath = "/healthcheck-ui";
+            // setup.AddCustomStylesheet("Customization\\custom.css");
         });
     }
 }
