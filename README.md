@@ -14,8 +14,12 @@ This project serves as a template for building a Clean Architecture Web API in A
 - [x] Unit testing
 - [x] Middleware for Exception Handling and Validation
 - [ ] Integration test, GA pipeline
-- [ ] Unit test for auth identity code 
+- [ ] Unit test for auth identity code
 - [ ] fix: scope assign
+- [ ] fix: user flow, update user remove not use file(status, avatar)
+- [ ] add background service
+- [ ] host in ec2, write terraform init resource in aws
+- [ ] rename all model follow request/response postfix, remove model has 1 field
 
 ## Getting Started
 
