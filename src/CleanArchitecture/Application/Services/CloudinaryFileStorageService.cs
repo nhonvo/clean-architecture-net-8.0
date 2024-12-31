@@ -48,5 +48,5 @@ public class CloudinaryFileStorageService(AppSettings appsettings) : IFileStorag
         }
     }
 
-    public string GetFileUrl(AddFileRequest request) => _cloudinary.Api.UrlImgUp.BuildUrl(request.FileName);
+    public string GetFileUrl(string fileName) => _cloudinary.Api.UrlImgUp.BuildUrl(fileName);
 }

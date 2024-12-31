@@ -84,26 +84,26 @@ public class LocalFileStorageService : IFileStorageService
         };
     }
 
-    public string GetFileUrl(AddFileRequest request)
+    public string GetFileUrl(string fileName)
     {
-        var filePath = Path.Combine(_userContentFolder, request.FileName);
+        var filePath = Path.Combine(_userContentFolder, fileName);
         if (File.Exists(filePath))
         {
             try
             {
-                var fileUrl = Path.Combine(_baseUrl, _userContentFolder, request.FileName);
-                _logger.LogInformation($"File URL for {request.FileName} retrieved successfully.");
+                var fileUrl = Path.Combine(_baseUrl, _userContentFolder, fileName);
+                _logger.LogInformation($"File URL for {fileName} retrieved successfully.");
                 return fileUrl;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error retrieving file URL for {request.FileName}");
-                throw new InvalidOperationException($"An error occurred while retrieving the file URL for {request.FileName}.", ex);
+                _logger.LogError(ex, $"Error retrieving file URL for {fileName}");
+                throw new InvalidOperationException($"An error occurred while retrieving the file URL for {fileName}.", ex);
             }
         }
         else
         {
-            _logger.LogWarning($"File {request.FileName} not found.");
+            _logger.LogWarning($"File {fileName} not found.");
             return null;
         }
     }
