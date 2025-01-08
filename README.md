@@ -6,20 +6,68 @@ This project serves as a template for building a Clean Architecture Web API in A
 
 ## Main Features
 
-- [x] Clean Architecture structure (Domain, Application, Web API, Infrastructure)
-- [x] ASP.NET Core 8.0 with Entity Framework Core
-- [x] Docker support with SQL Server integration
-- [x] JWT Token & Authentication by identity
-- [x] Health Check and Logging
-- [x] Unit testing
-- [x] Middleware for Exception Handling and Validation
-- [ ] Integration test, GA pipeline
-- [ ] Unit test for auth identity code
-- [ ] fix: scope assign
-- [ ] fix: user flow, update user remove not use file(status, avatar)
-- [ ] add background service
-- [ ] host in ec2, write terraform init resource in aws
-- [ ] rename all model follow request/response postfix, remove model has 1 field
+### **1. Core Features (Completed)**
+
+- Clean Architecture structure (Domain, Application, Web API, Infrastructure)
+- ASP.NET Core 8.0 with Entity Framework Core
+- Docker support with SQL Server integration
+- JWT Token & Authentication by Identity
+- Health Check and Logging
+- Middleware for Exception Handling and Validation
+- Unit Testing
+
+### **2. Testing and Quality Assurance**
+
+#### **2.1 Unit Testing**
+
+- Write unit tests for authentication and identity code.
+
+#### **2.2 Integration Testing**
+
+- Set up integration tests with `HttpClient`.
+- Update GitHub Actions (GA) pipeline to include integration tests and capture Docker logs.
+
+### **3. Infrastructure and Hosting**
+
+- Host the application on AWS EC2.
+- Write Terraform scripts to initialize AWS resources.
+- Add background services.
+- Configure Hangfire for scheduled tasks.
+- Apply sidecar architecture for job execution.
+
+### **4. Enhancements and Fixes**
+
+#### **4.1 Bug Fixes**
+
+- Fix scope assignment issues.
+- Fix user flow: update and remove unused files (e.g., status, avatar).
+
+#### **4.2 Code Enhancements**
+
+- Rename all models to include `Request`/`Response` postfix.
+- Remove redundant models containing only one field.
+
+#### **4.3 Warning and Pipeline Improvements**
+
+- Fix project warnings.
+- Enhance pipeline by separating build, unit test, and integration test stages.
+
+### **5. Advanced Features**
+
+- Add support for advanced technologies:
+- Redis.
+- Aspire.
+- Splunk.
+- New Relic for logging.
+- Elasticsearch (ELK stack).
+
+### **6. Real-World Testing**
+
+- Add a real external service for testing.
+
+### **7. Miscellaneous**
+
+- Configure integration tests to run in Docker.
 
 ## Getting Started
 
@@ -87,10 +135,3 @@ This project is licensed under the MIT License.
 
 For any inquiries, contact the repository owner [here](https://github.com/nhonvo).
 
-TODO:
-
-- [ ]: Config integration test, setup docker, run pipeline
-- [ ]: Fix warning
-- [ ]: Enhance pipeline separate build, unit test, integration test
-- [ ]: Config hangfire
-- [ ]: Config Job apply sidecar
