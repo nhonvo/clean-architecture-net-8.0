@@ -8,19 +8,17 @@ public class HealthChecksFilter : IDocumentFilter
     public void Apply(OpenApiDocument openApiDocument, DocumentFilterContext context)
     {
         // Add the /healthz endpoint to Swagger
-        openApiDocument.Paths.Add("/health/full", new OpenApiPathItem
+        openApiDocument.Paths.Add("/synthetic-check", new OpenApiPathItem
         {
             Operations =
             {
                 [OperationType.Get] = new OpenApiOperation
                 {
-                    Summary = "Custom Health Check",
+                    Summary = "Synthetic health Check",
                     Description = "Displays the application's health status.",
                     Responses = new OpenApiResponses
                     {
                         ["200"] = new OpenApiResponse { Description = "Healthy" },
-                        ["429"] = new OpenApiResponse { Description = "Degraded" },
-                        ["503"] = new OpenApiResponse { Description = "Unhealthy" }
                     }
                 }
             }
@@ -33,7 +31,7 @@ public class HealthChecksFilter : IDocumentFilter
             {
                 [OperationType.Get] = new OpenApiOperation
                 {
-                    Summary = "Health Endpoint",
+                    Summary = "Health check Endpoint",
                     Description = "Returns a plain text health status.",
                     Responses = new OpenApiResponses
                     {
