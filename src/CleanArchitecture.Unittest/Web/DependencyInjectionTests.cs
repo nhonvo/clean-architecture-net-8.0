@@ -36,8 +36,8 @@ public class DependencyInjectionTests
         UseInMemoryDatabase = false,
         Cors =
         [
-            "http://localhost:4200",
-            "https://myapp.com"
+        "http://localhost:4200",
+        "https://myapp.com"
         ],
         MailConfigurations = new MailConfigurations
         {

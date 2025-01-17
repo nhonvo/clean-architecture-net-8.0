@@ -5,11 +5,11 @@ using CleanArchitecture.Shared.Models.AuthIdentity.Media;
 namespace CleanArchitecture.Application.Services;
 
 public class MediaService(
-    IFileStorageService storageService,
+    IFileService storageService,
     ILogger<MediaService> logger,
     IUnitOfWork unitOfWork) : IMediaService
 {
-    private readonly IFileStorageService _storageService = storageService;
+    private readonly IFileService _storageService = storageService;
     private readonly ILogger<MediaService> _logger = logger;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 namespace CleanArchitecture.Application.Services;
 
 public class UserService(
-    IFileStorageService storageService,
+    IFileService storageService,
     UserManager<ApplicationUser> userManager,
     IUnitOfWork unitOfWork) : IUserService
 {
-    private readonly IFileStorageService _storageService = storageService;
+    private readonly IFileService _storageService = storageService;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
 

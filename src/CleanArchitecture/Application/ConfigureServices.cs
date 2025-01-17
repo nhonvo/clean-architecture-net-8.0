@@ -19,11 +19,11 @@ public static class ConfigureServices
 
         if (appsettings.FileStorageSettings.LocalStorage)
         {
-            services.AddTransient<IFileStorageService, LocalFileStorageService>();
+            services.AddTransient<IFileService, LocalStorageService>();
         }
         else
         {
-            services.AddTransient<IFileStorageService, CloudinaryFileStorageService>();
+            services.AddTransient<IFileService, CloudinaryStorageService>();
         }
 
 

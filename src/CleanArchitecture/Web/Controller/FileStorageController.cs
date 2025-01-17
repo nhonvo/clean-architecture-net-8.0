@@ -6,9 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace CleanArchitecture.Web.Controller;
 
-public class FileStorageController(IFileStorageService fileStorageService) : BaseController
+public class FileStorageController(IFileService fileStorageService) : BaseController
 {
-    private readonly IFileStorageService _fileStorageService = fileStorageService;
+    private readonly IFileService _fileStorageService = fileStorageService;
 
     /// <summary>
     /// upload a static file

@@ -3,13 +3,12 @@ using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Application.Common.Utilities;
-using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Shared.Models.AuthIdentity.UsersIdentity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Services;
-public class AuthIdentityService(ApplicationDbContext context,
+public class AuthIdentityService(
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
     ITokenService tokenService,
@@ -19,7 +18,6 @@ public class AuthIdentityService(ApplicationDbContext context,
     AppSettings appSettings,
     ICookieService cookieService) : IAuthIdentityService
 {
-    private readonly ApplicationDbContext _context = context;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
     private readonly IMailService _emailSender = emailSender;
