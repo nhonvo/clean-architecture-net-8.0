@@ -50,9 +50,9 @@ public class ValidateModelFilter : IActionFilter
             .Select(errorDetail => new Error(
                 $"{ApplicationConstants.Name}.{ErrorRespondCode.BAD_REQUEST}",
                 errorDetail.ErrorMessage)
-                {
-                    Property = errorDetail.ErrorMessage ?? "null"
-                })
+            {
+                Property = errorDetail.ErrorMessage ?? "null"
+            })
             .ToList();
 
         context.Result = new BadRequestObjectResult(new ErrorResponse { Errors = errors });

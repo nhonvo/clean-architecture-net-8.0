@@ -1,5 +1,4 @@
-﻿using CleanArchitecture.Shared.Models.AuthIdentity.Media;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace CleanArchitecture.Shared.Models.AuthIdentity.UsersIdentity;
 

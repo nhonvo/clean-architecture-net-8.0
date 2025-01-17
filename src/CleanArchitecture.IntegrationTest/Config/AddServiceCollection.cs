@@ -11,7 +11,7 @@ public class AddServiceCollection
     {
         var serviceCollection = new ServiceCollection();
         // register service here
-        serviceCollection.AddScoped<IBookClient, BookClient>();
+        serviceCollection.AddTransient<IBookClient, BookClient>();
 
         _serviceProvider = serviceCollection.BuildServiceProvider();
 
