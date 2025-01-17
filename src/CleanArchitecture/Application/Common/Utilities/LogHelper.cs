@@ -17,7 +17,7 @@ public static class LogHelper
 
         logger.LogInformation(
             "{logMessage}\nResponse Data: {responseData}\nStatus Code: {statusCode}",
-            logMessage,
+            logMessage ?? "Response",
             responseData,
             statusCode
         );

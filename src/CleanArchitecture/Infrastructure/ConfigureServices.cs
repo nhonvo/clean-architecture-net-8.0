@@ -28,13 +28,13 @@ public static class ConfigureServices
                 .AddDefaultTokenProviders();
 
         // register services
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IBookRepository, BookRepository>();
-        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddScoped<IMediaRepository, MediaRepository>();
-        services.AddScoped<IForgotPasswordRepository, ForgotPasswordRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<ApplicationDbContextInitializer>();
+        services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IBookRepository, BookRepository>();
+        services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddTransient<IMediaRepository, MediaRepository>();
+        services.AddTransient<IForgotPasswordRepository, ForgotPasswordRepository>();
+        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<ApplicationDbContextInitializer>();
 
         return services;
     }
