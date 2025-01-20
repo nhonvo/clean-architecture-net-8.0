@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.Common.Models;
+﻿namespace CleanArchitecture.Shared.Models;
 
 public abstract class BaseModel
 {

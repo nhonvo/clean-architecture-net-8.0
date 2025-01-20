@@ -1,4 +1,4 @@
-using CleanArchitecture.Application.Common.Models;
+using CleanArchitecture.Shared.Models;
 using CleanArchitecture.Shared.Models.Book;
 
 namespace CleanArchitecture.Application.Common.Interfaces;

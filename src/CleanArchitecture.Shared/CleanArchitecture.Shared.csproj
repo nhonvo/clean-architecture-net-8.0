@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
 
 </Project>

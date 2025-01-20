@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using CleanArchitecture.Application.Common.Models;
+using CleanArchitecture.Shared.Models;
 using CleanArchitecture.Infrastructure.Data;
 using CleanArchitecture.Infrastructure.Interface;
 using Microsoft.EntityFrameworkCore;

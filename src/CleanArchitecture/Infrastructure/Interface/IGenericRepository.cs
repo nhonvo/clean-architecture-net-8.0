@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using CleanArchitecture.Application.Common.Models;
+using CleanArchitecture.Shared.Models;
 
 namespace CleanArchitecture.Infrastructure.Interface;
 

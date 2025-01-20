@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using CleanArchitecture.Application;
-using CleanArchitecture.Application.Common.Models;
+using CleanArchitecture.Shared.Models;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Shared.Models.Book;
