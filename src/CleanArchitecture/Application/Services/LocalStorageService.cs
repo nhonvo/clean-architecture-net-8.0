@@ -1,7 +1,6 @@
 using System.Net.Http.Headers;
 using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.Common.Utilities;
 using CleanArchitecture.Shared.Models.AuthIdentity.File;
 using CleanArchitecture.Shared.Models.AuthIdentity.Media;
 
@@ -105,7 +104,7 @@ public class LocalStorageService : IFileService
         else
         {
             _logger.LogWarning($"File {fileName} not found.");
-            return null;
+            throw new InvalidOperationException($"File {fileName} not found.");
         }
     }
 }
