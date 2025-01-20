@@ -19,18 +19,18 @@ public static class ConfigureServices
 
         if (appsettings.FileStorageSettings.LocalStorage)
         {
-            services.AddTransient<IFileService, LocalStorageService>();
+            services.AddSingleton<IFileService, LocalStorageService>();
         }
         else
         {
-            services.AddTransient<IFileService, CloudinaryStorageService>();
+            services.AddSingleton<IFileService, CloudinaryStorageService>();
         }
 
 
         services.AddTransient<IUserService, UserService>();
 
         services.AddTransient<ICurrentTime, CurrentTime>();
-        services.AddTransient<ICurrentUser, CurrentUser>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<ICookieService, CookieService>();
 

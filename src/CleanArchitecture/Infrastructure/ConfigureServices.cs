@@ -20,7 +20,10 @@ public static class ConfigureServices
         else
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.ConnectionStrings.DefaultConnection));
+                options.UseSqlServer(configuration.ConnectionStrings.DefaultConnection,
+                sqlOptions => sqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
+                                                              maxRetryDelay: TimeSpan.FromSeconds(10),
+                                                              errorNumbersToAdd: null)));
         }
 
         services.AddIdentity<ApplicationUser, RoleIdentity>()
@@ -28,12 +31,12 @@ public static class ConfigureServices
                 .AddDefaultTokenProviders();
 
         // register services
-        services.AddTransient<IUserRepository, UserRepository>();
-        services.AddTransient<IBookRepository, BookRepository>();
-        services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddTransient<IMediaRepository, MediaRepository>();
-        services.AddTransient<IForgotPasswordRepository, ForgotPasswordRepository>();
-        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IBookRepository, BookRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IMediaRepository, MediaRepository>();
+        services.AddScoped<IForgotPasswordRepository, ForgotPasswordRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<ApplicationDbContextInitializer>();
 
         return services;
