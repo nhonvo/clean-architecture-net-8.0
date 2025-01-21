@@ -1,6 +1,6 @@
 namespace CleanArchitecture.Infrastructure.ExternalServices.HealthCheck;
 
-public class GithubHealthCheck(IHttpClientFactory httpClientFactory, ILogger<ExternalServiceHealthCheck> logger) : ExternalServiceHealthCheck(httpClientFactory, logger)
+public class GithubHealthCheck(IHttpClientFactory httpClientFactory, ILoggerFactory logger) : ExternalServiceHealthCheck(httpClientFactory, logger)
 {
     protected override string ServiceName => "Github";
     protected override string HealthCheckEndpoint => "https://www.githubstatus.com/api/v2/status.json";

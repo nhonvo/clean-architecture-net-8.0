@@ -10,15 +10,15 @@ public class LocalStorageService : IFileService
     private readonly FileStorageSettings _fileStorage;
     private readonly string _userContentFolder;
     private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly ILogger<LocalStorageService> _logger;
+    private readonly ILogger _logger;
     private readonly string _baseUrl;
 
     public LocalStorageService(
         IWebHostEnvironment webHostEnvironment,
-        ILogger<LocalStorageService> logger, AppSettings appSettings)
+        ILoggerFactory logger, AppSettings appSettings)
     {
         _webHostEnvironment = webHostEnvironment;
-        _logger = logger;
+        _logger = logger.CreateLogger<LocalStorageService>();
         _fileStorage = appSettings.FileStorageSettings;
         _userContentFolder = Path.Combine(_webHostEnvironment.ContentRootPath, _fileStorage.Path);
         _baseUrl = appSettings.BaseURL;

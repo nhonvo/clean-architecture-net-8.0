@@ -1,6 +1,6 @@
 namespace CleanArchitecture.Infrastructure.ExternalServices.HealthCheck;
 
-public class OpenAPIHealthCheck(IHttpClientFactory httpClientFactory, ILogger<ExternalServiceHealthCheck> logger) : ExternalServiceHealthCheck(httpClientFactory, logger)
+public class OpenAPIHealthCheck(IHttpClientFactory httpClientFactory, ILoggerFactory logger) : ExternalServiceHealthCheck(httpClientFactory, logger)
 {
     protected override string ServiceName => "OpenAPI";
     protected override string HealthCheckEndpoint => "https://status.openai.com/api/v2/status.json";

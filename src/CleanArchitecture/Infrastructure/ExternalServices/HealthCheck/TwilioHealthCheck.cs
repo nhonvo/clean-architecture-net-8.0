@@ -1,6 +1,6 @@
 namespace CleanArchitecture.Infrastructure.ExternalServices.HealthCheck;
 
-public class TwilioHealthCheck(IHttpClientFactory httpClientFactory, ILogger<ExternalServiceHealthCheck> logger) : ExternalServiceHealthCheck(httpClientFactory, logger)
+public class TwilioHealthCheck(IHttpClientFactory httpClientFactory, ILoggerFactory logger) : ExternalServiceHealthCheck(httpClientFactory, logger)
 {
     protected override string ServiceName => "Twilio";
     protected override string HealthCheckEndpoint => "https://status.twilio.com/api/v2/status.json";

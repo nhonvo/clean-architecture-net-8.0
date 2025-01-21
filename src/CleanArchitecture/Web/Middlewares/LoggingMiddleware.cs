@@ -2,10 +2,10 @@ using System.Text.Json;
 using CleanArchitecture.Application.Common.Utilities;
 
 namespace CleanArchitecture.Web.Middlewares;
-public class LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger)
+public class LoggingMiddleware(RequestDelegate next, ILoggerFactory logger)
 {
     private readonly RequestDelegate _next = next;
-    private readonly ILogger<LoggingMiddleware> _logger = logger;
+    private readonly ILogger _logger = logger.CreateLogger<LoggingMiddleware>();
     private const long MaxLogContentLength = 10_000_000; // 10 MB
 
     public async Task InvokeAsync(HttpContext context)

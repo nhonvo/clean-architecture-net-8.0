@@ -6,11 +6,11 @@ namespace CleanArchitecture.Application.Services;
 
 public class MediaService(
     IFileService storageService,
-    ILogger<MediaService> logger,
+    ILoggerFactory logger,
     IUnitOfWork unitOfWork) : IMediaService
 {
     private readonly IFileService _storageService = storageService;
-    private readonly ILogger<MediaService> _logger = logger;
+    private readonly ILogger _logger = logger.CreateLogger<MediaService>();
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     // Xóa media

@@ -4,10 +4,10 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace CleanArchitecture.Infrastructure.ExternalServices.HealthCheck;
 
-public abstract class ExternalServiceHealthCheck(IHttpClientFactory httpClientFactory, ILogger<ExternalServiceHealthCheck> logger) : IHealthCheck
+public abstract class ExternalServiceHealthCheck(IHttpClientFactory httpClientFactory, ILoggerFactory logger) : IHealthCheck
 {
     private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
-    private readonly ILogger<ExternalServiceHealthCheck> _logger = logger;
+    private readonly ILogger _logger = logger.CreateLogger<ExternalServiceHealthCheck>();
 
     protected abstract string ServiceName { get; }
     protected abstract string HealthCheckEndpoint { get; }
