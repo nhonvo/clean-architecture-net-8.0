@@ -7,7 +7,7 @@ using CloudinaryDotNet.Actions;
 
 namespace CleanArchitecture.Application.Services;
 
-public class CloudinaryFileStorageService(AppSettings appsettings) : IFileStorageService
+public class CloudinaryStorageService(AppSettings appsettings) : IFileService
 {
     private readonly Cloudinary _cloudinary = new(
         new Account(

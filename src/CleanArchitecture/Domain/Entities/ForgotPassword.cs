@@ -1,5 +1,5 @@
 
-using CleanArchitecture.Application.Common.Models;
+using CleanArchitecture.Shared.Models;
 
 namespace CleanArchitecture.Domain.Entities;
 

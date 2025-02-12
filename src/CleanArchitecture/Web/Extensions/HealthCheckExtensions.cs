@@ -23,18 +23,20 @@ public static class HealthCheckExtensions
             failureStatus: HealthStatus.Unhealthy,
             tags: new[] { HealthCheck.InfrastructureCheck }
         );
-
-        // Add external service health checks
-        healthCheckBuilder.AddCheck<GithubHealthCheck>(
-            name: nameof(GithubHealthCheck),
-            tags: new[] { HealthCheck.ExternalServiceCheck }
-        ).AddCheck<TwilioHealthCheck>(
-            name: nameof(TwilioHealthCheck),
-            tags: new[] { HealthCheck.ExternalServiceCheck }
-        ).AddCheck<OpenAPIHealthCheck>(
-            name: nameof(OpenAPIHealthCheck),
-            tags: new[] { HealthCheck.ExternalServiceCheck }
-        );
+        if (configuration.EnableExternalHealthCheck)
+        {
+            // Add external service health checks
+            healthCheckBuilder.AddCheck<GithubHealthCheck>(
+                name: nameof(GithubHealthCheck),
+                tags: new[] { HealthCheck.ExternalServiceCheck }
+            ).AddCheck<TwilioHealthCheck>(
+                name: nameof(TwilioHealthCheck),
+                tags: new[] { HealthCheck.ExternalServiceCheck }
+            ).AddCheck<OpenAPIHealthCheck>(
+                name: nameof(OpenAPIHealthCheck),
+                tags: new[] { HealthCheck.ExternalServiceCheck }
+            );
+        }
 
         // Configure Health Check UI
         services.AddHealthChecksUI(setup =>

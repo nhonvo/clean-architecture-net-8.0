@@ -20,7 +20,10 @@ public static class ConfigureServices
         else
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.ConnectionStrings.DefaultConnection));
+                options.UseSqlServer(configuration.ConnectionStrings.DefaultConnection,
+                sqlOptions => sqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
+                                                              maxRetryDelay: TimeSpan.FromSeconds(10),
+                                                              errorNumbersToAdd: null)));
         }
 
         services.AddIdentity<ApplicationUser, RoleIdentity>()
@@ -34,7 +37,7 @@ public static class ConfigureServices
         services.AddScoped<IMediaRepository, MediaRepository>();
         services.AddScoped<IForgotPasswordRepository, ForgotPasswordRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<ApplicationDbContextInitializer>();
+        services.AddTransient<ApplicationDbContextInitializer>();
 
         return services;
     }

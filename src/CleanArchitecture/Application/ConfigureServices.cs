@@ -10,29 +10,29 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationService(this IServiceCollection services, AppSettings appsettings)
     {
-        services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IBookService, BookService>();
-        services.AddScoped<IMailService, MailService>();
-        services.AddScoped<IMediaService, MediaService>();
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<IAuthIdentityService, AuthIdentityService>();
+        services.AddTransient<IAuthService, AuthService>();
+        services.AddTransient<IBookService, BookService>();
+        services.AddTransient<IMailService, MailService>();
+        services.AddTransient<IMediaService, MediaService>();
+        services.AddTransient<IRoleService, RoleService>();
+        services.AddTransient<IAuthIdentityService, AuthIdentityService>();
 
         if (appsettings.FileStorageSettings.LocalStorage)
         {
-            services.AddScoped<IFileStorageService, LocalFileStorageService>();
+            services.AddSingleton<IFileService, LocalStorageService>();
         }
         else
         {
-            services.AddScoped<IFileStorageService, CloudinaryFileStorageService>();
+            services.AddSingleton<IFileService, CloudinaryStorageService>();
         }
 
 
-        services.AddScoped<IUserService, UserService>();
+        services.AddTransient<IUserService, UserService>();
 
-        services.AddScoped<ICurrentTime, CurrentTime>();
+        services.AddTransient<ICurrentTime, CurrentTime>();
         services.AddScoped<ICurrentUser, CurrentUser>();
-        services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<ICookieService, CookieService>();
+        services.AddTransient<ITokenService, TokenService>();
+        services.AddTransient<ICookieService, CookieService>();
 
         return services;
     }

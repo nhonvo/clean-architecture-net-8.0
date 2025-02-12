@@ -5,17 +5,17 @@ using CleanArchitecture.Shared.Models.AuthIdentity.File;
 using CleanArchitecture.Shared.Models.AuthIdentity.Media;
 
 namespace CleanArchitecture.Application.Services;
-public class LocalFileStorageService : IFileStorageService
+public class LocalStorageService : IFileService
 {
     private readonly FileStorageSettings _fileStorage;
     private readonly string _userContentFolder;
     private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly ILogger<LocalFileStorageService> _logger;
+    private readonly ILogger<LocalStorageService> _logger;
     private readonly string _baseUrl;
 
-    public LocalFileStorageService(
+    public LocalStorageService(
         IWebHostEnvironment webHostEnvironment,
-        ILogger<LocalFileStorageService> logger, AppSettings appSettings)
+        ILogger<LocalStorageService> logger, AppSettings appSettings)
     {
         _webHostEnvironment = webHostEnvironment;
         _logger = logger;
@@ -104,7 +104,7 @@ public class LocalFileStorageService : IFileStorageService
         else
         {
             _logger.LogWarning($"File {fileName} not found.");
-            return null;
+            throw new InvalidOperationException($"File {fileName} not found.");
         }
     }
 }

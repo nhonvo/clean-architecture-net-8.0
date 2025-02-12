@@ -3,7 +3,7 @@ using CleanArchitecture.Shared.Models.AuthIdentity.Media;
 
 namespace CleanArchitecture.Application.Common.Interfaces;
 
-public interface IFileStorageService
+public interface IFileService
 {
     Task DeleteFileAsync(DeleteFileRequest request);
     Task<FileUploadResult> AddFileAsync(IFormFile file);

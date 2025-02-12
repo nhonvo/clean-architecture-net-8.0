@@ -16,12 +16,12 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddWebAPIService(this IServiceCollection services, AppSettings appSettings)
     {
-        services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
+        services.SetupMvc();
         if (appSettings.Identity.IsLocal)
         {
             services.AddAuthLocal(appSettings.Identity);

@@ -16,6 +16,7 @@ public class AppSettings
     public bool UseInMemoryDatabase { get; set; }
     public string[] Cors { get; set; }
     public string BaseURL { get; set; }
+    public bool EnableExternalHealthCheck { get; set; }
 }
 
 public class ApplicationDetail
