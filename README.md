@@ -134,6 +134,3 @@ This project is licensed under the MIT License.
 ## Contact
 
 For any inquiries, contact the repository owner [here](https://github.com/nhonvo).
-
-
-Note shared project for integration test, and unit test project which need use same model

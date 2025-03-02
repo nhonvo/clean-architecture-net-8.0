@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,11 +8,26 @@
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class identityEntity : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Book",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Book", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ForgotPassword",
                 columns: table => new
@@ -33,19 +49,18 @@ namespace CleanArchitecture.Infrastructure.Migrations
                 name: "Media",
                 columns: table => new
                 {
-                    MediaId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    MediaId = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     PathMedia = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Caption = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SortOrder = table.Column<int>(type: "int", nullable: false),
-                    Duration = table.Column<int>(type: "int", nullable: false),
                     FileSize = table.Column<long>(type: "bigint", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Media", x => x.MediaId);
+                    table.PrimaryKey("PK_Media", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,6 +75,22 @@ namespace CleanArchitecture.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,7 +123,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         name: "FK_ApplicationUser_Media_AvatarId",
                         column: x => x.AvatarId,
                         principalTable: "Media",
-                        principalColumn: "MediaId");
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -227,13 +258,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "ApplicationUser",
                 columns: new[] { "Id", "AccessFailedCount", "AvatarId", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[,]
-                {
-                    { new Guid("69db714f-9576-45ba-b5b7-f00649be01de"), 0, null, "a6456a8d-a4b0-4046-830b-a9731ebd5a6b", "admin1@gmail.com", true, false, null, "Admin 1", "ADMIN1@GMAIL.COM", "admin1", "AQAAAAIAAYagAAAAEO9oNwPJdecRbKgHQ8tJRhEO15iZe0gUmQ+VNQBvooV1Q1mwLvHL00QzD6yS0BSo7g==", null, false, "", false, "admin1" },
-                    { new Guid("69db714f-9576-45ba-b5b7-f00649be02de"), 0, null, "d905b15f-0823-4e9d-852f-828a2fc37a1a", "admin2@gmail.com", true, false, null, "Admin 2", "ADMIN2@GMAIL.COM", "Admin2", "AQAAAAIAAYagAAAAEG1Yzxzo7CIUqt7WtmdliA4t61NXibkTCe5yOcT1MeuOsUj2qFT9dt2b8sjRShH11w==", null, false, "", false, "Admin2" },
-                    { new Guid("69db714f-9576-45ba-b5b7-f00649be03de"), 0, null, "3ce89235-da10-4143-bb1b-533ac5b56e9d", "admin3@gmail.com", true, false, null, "Admin 3", "ADMIN3@GMAIL.COM", "Admin3", "AQAAAAIAAYagAAAAEJIRTCUCZAjaSR5khibEucQhHlPpyLDzCRw+0Ip7lIBjXGNEcicCmGwZSbjU8paEnw==", null, false, "", false, "Admin3" },
-                    { new Guid("69db714f-9576-45ba-b5b7-f00649be04de"), 0, null, "c6b8f21b-5cfe-41bc-86a9-48b6ff373527", "admin4@gmail.com", true, false, null, "Admin 4", "ADMIN4@GMAIL.COM", "Admin4", "AQAAAAIAAYagAAAAEBCAreAzwYB2gvdJ0G7gALi+fUFmDgf7Ls0OuyGhVPexREP7REBzCErLQsrwXERGHg==", null, false, "", false, "Admin4" }
-                });
+                values: new object[] { new Guid("69db714f-9576-45ba-b5b7-f00649be01de"), 0, null, "8dce1115-6431-44a9-a6fb-52063b66eeec", "admin@gmail.com", true, false, null, "Admin 1", "ADMIN@GMAIL.COM", "admin", "AQAAAAIAAYagAAAAEEhJsDhnCQc2BeJEnL9v4GABA9I5sDC/70RU3KUvNiVal870ojT17VHmWVznedBeGA==", null, false, "", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "Role",
@@ -241,19 +266,13 @@ namespace CleanArchitecture.Infrastructure.Migrations
                 values: new object[,]
                 {
                     { new Guid("a3314be5-4c77-4fb6-82ad-302014682a73"), null, "Admin", "Admin" },
-                    { new Guid("b4314be5-4c77-4fb6-82ad-302014682b13"), null, "Subscriber", "Subscriber" }
+                    { new Guid("b4314be5-4c77-4fb6-82ad-302014682b13"), null, "User", "User" }
                 });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[,]
-                {
-                    { new Guid("a3314be5-4c77-4fb6-82ad-302014682a73"), new Guid("69db714f-9576-45ba-b5b7-f00649be01de") },
-                    { new Guid("a3314be5-4c77-4fb6-82ad-302014682a73"), new Guid("69db714f-9576-45ba-b5b7-f00649be02de") },
-                    { new Guid("a3314be5-4c77-4fb6-82ad-302014682a73"), new Guid("69db714f-9576-45ba-b5b7-f00649be03de") },
-                    { new Guid("a3314be5-4c77-4fb6-82ad-302014682a73"), new Guid("69db714f-9576-45ba-b5b7-f00649be04de") }
-                });
+                values: new object[] { new Guid("a3314be5-4c77-4fb6-82ad-302014682a73"), new Guid("69db714f-9576-45ba-b5b7-f00649be01de") });
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -311,6 +330,9 @@ namespace CleanArchitecture.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Book");
+
+            migrationBuilder.DropTable(
                 name: "ForgotPassword");
 
             migrationBuilder.DropTable(
@@ -318,6 +340,9 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "RoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "UserClaims");

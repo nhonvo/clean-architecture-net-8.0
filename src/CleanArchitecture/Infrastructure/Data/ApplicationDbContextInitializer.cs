@@ -30,7 +30,7 @@ public class ApplicationDbContextInitializer(ApplicationDbContext context, ILogg
         new List<User>{
                 new User
                 {
-                    UserName = "admin",
+                    UserName = "superAdmin",
                     Email = "admin@gmail.com",
                     Password = "P@ssw0rd".Hash(),
                     Role = Role.Admin

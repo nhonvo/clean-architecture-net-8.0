@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240717072243_identityEntity")]
-    partial class identityEntity
+    [Migration("20250302041736_seedingBook")]
+    partial class seedingBook
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -111,73 +111,19 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         {
                             Id = new Guid("69db714f-9576-45ba-b5b7-f00649be01de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a6456a8d-a4b0-4046-830b-a9731ebd5a6b",
-                            Email = "admin1@gmail.com",
+                            ConcurrencyStamp = "beb69596-7f7a-4150-b83f-c26fe411db7a",
+                            Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Admin 1",
-                            NormalizedEmail = "ADMIN1@GMAIL.COM",
-                            NormalizedUserName = "admin1",
-                            PasswordHash = "AQAAAAIAAYagAAAAEO9oNwPJdecRbKgHQ8tJRhEO15iZe0gUmQ+VNQBvooV1Q1mwLvHL00QzD6yS0BSo7g==",
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "admin",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFRvVcaq1XPSnKP9ULtz1SydbglqHOayROrNqAq7Nb4CrKahYze9DKJsmdXXUsJ6Uw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             Status = 0,
                             TwoFactorEnabled = false,
-                            UserName = "admin1"
-                        },
-                        new
-                        {
-                            Id = new Guid("69db714f-9576-45ba-b5b7-f00649be02de"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d905b15f-0823-4e9d-852f-828a2fc37a1a",
-                            Email = "admin2@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "Admin 2",
-                            NormalizedEmail = "ADMIN2@GMAIL.COM",
-                            NormalizedUserName = "Admin2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG1Yzxzo7CIUqt7WtmdliA4t61NXibkTCe5yOcT1MeuOsUj2qFT9dt2b8sjRShH11w==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            Status = 0,
-                            TwoFactorEnabled = false,
-                            UserName = "Admin2"
-                        },
-                        new
-                        {
-                            Id = new Guid("69db714f-9576-45ba-b5b7-f00649be03de"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "3ce89235-da10-4143-bb1b-533ac5b56e9d",
-                            Email = "admin3@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "Admin 3",
-                            NormalizedEmail = "ADMIN3@GMAIL.COM",
-                            NormalizedUserName = "Admin3",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJIRTCUCZAjaSR5khibEucQhHlPpyLDzCRw+0Ip7lIBjXGNEcicCmGwZSbjU8paEnw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            Status = 0,
-                            TwoFactorEnabled = false,
-                            UserName = "Admin3"
-                        },
-                        new
-                        {
-                            Id = new Guid("69db714f-9576-45ba-b5b7-f00649be04de"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c6b8f21b-5cfe-41bc-86a9-48b6ff373527",
-                            Email = "admin4@gmail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "Admin 4",
-                            NormalizedEmail = "ADMIN4@GMAIL.COM",
-                            NormalizedUserName = "Admin4",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBCAreAzwYB2gvdJ0G7gALi+fUFmDgf7Ls0OuyGhVPexREP7REBzCErLQsrwXERGHg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            Status = 0,
-                            TwoFactorEnabled = false,
-                            UserName = "Admin4"
+                            UserName = "admin"
                         });
                 });
 
@@ -203,6 +149,43 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Book", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "A comprehensive guide to C# programming.",
+                            Price = 29.989999999999998,
+                            Title = "C# Programming"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Learn how to build web applications using ASP.NET Core.",
+                            Price = 35.5,
+                            Title = "ASP.NET Core Development"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Master the Entity Framework Core ORM for .NET development.",
+                            Price = 40.0,
+                            Title = "Entity Framework Core In Action"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Everything you need to know about building Blazor WebAssembly applications.",
+                            Price = 45.990000000000002,
+                            Title = "Blazor WebAssembly: The Complete Guide"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Implement common design patterns in C# to improve code structure.",
+                            Price = 50.0,
+                            Title = "Design Patterns in C#"
+                        });
                 });
 
             modelBuilder.Entity("CleanArchitecture.Domain.Entities.ForgotPassword", b =>
@@ -238,11 +221,11 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Entities.Media", b =>
                 {
-                    b.Property<int>("MediaId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MediaId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Caption")
                         .IsRequired()
@@ -251,23 +234,20 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("MediaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PathMedia")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("int");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("MediaId");
+                    b.HasKey("Id");
 
                     b.ToTable("Media");
                 });
@@ -340,8 +320,8 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("b4314be5-4c77-4fb6-82ad-302014682b13"),
-                            Name = "Subscriber",
-                            NormalizedName = "Subscriber"
+                            Name = "User",
+                            NormalizedName = "User"
                         });
                 });
 
@@ -391,21 +371,6 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         new
                         {
                             UserId = new Guid("69db714f-9576-45ba-b5b7-f00649be01de"),
-                            RoleId = new Guid("a3314be5-4c77-4fb6-82ad-302014682a73")
-                        },
-                        new
-                        {
-                            UserId = new Guid("69db714f-9576-45ba-b5b7-f00649be02de"),
-                            RoleId = new Guid("a3314be5-4c77-4fb6-82ad-302014682a73")
-                        },
-                        new
-                        {
-                            UserId = new Guid("69db714f-9576-45ba-b5b7-f00649be03de"),
-                            RoleId = new Guid("a3314be5-4c77-4fb6-82ad-302014682a73")
-                        },
-                        new
-                        {
-                            UserId = new Guid("69db714f-9576-45ba-b5b7-f00649be04de"),
                             RoleId = new Guid("a3314be5-4c77-4fb6-82ad-302014682a73")
                         });
                 });

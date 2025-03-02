@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240728171739_UpdateSeedData")]
-    partial class UpdateSeedData
+    [Migration("20250121145316_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -111,14 +111,14 @@ namespace CleanArchitecture.Infrastructure.Migrations
                         {
                             Id = new Guid("69db714f-9576-45ba-b5b7-f00649be01de"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dd829aed-ba0a-48a8-bfa2-31502d8c4d70",
+                            ConcurrencyStamp = "8dce1115-6431-44a9-a6fb-52063b66eeec",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "Admin 1",
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPBze+Pd4XI+Pv1FnmwBZHqp9ZHk+8tJzFuCEfZ/hKyNl5SLozdRTkiLpRpwWSQF0w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEhJsDhnCQc2BeJEnL9v4GABA9I5sDC/70RU3KUvNiVal870ojT17VHmWVznedBeGA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             Status = 0,
@@ -184,11 +184,11 @@ namespace CleanArchitecture.Infrastructure.Migrations
 
             modelBuilder.Entity("CleanArchitecture.Domain.Entities.Media", b =>
                 {
-                    b.Property<int>("MediaId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MediaId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Caption")
                         .IsRequired()
@@ -200,6 +200,9 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("MediaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PathMedia")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -207,7 +210,7 @@ namespace CleanArchitecture.Infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("MediaId");
+                    b.HasKey("Id");
 
                     b.ToTable("Media");
                 });
