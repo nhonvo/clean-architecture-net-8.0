@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,11 +8,18 @@
 namespace CleanArchitecture.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddBookSeedingData : Migration
+    public partial class seedingBook : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.UpdateData(
+                table: "ApplicationUser",
+                keyColumn: "Id",
+                keyValue: new Guid("69db714f-9576-45ba-b5b7-f00649be01de"),
+                columns: new[] { "ConcurrencyStamp", "PasswordHash" },
+                values: new object[] { "beb69596-7f7a-4150-b83f-c26fe411db7a", "AQAAAAIAAYagAAAAEFRvVcaq1XPSnKP9ULtz1SydbglqHOayROrNqAq7Nb4CrKahYze9DKJsmdXXUsJ6Uw==" });
+
             migrationBuilder.InsertData(
                 table: "Book",
                 columns: new[] { "Id", "Description", "Price", "Title" },
@@ -52,6 +60,13 @@ namespace CleanArchitecture.Infrastructure.Migrations
                 table: "Book",
                 keyColumn: "Id",
                 keyValue: 5);
+
+            migrationBuilder.UpdateData(
+                table: "ApplicationUser",
+                keyColumn: "Id",
+                keyValue: new Guid("69db714f-9576-45ba-b5b7-f00649be01de"),
+                columns: new[] { "ConcurrencyStamp", "PasswordHash" },
+                values: new object[] { "8dce1115-6431-44a9-a6fb-52063b66eeec", "AQAAAAIAAYagAAAAEEhJsDhnCQc2BeJEnL9v4GABA9I5sDC/70RU3KUvNiVal870ojT17VHmWVznedBeGA==" });
         }
     }
 }

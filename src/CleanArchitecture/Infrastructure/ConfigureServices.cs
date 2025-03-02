@@ -20,10 +20,7 @@ public static class ConfigureServices
         else
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.ConnectionStrings.DefaultConnection,
-                sqlOptions => sqlOptions.EnableRetryOnFailure(maxRetryCount: 5,
-                                                              maxRetryDelay: TimeSpan.FromSeconds(10),
-                                                              errorNumbersToAdd: null)));
+                options.UseSqlServer(configuration.ConnectionStrings.DefaultConnection));
         }
 
         services.AddIdentity<ApplicationUser, RoleIdentity>()
