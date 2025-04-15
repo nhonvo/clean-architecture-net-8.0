@@ -10,7 +10,8 @@ public class LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> 
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (await ShouldLogRequest(context))
+        context.Request.EnableBuffering();
+        if (await IsApiRequest(context))
         {
             await LogRequest(context);
             await LogResponse(context);
@@ -21,42 +22,17 @@ public class LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> 
         }
     }
 
-    private async Task<string> ReadRequestBodyAsync(HttpContext context)
+    private async Task<bool> IsApiRequest(HttpContext context)
+        => context.Request.Path.Value.StartsWith("/api", StringComparison.OrdinalIgnoreCase)
+            || context.Request.Headers.Accept.Any(h => h.Contains("application/json", StringComparison.OrdinalIgnoreCase));
+
+    private async Task LogRequest(HttpContext context)
     {
         using var memStream = new MemoryStream();
         await context.Request.Body.CopyToAsync(memStream);
         memStream.Seek(0, SeekOrigin.Begin);
         context.Request.Body.Position = 0; // Reset stream position
-        return await new StreamReader(memStream).ReadToEndAsync();
-    }
-
-    private async Task<bool> ShouldLogRequest(HttpContext context)
-    {
-        context.Request.EnableBuffering();
-
-        if (context.Request.HasFormContentType)
-        {
-            foreach (var file in context.Request.Form.Files)
-            {
-                LogHelper.LogRequest(_logger, context.Request.Path, $"File: {file.FileName}, Size: {file.Length} bytes");
-            }
-            return false;
-        }
-
-        var requestBody = await ReadRequestBodyAsync(context);
-        if (requestBody.Length > MaxLogContentLength)
-        {
-            LogHelper.LogRequest(_logger, context.Request.Path, $"Request body too large to log. ContentLength: {requestBody.Length} bytes");
-            return false;
-        }
-        LogHelper.LogRequest(_logger, context.Request.Path, requestBody);
-
-        return true;
-    }
-
-    private async Task LogRequest(HttpContext context)
-    {
-        var requestBody = await ReadRequestBodyAsync(context);
+        var requestBody = await new StreamReader(memStream).ReadToEndAsync();
         LogHelper.LogRequest(_logger, context.Request.Path, JsonSerializer.Serialize(requestBody));
     }
 
