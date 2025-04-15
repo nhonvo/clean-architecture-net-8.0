@@ -483,3 +483,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 .vscode
+
+coverage/
+src/CleanArchitecture/image/
