@@ -1,4 +1,4 @@
-name: Package
+name: 📦 Package and Publish to NuGet
 
 on:
   push:
@@ -9,24 +9,32 @@ on:
 
 jobs:
   publish:
-    name: Publish to NuGet.org
-
+    name: 🚀 Publish to NuGet.org
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-        name: Checkout code
+      - name: 🔄 Checkout Repository
+        uses: actions/checkout@v3
 
-      - name: Setup .NET
+      - name: 🛠️ Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
 
-      - name: Restore NuGet packages
+      - name: 📥 Restore Dependencies
         run: dotnet restore
 
-      - name: Pack the project
-        run: dotnet pack --configuration Release -o ./nupkg
+      - name: 🏗️ Build Solution
+        run: dotnet build --configuration Release --no-restore
 
-      - name: Push the package to NuGet.org
-        run: dotnet nuget push ./nupkg/CleanArchitecture.1.0.0.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: 📦 Pack NuGet Package
+        run: dotnet pack --configuration Release --no-build -o ./nupkg
+
+      - name: 🚚 Push Package to NuGet.org
+        run: |
+          for pkg in ./nupkg/*.nupkg; do
+            dotnet nuget push "$pkg" \
+              --api-key ${{ secrets.NUGET_API_KEY }} \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done

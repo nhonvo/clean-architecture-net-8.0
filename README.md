@@ -52,15 +52,6 @@ This project serves as a template for building a Clean Architecture Web API in A
 - Fix project warnings.
 - Enhance pipeline by separating build, unit test, and integration test stages.
 
-### **5. Advanced Features**
-
-- Add support for advanced technologies:
-- Redis.
-- Aspire.
-- Splunk.
-- New Relic for logging.
-- Elasticsearch (ELK stack).
-
 ### **6. Real-World Testing**
 
 - Add a real external service for testing.
@@ -134,6 +125,3 @@ This project is licensed under the MIT License.
 ## Contact
 
 For any inquiries, contact the repository owner [here](https://github.com/nhonvo).
-
-
-Note shared project for integration test, and unit test project which need use same model

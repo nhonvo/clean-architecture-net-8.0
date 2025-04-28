@@ -1,0 +1,54 @@
+name: CleanArchitecture Unit test CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: 📦 Install Code Coverage Tool
+        run: |
+          dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.2.0
+          echo "/home/runner/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: 🧪 Run Unit Tests with Coverage
+        run: |
+          dotnet test ./src/CleanArchitecture.UnitTests \
+            -p:ParallelizeTestCollections=true \
+            -p:CollectCoverage=true \
+            -p:CoverletOutputFormat=cobertura \
+            -p:Exclude="[xunit.*]*" \
+            --collect:"XPlat Code Coverage" \
+            -l "trx;LogFileName=unit-test-results.trx" \
+            --results-directory ./TestResults
+
+      - name: 📊 Generate Code Coverage Report
+        run: |
+          reportgenerator \
+            -reports:./TestResults/**/coverage.cobertura.xml \
+            -targetdir:./TestResults \
+            -reporttypes:MarkdownSummaryGithub
+
+      - name: 📝 Publish Coverage Summary
+        run: cat ./TestResults/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+
+      - name: 📈 Publish Unit Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Unit Test Report
+          path: ./TestResults/unit-test-results.trx
+          reporter: dotnet-trx

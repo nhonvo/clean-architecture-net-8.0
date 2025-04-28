@@ -1,32 +1,36 @@
-name: Push Image to Docker Hub
+name: Push Docker Image to Docker Hub
+
 on:
   push:
     branches: ["main"]
+
 jobs:
-  clean-architechture:
+  docker-build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: get code
+      - name: 🧾 Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
+      - name: 🔐 Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: setup docker buildx
-        uses: docker/setup-buildx-action@v1
+      - name: 🛠️ Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
         id: buildx
 
-      - name: build and push docker image
-        uses: docker/build-push-action@v2
+      - name: 🐳 Build and Push Docker Image
+        id: docker_build
+        uses: docker/build-push-action@v5
         with:
-          context: ./
+          context: .
           file: ./src/CleanArchitecture/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/cleanarchitecture:v1
 
-      - name: verify
-        run: echo ${{ steps.docker_build.outputs.digest}}
+      - name: 🔍 Verify Image Digest
+        run: echo "${{ steps.docker_build.outputs.digest }}"
