@@ -1,3 +1,16 @@
+- shared appsettings.json side-car
+  - change docker file
+- set up redis
+  - lock message mechanism 
+- set up hangfire
+- no sql table
+- setup newrelic, splunk log
+- set up background service
+- setup sns, sqs 
+  - set up kafca
+
+enhance file in our app
+
 # Clean Architecture Web API Project
 
 ## About the Project
