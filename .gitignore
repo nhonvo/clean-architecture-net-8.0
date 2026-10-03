@@ -486,3 +486,6 @@ $RECYCLE.BIN/
 
 coverage/
 src/CleanArchitecture/image/
+
+# agyreview audit reports
+doc/audit/
