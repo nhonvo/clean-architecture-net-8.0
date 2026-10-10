@@ -41,6 +41,11 @@
     <PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageVersion Include="CloudinaryDotNet" Version="1.26.2" />
   </ItemGroup>
+  <!-- Hangfire library -->
+    <PackageVersion Include="Hangfire" Version="1.8.18" />
+    <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.18" />
+    <PackageVersion Include="Hangfire.Dashboard.Authorization" Version="3.1.0" />
+    <PackageVersion Include="Hangfire.Redis.StackExchange" Version="1.12.0" />
   <!-- unittest and integration test library -->
   <ItemGroup>
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
